@@ -310,7 +310,113 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Coming soon!</p>
+
+                                    <h1>Overview</h1>
+                                    <p class="mb-4">
+                                        The purpose of this lab was to setup a Bluetooth connection between the Artemis Nano and my computer. I used the 
+                                        Arduino IDE to trasmit data wirelessly from the Artemis Nano to my computer, and Jupyter Lab to develop Python 
+                                        code to transmit data wirelessly from my computer to the Artemis Nano. I was able to send basic messages 
+                                        and commands to the Artemis Nano as well as receive simple responses. This lab provided a solid overview of 
+                                        Bluetooth Low Energy.
+                                    </p>
+
+                                    <h1>Materials</h1>
+                                    <p >Artemis Nano</p>
+                                    <p class="mb-4">USB C-to-C Cable</p>
+                                    <p>Bluetooth 4.0 Low Energy Micro Adaptor</p>
+
+                                    <h1>Setup</h1>
+                                    <p class="mb-4">
+                                        The first part of the lab involved setting up the Python environment and the Artemis Nano.
+                                    </p>
+
+                                    <h3>Computer Setup</h3>
+                                    <p class="mb-4">
+                                        First, I ensured that I had Python 3.9 installed along with a pip (Python package manager) version 
+                                        of at least 21.0. Next, I setup a virtual environment for this lab. This allowed me to maintain the correct 
+                                        versions for this lab's Python packages, and helped ensure they didn't conflict with other packages 
+                                        I had installed. After activating the virtual environment, I installed the following packages using pip: 
+                                        <code>numpy, pyyaml, colorama, nest_asyncio, bleak, jupyterlab</code>. Lastly, I downloaded the Lab 2 Codebase 
+                                        from Cornell Box and verified that I was able to start the Jupyter server.
+                                    </p>
+
+                                    <h3>Artemis Nano Setup</h3>
+                                    <p class="mb-4">
+                                        I had to install the ArduinoBLE library, and used the IDE's library manager to do this. I ran the provided code 
+                                        to obtain the Artemis Nano's MAC address, which can be seen below.
+                                    </p>
+
+                                    <p class="mb-4">
+                                        I had to use this MAC address as a final configuration step for BLE. The provided Python code had a 
+                                        <code>connection.yaml</code> file, which had a field for the Artemis Nano's MAC address. I replaced 
+                                        this field's value with the MAC address displayed by the serial monitor. After doing this, I was able to 
+                                        connect to the Artemis Nano from my computer, and the serial monitor verified this connection.
+                                    </p>
+
+                                    <h3>ECHO Command</h3>
+                                    <p class="mb-4">
+                                        This first lab task was the ECHO command. This command involved sending a message from my computer 
+                                        to the Artemis Nano and having the Nano respond with an argumented message. For example, my computer 
+                                        could send <code>Hello</code> and the Nano respond would respond with <code>Received Message: Hello</code>. The 
+                                        provided lab code had functions for sending the command and processing the response, so I only had to implement 
+                                        the code on the Arduino side to receive the command and send the response. The ArduinoBLE library and provided 
+                                        lab code helped initiate this process. It had the logic for decoding the command and extracting the message (as a string). 
+                                        I added the logic for constructing and sending the response. As shown in the image below, I had to clear the transmission 
+                                        string, add the appropriate text, which was the augmented string, and finally write this string to the BLE string characteristic.
+                                    </p>
+
+                                    <p class="mb-4">
+                                        The two images below show the Python code and output response as well as the Arduino's serial monitor output, which indicate 
+                                        that this command works correctly.
+                                    </p>
+
+
+                                    <h3>SEND_THREE_FLOATS Command</h3>
+                                    <p class="mb-4">
+                                        The second lab task was the SEND_THREE_FLOATS command, and this was slightly simpler than the previous command. 
+                                        It only entailed sending three floats from my computer to the Artemis Board, and printing these values to the serial 
+                                        monitor. The implementation, as show below, was nearly identical to the previous command. However, the values were floats 
+                                        instead of strings, and I didn't have to construct a response message.
+                                    </p>
+
+                                    <p class="mb-4">
+                                        The two images below show the Python code for sending the command and the serial monitor output ensuring that 
+                                        the command functioned correctly.
+                                    </p>
+
+                                    <h3>Notification Handler</h3>
+                                    <p class="mb-4">
+                                        The next part of the lab involved setting up a notification handler to receive floats sent by the Artemis board. For the 
+                                        previous command, I would have to explicitly check if the Artemis board sent a response, which can become fairly tedious. The handler 
+                                        (shown below) took a GATT characteristic's uuid and received data value as inputs, and simply updated a global variable to be this 
+                                        value and then printed it out and returned it.
+
+                                        <img>
+
+                                        Lastly, I started the nofications by binding the float GATT characteristic with the handler function, as shown below. I had to use the 
+                                        <code>stop_notify</code> function, which was provided, to stop the notifications.
+
+                                        <img>
+
+                                        These values make sense, since as long as the connection exists, the Artemis Nano Board is incrementing the float value by <code>0.5</code> 
+                                        and then sending it.
+
+                                        <img>
+
+                                        <img>
+                                    </p>
+
+                                    <h3>Different Data Transmission Methods</h3>
+
+                                    <h3>Effective Data Rate</h3>
+
+                                    <h3>Reliability</h3>
+
+
+
+
+
+
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
                                         Close Window
