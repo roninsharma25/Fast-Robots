@@ -80,7 +80,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/cake.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab2/USB_Bluetooth.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 2</div>
                     </div>
@@ -300,7 +300,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 2</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 2: Bluetooth</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -308,7 +308,7 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab2/USB_Bluetooth.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
 
                                     <h1>Overview</h1>
@@ -344,30 +344,38 @@
                                     <p class="mb-4">
                                         I had to install the ArduinoBLE library, and used the IDE's library manager to do this. I ran the provided code 
                                         to obtain the Artemis Nano's MAC address, which can be seen below.
-                                    </p>
-
-                                    <p class="mb-4">
+                                        
+                                        <img src="assets/img/Lab2/ArtemisMACAddress.png" height="150" width="500">
+                                        <br>
+                                    
                                         I had to use this MAC address as a final configuration step for BLE. The provided Python code had a 
                                         <code>connection.yaml</code> file, which had a field for the Artemis Nano's MAC address. I replaced 
                                         this field's value with the MAC address displayed by the serial monitor. After doing this, I was able to 
                                         connect to the Artemis Nano from my computer, and the serial monitor verified this connection.
+
+                                        <img src="assets/img/Lab2/SerialMonitor_Connection.png" height="200" width="400">
                                     </p>
 
                                     <h3>ECHO Command</h3>
                                     <p class="mb-4">
                                         This first lab task was the ECHO command. This command involved sending a message from my computer 
-                                        to the Artemis Nano and having the Nano respond with an argumented message. For example, my computer 
+                                        to the Artemis Nano and having the Nano respond with an augmented message. For example, my computer 
                                         could send <code>Hello</code> and the Nano respond would respond with <code>Received Message: Hello</code>. The 
                                         provided lab code had functions for sending the command and processing the response, so I only had to implement 
                                         the code on the Arduino side to receive the command and send the response. The ArduinoBLE library and provided 
                                         lab code helped initiate this process. It had the logic for decoding the command and extracting the message (as a string). 
                                         I added the logic for constructing and sending the response. As shown in the image below, I had to clear the transmission 
                                         string, add the appropriate text, which was the augmented string, and finally write this string to the BLE string characteristic.
-                                    </p>
+                                        <br>
+                                        <img src="assets/img/Lab2/ECHO_function.png" height="350" width="400">
+                                        <br>
 
-                                    <p class="mb-4">
                                         The two images below show the Python code and output response as well as the Arduino's serial monitor output, which indicate 
                                         that this command works correctly.
+                                        <br>
+                                        <img src="assets/img/Lab2/ECHO_Python.png" height="300" width="350">
+                                        <br>
+                                        <img src="assets/img/Lab2/ECHO_SerialMonitor.png" height="100" width="500">
                                     </p>
 
 
@@ -377,11 +385,15 @@
                                         It only entailed sending three floats from my computer to the Artemis Board, and printing these values to the serial 
                                         monitor. The implementation, as show below, was nearly identical to the previous command. However, the values were floats 
                                         instead of strings, and I didn't have to construct a response message.
-                                    </p>
-
-                                    <p class="mb-4">
+                                        <br>
+                                        <img src="assets/img/Lab2/SENDTHREEFLOATS.png" height="350" width="400">
+                                        <br>
                                         The two images below show the Python code for sending the command and the serial monitor output ensuring that 
                                         the command functioned correctly.
+                                        <br>
+                                        <img src="assets/img/Lab2/SENDTHREEFLOATS_Python.png" height="250" width="500">
+                                        <br>
+                                        <img src="assets/img/Lab2/SENDTHREEFLOATS_Arduino.png" height="175" width="350">
                                     </p>
 
                                     <h3>Notification Handler</h3>
@@ -390,32 +402,81 @@
                                         previous command, I would have to explicitly check if the Artemis board sent a response, which can become fairly tedious. The handler 
                                         (shown below) took a GATT characteristic's uuid and received data value as inputs, and simply updated a global variable to be this 
                                         value and then printed it out and returned it.
-
-                                        <img>
-
-                                        Lastly, I started the nofications by binding the float GATT characteristic with the handler function, as shown below. I had to use the 
+                                        <br>
+                                        <img src="assets/img/Lab2/Notification_Handler.png" height="200" width="400">
+                                        <br>
+                                        Lastly, I started the nofications by binding the float GATT characteristic to the handler function, as shown below. I had to use the 
                                         <code>stop_notify</code> function, which was provided, to stop the notifications.
-
-                                        <img>
-
+                                        <br>
+                                        <img src="assets/img/Lab2/Notification_Handler_Running.png" height="300" width="300">
+                                        <br>
                                         These values make sense, since as long as the connection exists, the Artemis Nano Board is incrementing the float value by <code>0.5</code> 
-                                        and then sending it.
-
-                                        <img>
-
-                                        <img>
+                                        and then sending it (as shown by the two code segments below).
+                                        <br>
+                                        <img src="assets/img/Lab2/Write_Data_Function.png" height="200" width="250">
+                                        <br>
+                                        <img src="assets/img/Lab2/Increment_5.png" height="300" width="300">
                                     </p>
 
                                     <h3>Different Data Transmission Methods</h3>
+                                    <p class="mb-4">
+                                        The function requirements are based on their names, so <code>receive_float()</code> requires a float and <code>receive_string()</code> 
+                                        requires a string. To receive a float value in Python, nothing needs to be done if <code>receive_float()</code> is used, but type 
+                                        conversion from string to float is required if <code>receive_string()</code> is used. Additionally, a string, which is comprised 
+                                        of characters, requires more bits than floats. As a result, larger values and more precise values can be used by <code>receive_float</code> 
+                                        compared to <code>receive_string</code>.
+
+                                        <br>
+                                        <br>
+
+                                        Additionally, the implementations of the two functions differ as <code>receive_float()</code> uses the float GATT Characteristic while 
+                                        <code>receive_string()</code> uses the C-String GATT Characteristic. They also use different functions to parse the data. Specifically, 
+                                        <code>receive_float()</code> uses the <code>unpack()</code> method from the struct module on the byte array, while <code>receive_string()</code> 
+                                        uses the byte array object's <code>decode()</code> method.
+
+                                    </p>
 
                                     <h3>Effective Data Rate</h3>
+                                    <p class="mb-4">
+                                        The next part of the lab involved calculating the effective data rate. I used the ECHO command to send 
+                                        a message from my computer to the Artemis board and then used the <code>receive_string()</code> method 
+                                        to obtain the response sent from the Artemis board to my computer. I used Python's <code>time</code> 
+                                        module to collect the time before sending the message, collect the time after receiving the message, and 
+                                        then calculated the elapsed time by taking the difference. I used Python's <code>getsizeof()</code> function 
+                                        to obtain the number of bytes in the two messages, and then calculated the data rate by dividing the total 
+                                        message size by the time elapsed. I calculated the data rate for four different messages of various sizes, and 
+                                        for each message I averaged the results from ten trials. The image below contains the Python code for this part.
+                                        <br>
+                                        <img src="assets/img/Lab2/Effective_Data_Rate_Python.png" height="500" width="500">
+                                        <br>
+                                        I used Python's <code>matplotlib</code> module to plot the results, as shown below. As the data size increased, 
+                                        the data rate also generally increased. There was a slight decrease from 117 to 125 bytes, but this is most likely 
+                                        an outlier or negligible. I believe the trend indicates that the setup overhead dominates at smaller data sizes, and 
+                                        similarly doesn't have a major effect at the larger data sizes.
+                                        <br>
+                                        <img src="assets/img/Lab2/Effective_Data_Rate_Plots.png" height="500" width="500">
+
+                                    </p>
 
                                     <h3>Reliability</h3>
+                                    <p class="mb-4">
+                                        The last part of the lab involved determined the reliability of the Artemis Nano. I utilized the float 
+                                        notification handler I wrote previously to perform this task. The provided Arduino code 
+                                        sent a float every time the timer exceeded a value, specified by the variable <code>interval</code>. The larger 
+                                        this variable, the longer the time between successive floats. I attempted to exceed the data rates I calculated 
+                                        in the previous part of the lab by significantly decreasing the value of <code>interval</code>. I started by making it
+                                        <code>10</code>, then <code>1</code>, then <code>0.0001</code>, but the notification handler kept reading every value, which 
+                                        included consecutive increments of <code>0.5</code>, and this was surprising to me since I expected some data to be dropped. 
+                                        Even when I set interval to <code>0</code>, no data was dropped, which indicated that the Artemis Nano is very reliable. 
 
-
-
-
-
+                                        <br>
+                                        <br>
+                                        The image below shows the receiver (computer) output when <code>interval</code> is set to <code>0</code>. As I mentioned previously, 
+                                        I utilized the notification handler again and disabled it after two seconds to limit the output.
+                                        <br>
+                                        <img src="assets/img/Lab2/Reliability_Zero_Interval.png" height="450" width="500">
+                                    
+                                    </p>
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
