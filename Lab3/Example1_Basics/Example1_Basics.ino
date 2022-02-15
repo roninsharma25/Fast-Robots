@@ -32,8 +32,8 @@ ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
 
 int LPF_size = 250;
 int LPF_index;
-double alpha_acc = 500; // update based on cutoff frequency
-double alpha_gyro = 500; // update
+double alpha_acc = 0.14; // update based on cutoff frequency
+double alpha_gyro = 0.04; // same value as 
 
 int count;
 int max_count = 500;
@@ -41,29 +41,9 @@ unsigned long start_time;
 float time_axis[500];
 float pitch_values[500];
 
-unsigned long start_dt;
-unsigned long dt;
-
-float prev_acc_x;
-float prev_acc_y;
-float prev_acc_z;
-
-float acc_x;
-float acc_y;
-float acc_z;
-
-double pitch;
-double roll;
-
-double prev_pitch;
-double prev_roll;
-
-double gyro_pitch;
-double gyro_roll;
-double gyro_yaw;
-
-double comp_pitch;
-double comp_roll;
+float prev_acc_x, prev_acc_y, prev_acc_z, acc_x, acc_y, acc_z;
+double pitch, acc_pitch, roll, acc_roll, prev_pitch, prev_roll, gyro_pitch, gyro_roll, gyro_yaw, comp_pitch, comp_roll;
+double dt = 30; // 30 sec delay in the loop
 
 
 void setup()
@@ -93,11 +73,11 @@ void setup()
     myICM.begin(WIRE_PORT, AD0_VAL);
 #endif
 
-    SERIAL_PORT.print(F("Initialization of the sensor returned: "));
-    SERIAL_PORT.println(myICM.statusString());
+    //SERIAL_PORT.print(F("Initialization of the sensor returned: "));
+    //SERIAL_PORT.println(myICM.statusString());
     if (myICM.status != ICM_20948_Stat_Ok)
     {
-      SERIAL_PORT.println("Trying again...");
+      //SERIAL_PORT.println("Trying again...");
       delay(500);
     }
     else
@@ -112,18 +92,18 @@ void setup()
 
 void loop()
 {
-  start_dt = millis();
+//  start_dt = millis();
   if (myICM.dataReady())
   {
     myICM.getAGMT();         // The values are only updated when you call 'getAGMT'
                              //    printRawAGMT( myICM.agmt );     // Uncomment this to see the raw values, taken directly from the agmt structure
     //printScaledAGMT(&myICM); // This function takes into account the scale settings from when the measurement was made to calculate the values with units
-    dt = millis() - start_dt;
+    //dt = millis() - start_dt;
     delay(30);
   }
   else
   {
-    SERIAL_PORT.println("Waiting for data");
+    //SERIAL_PORT.println("Waiting for data");
     delay(500);
   }
 
@@ -140,33 +120,55 @@ void loop()
   acc_y = myICM.accY();
   acc_z = myICM.accZ();
 
-  //double pitch = atan2(acc_x, acc_z);
-  //double roll = atan2(acc_y, acc_z);
+  // Current Pitch Values Calculated From the Accelerometer Data
+  acc_pitch = atan2(acc_x, acc_z);
+  acc_roll = atan2(acc_y, acc_z);
+
+  // LPF pitch and roll
+  pitch = (alpha_acc * acc_pitch) + (1 - alpha_acc) * prev_pitch;
+  roll = (alpha_acc * acc_roll) + (1 - alpha_acc) * prev_roll;
 
   // Calculate pitch (y) and roll (x) from the gyroscope
   gyro_pitch -= myICM.gyrY() * dt;
   gyro_roll -= myICM.gyrX() * dt;
-  gyro_yal -= myICM.gyrZ() * dt;
-  
-  Serial.print("Pitch: ");
+  gyro_yaw -= myICM.gyrZ() * dt;
+
+  // Complementary Filter - Gyroscope
+  comp_pitch = ( (comp_pitch + myICM.gyrY() * dt) * (1 - alpha_gyro) ) + (acc_pitch * alpha_gyro);
+  comp_roll = ( (comp_roll + myICM.gyrX() * dt) * (1 - alpha_gyro) ) + (acc_roll * alpha_gyro);
+
+
+  Serial.print("Acc_Pitch:");
+  Serial.print(acc_pitch);
+  Serial.print(" Filtered_Pitch:");
   Serial.print(pitch);
-  Serial.print(" | Roll: ");
-  Serial.println(roll);
+//  Serial.print(" Gyro_Pitch:");
+//  Serial.print(gyro_pitch);
+  Serial.print(" Comp_Pitch:");
+  Serial.print(comp_pitch);
+  Serial.print(" Acc_Roll:");
+  Serial.print(acc_roll);
+  Serial.print(" Filtered_Roll:");
+  Serial.print(roll);
+//  Serial.print(" Gyro_Roll:");
+//  Serial.println(gyro_roll);
+  Serial.print(" Comp_Roll:");
+  Serial.println(comp_roll);
 
-  // LPF pitch and roll
-  pitch = (alpha_acc * pitch) + (1 - alpha_acc) * prev_pitch
-  roll = (alpha_acc * roll) + (1 - alpha_acc) * prev_roll
+//  Serial.print("Gyro Pitch: ");
+//  Serial.print(gyro_pitch);
+//  Serial.print(" | Gyro Roll: ");
+//  Serial.print(gyro_roll);
+//  Serial.print(" | Gyro Yaw: ");
+//  Serial.println(gyro_yaw);
 
-  // Complementary Filter
-  comp_pitch = ( (comp_pitch + myICM.gyrY() * dt) * (1 - alpha_gyro) ) + (acc_y * alpha_gyro);
-  comp_roll = ( (comp_roll + myICM.gyrX() * dt) * (1 - alpha_roll) ) + (acc_x * alpha_gyro);
 
   // Convert Magnetometer Data into a Yaw Angle
   double xm = myICM.magX()*cos(pitch) - myICM.magY()*sin(roll)*sin(pitch) + myICM.magZ()*cos(roll)*sin(pitch);
-  double ym = myICM.magY()*cos(roll) + myICM.magZ()*sin(roll_rad);
+  double ym = myICM.magY()*cos(roll) + myICM.magZ()*sin(roll);
   double yaw = atan2(ym, xm);
 
-  delay(1000);
+  //delay(100);
 
 
   
