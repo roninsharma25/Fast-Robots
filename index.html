@@ -512,7 +512,11 @@
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
-                                        
+                                        The purpose of this lab was to add two types of sensors to the robot: Time-of-Flight (ToF) Sensor 
+                                        and Inertial Measurement Unit (IMU). I connected these sensors to the Artemis Nano Board and verified 
+                                        that they were connected properly by running basic scripts. I developed more complicated scripts to 
+                                        calibrate and test many features of both sensors. By the end of the lab, I had a robot with 
+                                        fully-functional ToF sensors and an IMU.
                                     </p>
 
                                     <h1>Materials</h1>
@@ -525,26 +529,33 @@
 
                                     <h1>Prelab</h1>
                                     <p class="mb-4">
-                                        
+                                        Prior to the lab, I researched the two types of sensors. I skimmed both of their manuals and datasheets. 
+                                        I also planned out some of the sensor integration aspects. I decided to use permanent soldered connections 
+                                        for both sensors to ensure that the sensors remain available throughout the high accelerations. I planned 
+                                        out the wire lengths as well. I planned to have one ToF sensor in the front of the robot, one of the side, and 
+                                        the IMU near the back of the robot to limit electromagnetic interference.
                                     </p>
 
                                     <h1>Time-of-Flight Sensors</h1>
-                                    <p class="mb-4">
-                                        
-                                    </p>
 
                                     <h3>Setup</h3>
                                     <p class="mb-4">
+                                        First, I soldered one sensor and connected it to the Artemis Nano by using the Qwiic Connector, which 
+                                        connected directly to the Artemis. Then I daisy-chained a second ToF sensor. For the second sensor, I also 
+                                        had to utilize the XSHUT pin. Since I'm connecting two identical sensors on the same I2C bus, their address 
+                                        is the same. I had to use the XSHUT pin to shut one sensor down and restart it wwith a different address.
                                         
+                                        The final wiring is depicted below.
+
+                                        <img>
+
+                                        Next, I had to install the <code>SparkFun VL53L1x 4m Laser Distance Sensor </code> library using the Arduino 
+                                        IDE's library manager.
                                     </p>
 
-                                    <h3>One Sensor</h3>
+                                    <h3>Sensor Experimentation</h3>
                                     <p class="mb-4">
-                                        
-                                    </p>
-
-                                    <h3>Two Sensors</h3>
-                                    <p class="mb-4">
+                                        I ran the example I2C Wire code to check if the I2C channel address
                                         
                                     </p>
 
