@@ -138,22 +138,22 @@ void loop()
   comp_roll = ( (comp_roll + myICM.gyrX() * dt) * (1 - alpha_gyro) ) + (acc_roll * alpha_gyro);
 
 
-  Serial.print("Acc_Pitch:");
-  Serial.print(acc_pitch);
-  Serial.print(" Filtered_Pitch:");
-  Serial.print(pitch);
-//  Serial.print(" Gyro_Pitch:");
-//  Serial.print(gyro_pitch);
-  Serial.print(" Comp_Pitch:");
-  Serial.print(comp_pitch);
-  Serial.print(" Acc_Roll:");
-  Serial.print(acc_roll);
-  Serial.print(" Filtered_Roll:");
-  Serial.print(roll);
-//  Serial.print(" Gyro_Roll:");
-//  Serial.println(gyro_roll);
-  Serial.print(" Comp_Roll:");
-  Serial.println(comp_roll);
+//  Serial.print("Acc_Pitch:");
+//  Serial.print(acc_pitch);
+//  Serial.print(" Filtered_Pitch:");
+//  Serial.print(pitch);
+////  Serial.print(" Gyro_Pitch:");
+////  Serial.print(gyro_pitch);
+//  Serial.print(" Comp_Pitch:");
+//  Serial.print(comp_pitch);
+//  Serial.print(" Acc_Roll:");
+//  Serial.print(acc_roll);
+//  Serial.print(" Filtered_Roll:");
+//  Serial.print(roll);
+////  Serial.print(" Gyro_Roll:");
+////  Serial.println(gyro_roll);
+//  Serial.print(" Comp_Roll:");
+//  Serial.println(comp_roll);
 
 //  Serial.print("Gyro Pitch: ");
 //  Serial.print(gyro_pitch);
@@ -164,11 +164,25 @@ void loop()
 
 
   // Convert Magnetometer Data into a Yaw Angle
-  double xm = myICM.magX()*cos(pitch) - myICM.magY()*sin(roll)*sin(pitch) + myICM.magZ()*cos(roll)*sin(pitch);
-  double ym = myICM.magY()*cos(roll) + myICM.magZ()*sin(roll);
-  double yaw = atan2(ym, xm);
+//  double xm = myICM.magX()*cos(pitch) - myICM.magY()*sin(roll)*sin(pitch) + myICM.magZ()*cos(roll)*sin(pitch);
+//  double ym = myICM.magY()*cos(roll) + myICM.magZ()*sin(roll);
+//  double yaw = atan2(ym, xm);
+//  Serial.print("xm: ");
+//  Serial.print(xm);
+//  Serial.print(" ym: ");
+//  Serial.print(ym);
+//  Serial.print(" Yaw: ");
+//  Serial.println(yaw);
 
-  //delay(100);
+// Plot Magnetometer Data
+  Serial.print("Mag_X:");
+  Serial.print(myICM.magX());
+  Serial.print(" Mag_Y:");
+  Serial.print(myICM.magY());
+  Serial.print(" Mag_Z:");
+  Serial.println(myICM.magZ());
+
+  delay(100);
 
 
   
@@ -184,10 +198,10 @@ void loop()
 //
 //    Serial.println();
 //    
-//    /*for (int i = 0; i < max_count; i++) {
+//    for (int i = 0; i < max_count; i++) {
 //      Serial.print(time_axis[i]);
 //      Serial.print(", ");
-//    }*/
+//    }
 //    while(1) {};
 //  }
 
