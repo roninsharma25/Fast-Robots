@@ -555,7 +555,51 @@
 
                                     <h3>Sensor Experimentation</h3>
                                     <p class="mb-4">
-                                        I ran the example I2C Wire code to check if the I2C channel address
+                                        As I mentioned previoously, I had to change the address of one of the ToF sensors. I turned one sensor off, 
+                                        but forcing its XSHUT pin low, then I changed the address for the sensor still on by using the 
+                                        <code>setI2CAddress()</code> function, and then I wrote a digital high to the XSHUT pin to turn the other 
+                                        sensor back on. The code snippet below reflects these actions.
+
+                                        <br>
+
+                                        I ran the example I2C Wire code to check if the I2C channel address matched what I expected. However, instead of 
+                                        the two sensor addresses being printed, all addresses were printed. This is a problem we established in lab, so I 
+                                        used other scripts to check if the sensors were working.
+
+                                        <img>
+
+                                        Instead, I used the read distance example. As the name suggests, this script displays the distance sensed by one 
+                                        ToF sensor. Since I had already added the second sensor and changed the address, all I had to add was the logic 
+                                        for obtaining the distance for it and displaying it. I utilized the same code that was provided and modified it 
+                                        to reference the second sensor object. Below is the code modification and the output of the serial monitor showing 
+                                        both sensors operating correctly.
+
+                                        <img>
+
+                                        Next, I explored the three distance modes (short, medium, and long) that the ToF sensor has. The short distance 
+                                        mode is good for sensing immediate obstacles. However, if there's the occasional larger distance that needs to 
+                                        be detected, this mode would cause a problem since it wouldn't be able to detect it (it has a max of 1.3m). 
+                                        The long distance mode is good for checking that there is a lot of open space in front of the robot. It might be 
+                                        not be as helpful if there are abrupt close obstacles since this would lead to fluctuations in close and far distance 
+                                        sensing. This mode is also more error prone where there are inconsistencies in the surrounding environment. The medium 
+                                        distance mode should be the happy middle of the previous two modes. A slight disadvantage is that it's not specialized 
+                                        in short or long distances. Ultimately, I chose the short distance mode for the robot because I believe we will mainly want 
+                                        to measure nearby obstacles. Given the size of the robot, this mode will create a large sensing area around the robot.
+
+                                        <br>
+
+                                        The code snippet below shows how I set the distance mode for both sensors.
+
+                                        <img>
+
+                                        Then, I tested the accuracy of this distance mode. For each measurment, I average 25 values and using <code>millis()</code> 
+                                        to find the average ranging time. The graph below shows the output.
+
+                                        <img>
+
+                                        I experimented with different surfaces. When I used the sensor on different colors and other flat surfaces (wood, cloth), 
+                                        the accuracy didn't change significantly. However, when I used it to detect uneven/bumpy surfaces (small pile of objects, 
+                                        crumpled up paper), the values still ended up being fairly consistent.
                                         
                                     </p>
 
@@ -566,18 +610,34 @@
 
                                     <h3>Timing Budget</h3>
                                     <p class="mb-4">
-                                        
+                                        I experimented with the timing budget of the ToF sensor. I used the manual to identify functions I could use to modify 
+                                        the timing budget. I noticed the most notable changes when I used the function <code>setTimingBudgetInMs()</code>. 
+                                        This function set the time needed to perform one measurement. A larger value means less frequent measurements, but 
+                                        even when I tried larger values, I didn't notice any significant changes in my distance calculations. 
+                                        When I set it to the minimum (<code>20 ms</code>), I was able to more than halve the ranging time (shown below).
+
+                                        <img>
+
+                                        <img>
                                     </p>
 
                                     <h3>"Signal and Sigma"</h3>
                                     <p class="mb-4">
-                                        
+                                        The last aspect of the ToF sensors that I analyzed was its "signal and sigma" parameters. These parameters specify if 
+                                        the sensor's readings are valid, which allowed me to discard invalid measurements. I used the minimum timing budget 
+                                        (<code>20 ms</code>) with the short distance mode, but abruptly changing the distance to an object didn't impact the range 
+                                        status (it remained good). However, the signal rate did fluctuate after these changes. The video below reflects these 
+                                        trials.
+
+                                        <video></video>
+
+                                        At the end of the video, the range status changed because the distance exceeded the maximum <code>1.3m</code> of this mode, which was a 
+                                        result of me trying to push the fluctuation limits (practically <code>0.0m</code> to <code>1.3m</code>). I was surprised 
+                                        by this behavior since I expected rapid fluctuations to cause the signal too fail, at least occasionally. I'll have to check 
+                                        this again prior too comopleting future lab tasks, and possible increase the timing budget accordingly.
                                     </p>
 
                                     <h1>Inertial Measurement Unit</h1>
-                                    <p class="mb-4">
-                                        
-                                    </p>
 
                                     <h3>Setup</h3>
                                     <p class="mb-4">
