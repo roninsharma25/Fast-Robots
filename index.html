@@ -549,7 +549,7 @@
 
                                         <img>
 
-                                        Next, I had to install the <code>SparkFun VL53L1x 4m Laser Distance Sensor </code> library using the Arduino 
+                                        Next, I had to install the <code>SparkFun VL53L1x 4m Laser Distance Sensor</code> library using the Arduino 
                                         IDE's library manager.
                                     </p>
 
@@ -634,19 +634,52 @@
                                         At the end of the video, the range status changed because the distance exceeded the maximum <code>1.3m</code> of this mode, which was a 
                                         result of me trying to push the fluctuation limits (practically <code>0.0m</code> to <code>1.3m</code>). I was surprised 
                                         by this behavior since I expected rapid fluctuations to cause the signal too fail, at least occasionally. I'll have to check 
-                                        this again prior too comopleting future lab tasks, and possible increase the timing budget accordingly.
+                                        this again prior too completing future lab tasks, and possible increase the timing budget accordingly.
                                     </p>
 
                                     <h1>Inertial Measurement Unit</h1>
 
                                     <h3>Setup</h3>
                                     <p class="mb-4">
+                                        First, I soldered the IMU's connections, which were also daisy chained to the previous ToF sensors. The soldered sensor is depicted 
+                                        below.
+
+                                        <img>
+
+                                        Then, I installed the apropriate Arduino library: <code>SparkFun 9DOF IMU Breakout - ICM 20948</code>. I ran the same provided code 
+                                        to display the sensor's I2C address, but this just printed all addresses since multiple sensors were connected.
+
+                                        <br>
+
+                                        I ran the basic example which displayed various sensor values. I modified the script and set <code>AD0_VAL</code> to 0 because the ADR 
+                                        jumper is closed. By default the ADR jumper is open, which requires this value to be 1, but that doesn't work correctly for my circuit 
+                                        since the ADR jumper is closed. The video below shows the changes based on accelerations in the x, y, and z directions, respectively. 
+                                        Rotating the IMU about each axis increased the Gyroscope's values for that sensor. I added a one second delay between each display 
+                                        to make it easier to analyze the changes on the serial monitor output.
+
+                                        <video></video>
                                         
                                     </p>
 
                                     <h3>Accelerometer</h3>
                                     <p class="mb-4">
-                                        
+                                        Next, I used the accelerometer data to compute pitch and roll. I used the formulas from lecture and focused on the output values 
+                                        at <code>-90, 0, and 90</code> degrees for pitch and roll. The plot below shows averages for each measurement.
+
+                                        <img>
+
+                                        Then, I plotted the frequency response as a result of tapping on the sensor. I referenced this 
+                                        <a href = "https://alphabold.com/fourier-transform-in-python-vibration-analysis/">resource</a> for example Python code. 
+                                        Below are code snippets at the frequency response plot.
+
+                                        <img>
+
+                                        I had to choose a cutoff frequency for the low-pass filter. A higher cutoff frequency implies that rapid movements above the 
+                                        high frequency should not affect the pitch values. When the complimentary low pass filter utilized the calculated alpha value of 
+                                        <code>0.86</code> it didn't have much of an impact on the results as the plots from the serial plotter looked fairly similar. However, 
+                                        using an alpha value of <code>0.14</code> did have an impact. The new plot showed that the pitch and roll values calculated from the 
+                                        accelerometer were sensitive to spaces (AT THESE SPECIFIC TIMES), but the filtered values were not.
+
                                     </p>
 
                                     <h3>Gyroscope</h3>
