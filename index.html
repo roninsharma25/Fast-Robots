@@ -555,10 +555,12 @@
 
                                     <h3>Sensor Experimentation</h3>
                                     <p class="mb-4">
-                                        As I mentioned previoously, I had to change the address of one of the ToF sensors. I turned one sensor off, 
+                                        As I mentioned previously, I had to change the address of one of the ToF sensors. I turned one sensor off, 
                                         but forcing its XSHUT pin low, then I changed the address for the sensor still on by using the 
                                         <code>setI2CAddress()</code> function, and then I wrote a digital high to the XSHUT pin to turn the other 
                                         sensor back on. The code snippet below reflects these actions.
+
+                                        <img src="assets/img/Lab3/ChangeAddress.png" height="450" width="500">
 
                                         <br>
 
@@ -566,13 +568,21 @@
                                         the two sensor addresses being printed, all addresses were printed. This is a problem we established in lab, so I 
                                         used other scripts to check if the sensors were working.
 
-                                        <img>
+                                        <img src="assets/img/Lab3/Addresses_2Sensors.png" height="450" width="500">
 
                                         Instead, I used the read distance example. As the name suggests, this script displays the distance sensed by one 
                                         ToF sensor. Since I had already added the second sensor and changed the address, all I had to add was the logic 
                                         for obtaining the distance for it and displaying it. I utilized the same code that was provided and modified it 
                                         to reference the second sensor object. Below is the code modification and the output of the serial monitor showing 
                                         both sensors operating correctly.
+
+                                        ADD IMAGE OF CODE MODIFICATION
+
+                                        <img src="assets/img/Lab3/Example_Distance_Output.png" height="450" width="500">
+
+                                        <video controls="controls" width="300" height="200" name="Two Sensor Readings">
+                                            <source src="assets/videos/TwoSensorReadings.mov">
+                                        </video>
 
                                         <img>
 
@@ -590,12 +600,16 @@
 
                                         The code snippet below shows how I set the distance mode for both sensors.
 
-                                        <img>
+                                        <img src="assets/img/Lab3/SetDistanceMode.png" height="450" width="500">
 
-                                        Then, I tested the accuracy of this distance mode. For each measurment, I average 25 values and using <code>millis()</code> 
-                                        to find the average ranging time. The graph below shows the output.
+                                        Then, I tested the accuracy of this distance mode. For each measurement, I averaged 25 values and used <code>millis()</code> 
+                                        to find the average ranging time. The images below include the graph and the code used to generate that graph. The blue line 
+                                        represents sensor 1, the orange line represents sensor 2, and the green line represents the line <code>y = x</code>. Overall, 
+                                        the sensors weren't too far off and measured distances fairly close to what I expected.
 
-                                        <img>
+                                        <img src="assets/img/Lab3/SensorAccuracyCode.png" height="450" width="500">
+
+                                        <img src="assets/img/Lab3/SensorAccuracyPlot.png" height="450" width="500">
 
                                         I experimented with different surfaces. When I used the sensor on different colors and other flat surfaces (wood, cloth), 
                                         the accuracy didn't change significantly. However, when I used it to detect uneven/bumpy surfaces (small pile of objects, 
@@ -605,7 +619,15 @@
 
                                     <h3>Infrared Transmission</h3>
                                     <p class="mb-4">
+                                        The ToF sensors utilize laser pulses to measure distances. Infrared distance sensors measure the reflected infrared (IR) light, 
+                                        and then use it to estimate the location of an object. Specifically, the angles of reflected beams are analyzed.
+
+                                        There are active and passive IR sensors. Active sensors are able to emit and detect IR radiation, while passive sensors 
+                                        are only able to detect IR radiation. If I was to use an IR distance sensor on the robot, I would use an active IR sensor 
+                                        so that I could detect any type of obstacles, since it isn't common for objects to emit significant IR radiation. 
                                         
+                                        Generally, IR distance sensors are faily small and are capable of measuring distances to complex surfaces and objects. 
+                                        One problem with infrared sensors is that the light conditions can significantly affect the performance of the sensor.
                                     </p>
 
                                     <h3>Timing Budget</h3>
@@ -614,11 +636,12 @@
                                         the timing budget. I noticed the most notable changes when I used the function <code>setTimingBudgetInMs()</code>. 
                                         This function set the time needed to perform one measurement. A larger value means less frequent measurements, but 
                                         even when I tried larger values, I didn't notice any significant changes in my distance calculations. 
-                                        When I set it to the minimum (<code>20 ms</code>), I was able to more than halve the ranging time (shown below).
+                                        When I set it to the minimum (<code>20 ms</code>), I was able to more than halve the ranging time (shown below). 
+                                        The images below include the code snippet to modify the timing budget and the observed results.
 
-                                        <img>
+                                        <img src="assets/img/Lab3/SmallestTimingBudget.png" height="450" width="500">
 
-                                        <img>
+                                        <img src="assets/img/Lab3/SmallestTimingBudget_Output.png" height="450" width="500">
                                     </p>
 
                                     <h3>"Signal and Sigma"</h3>
@@ -629,7 +652,9 @@
                                         status (it remained good). However, the signal rate did fluctuate after these changes. The video below reflects these 
                                         trials.
 
-                                        <video></video>
+                                        <video controls="controls" width="300" height="200" name="Status and Rate">
+                                            <source src="assets/videos/Lab3/StatusAndRate.mov">
+                                        </video>
 
                                         At the end of the video, the range status changed because the distance exceeded the maximum <code>1.3m</code> of this mode, which was a 
                                         result of me trying to push the fluctuation limits (practically <code>0.0m</code> to <code>1.3m</code>). I was surprised 
@@ -657,39 +682,112 @@
                                         Rotating the IMU about each axis increased the Gyroscope's values for that sensor. I added a one second delay between each display 
                                         to make it easier to analyze the changes on the serial monitor output.
 
-                                        <video></video>
+                                        <video controls="controls" width="300" height="200" name="IMU">
+                                            <source src="assets/videos/Lab3/IMU.mov">
+                                        </video>
                                         
                                     </p>
 
                                     <h3>Accelerometer</h3>
                                     <p class="mb-4">
                                         Next, I used the accelerometer data to compute pitch and roll. I used the formulas from lecture and focused on the output values 
-                                        at <code>-90, 0, and 90</code> degrees for pitch and roll. The plot below shows averages for each measurement.
+                                        at <code>-90, 0, and 90</code> degrees for pitch and roll. The image below shows the code used to perform this calculation.
+                                        
+                                        <img src="assets/img/Lab3/Pitch_Roll_From_Acc.png" height="450" width="500">
+                                        
+                                        The images below show the output pitch calculations at -90, 0, and 90 degree angles, respectively.
 
-                                        <img>
+                                        <img src="assets/img/Lab3/Pitch_-90.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Pitch_0.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Pitch_90.png" height="450" width="500">
+
+                                        The images below show the output roll calculations at -90, 0, and 90 degree angles, respectively.
+
+                                        <img src="assets/img/Lab3/Roll_-90.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Roll_0.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Roll_90.png" height="450" width="500">
+
+                                        ADD RATIONALE IF THESE VALUES ARE CORRECT.
 
                                         Then, I plotted the frequency response as a result of tapping on the sensor. I referenced this 
                                         <a href = "https://alphabold.com/fourier-transform-in-python-vibration-analysis/">resource</a> for example Python code. 
-                                        Below are code snippets at the frequency response plot.
+                                        I updated the Arduino code to print out the pitch and time values.
 
-                                        <img>
+                                        <img src="assets/img/Lab3/Pitch_Time_Values.png" height="450" width="500">
 
-                                        I had to choose a cutoff frequency for the low-pass filter. A higher cutoff frequency implies that rapid movements above the 
-                                        high frequency should not affect the pitch values. When the complimentary low pass filter utilized the calculated alpha value of 
-                                        <code>0.86</code> it didn't have much of an impact on the results as the plots from the serial plotter looked fairly similar. However, 
-                                        using an alpha value of <code>0.14</code> did have an impact. The new plot showed that the pitch and roll values calculated from the 
-                                        accelerometer were sensitive to spaces (AT THESE SPECIFIC TIMES), but the filtered values were not.
+                                        Then, I loaded this data into Python and performed FFT.
+
+                                        <img src="assets/img/Lab3/FFT.png" height="450" width="500">
+
+                                        Below are the resulting time domain and frequency response plots, respectively.
+
+                                        <img src="assets/img/Lab3/Pitch_Time_Domain.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Pitch_Frequency_Response.png" height="450" width="500">
+
+                                        The goal of this analysis was to identify a cutoff frequency for the low-pass filter to help eliminate noise.
+                                        A higher cutoff frequency implies that rapid movements above the high frequency should not affect the pitch values. 
+                                        The frequency response plot didn't reflect a lot of noise readings, so I just used a cutoff frequency of 50 Hz since 
+                                        my future measurements will likely not be greater than 50 Hz. The code snippet below shows the calculation of the 
+                                        alpha value (<code>0.4652</code>) for the filter.
+
+                                        <img src="assets/img/Lab3/Pitch_Alpha_Calculation.png" height="450" width="500">
+
+                                        When the complimentary low pass filter utilized the calculated alpha value of <code>0.4652</code> it didn't have 
+                                        much of an impact on the results as the plots from the serial plotter looked fairly similar. 
+                                        
+                                        <img src="assets/img/Lab3/CompFilter_alpha_46.png" height="450" width="500">
+
+                                        However, using an alpha value of <code>0.14</code> did have an impact. The new plot showed that the pitch and roll values 
+                                        calculated from the accelerometer were sensitive to spaces (AT THESE SPECIFIC TIMES), but the filtered values were not.
+
+                                        <img src="assets/img/Lab3/CompFilter_alpha_14.png" height="450" width="500">
 
                                     </p>
 
                                     <h3>Gyroscope</h3>
                                     <p class="mb-4">
+                                        Next, I used the gyroscope data to compute pitch, roll, and yaw. Again, I used the formulas from lecture to perform these 
+                                        calculations. The gyroscope calculated pitch and roll values were significantly different from the accelerometer's calculated 
+                                        values and the low pass filtered values. The outputs of the Gyroscope's calculations are below.
+
+                                        <img src="assets/img/Lab3/Gyro_YPR.png" height="450" width="500">
+
+                                        <img src="assets/img/Lab3/Gyroscope_1a_dt30.png" height="450" width="500">
+
+                                        The Gyroscope readings tend to drift away from zero. I experimented with lowering the sampling frequency by a factor of 
+                                        ten, and this made the error even worse.
+
+                                        <img src="assets/img/Lab3/Gyroscope_1a_dt300.png" height="450" width="500">
+
+                                        <img>
+
+                                        Next, I tried to improve the accuracy and stablility of the pitch and roll values by implementing a complimentary filter. 
+                                        For this filter, I started with the sampe alpha value as the one I used for the acceleration filter (<code>0.14</code>), 
+                                        since it worked well for that. I also reverted back to the original sampling frequency, which was the sampling frequency 
+                                        that had the least error for the originial gyroscope calculations. This resulted in less drift, with the fluctuations in 
+                                        the middle of the plot a result of rapid rotations.
+
+                                        <img src="assets/img/Lab3/Gyro_Comp_Filter_alpha04.png" height="450" width="500">
                                         
                                     </p>
 
                                     <h3>Magnetometer</h3>
                                     <p class="mb-4">
+                                        The last part of the lab involved using the magnetometer. I converted the data from the magnetomer into yaw angle by using 
+                                        the formulas presented in lecture. The image below shows sample output data.
                                         
+                                        <img src="assets/img/Lab3/ConvertingMagnetometerDataToYaw.png" height="450" width="500">
+
+                                        I noticed some interested trends in the sensor data. The magnetometer's data didn't fluctuate a lot. Its values would 
+                                        change after time intervals, and sometimes remain constant for a substantial period of time. I attempted to find 
+                                        the magnetic north, at which one component should be zero and another component should be at a maximum. The graph 
+                                        below plots the output data while I attempted to find magnetic north.
+
+                                        <img src="assets/img/Lab3/MagnetometerOutput.png" height="450" width="500">
+
+                                        In the graph, one component's magnitude is somewhat close to 0 and another is around 35 mT. As I varied the pitch, 
+                                        the magnetometer's values didn't change significantly. Overall, I expected to see more fluctuations in the data, but 
+                                        this is the output I got from the iMU.
                                     </p>
 
 
