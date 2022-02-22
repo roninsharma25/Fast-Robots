@@ -90,7 +90,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/circus.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab3/TOF_Sensor.jpg" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 3</div>
                     </div>
@@ -508,7 +508,7 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/circus.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab3/TOF_Sensor.jpg" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
@@ -542,12 +542,18 @@
                                     <p class="mb-4">
                                         First, I soldered one sensor and connected it to the Artemis Nano by using the Qwiic Connector, which 
                                         connected directly to the Artemis. Then I daisy-chained a second ToF sensor. For the second sensor, I also 
-                                        had to utilize the XSHUT pin. Since I'm connecting two identical sensors on the same I2C bus, their address 
-                                        is the same. I had to use the XSHUT pin to shut one sensor down and restart it wwith a different address.
+                                        had to utilize the XSHUT pin. Since I'm connecting two identical sensors on the same I2C bus, their addresses 
+                                        are the same. I had to use the XSHUT pin to shut one sensor down and restart it with a different address.
                                         
                                         The final wiring is depicted below.
 
-                                        <img>
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/TOF_Final.png" height="350" width="400">
+
+                                        <br>
+                                        <br>
 
                                         Next, I had to install the <code>SparkFun VL53L1x 4m Laser Distance Sensor</code> library using the Arduino 
                                         IDE's library manager.
@@ -560,7 +566,10 @@
                                         <code>setI2CAddress()</code> function, and then I wrote a digital high to the XSHUT pin to turn the other 
                                         sensor back on. The code snippet below reflects these actions.
 
-                                        <img src="assets/img/Lab3/ChangeAddress.png" height="450" width="500">
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/Change_Address.png" height="350" width="400">
 
                                         <br>
 
@@ -568,52 +577,82 @@
                                         the two sensor addresses being printed, all addresses were printed. This is a problem we established in lab, so I 
                                         used other scripts to check if the sensors were working.
 
-                                        <img src="assets/img/Lab3/Addresses_2Sensors.png" height="450" width="500">
+                                        <br>
+                                        <br>
 
-                                        Instead, I used the read distance example. As the name suggests, this script displays the distance sensed by one 
+                                        <img src="assets/img/Lab3/Addresses_2Sensors.png" height="400" width="450">
+
+                                        <br>
+                                        <br>
+
+                                        Instead, I used the read distance example. As the name suggests, this script displays the distance detected by one 
                                         ToF sensor. Since I had already added the second sensor and changed the address, all I had to add was the logic 
                                         for obtaining the distance for it and displaying it. I utilized the same code that was provided and modified it 
                                         to reference the second sensor object. Below is the code modification and the output of the serial monitor showing 
                                         both sensors operating correctly.
 
-                                        ADD IMAGE OF CODE MODIFICATION
+                                        <br>
+                                        <br>
 
-                                        <img src="assets/img/Lab3/Example_Distance_Output.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Two_Distance_Sensor_Code.png" height="500" width="550">
 
-                                        <video controls="controls" width="300" height="200" name="Two Sensor Readings">
-                                            <source src="assets/videos/TwoSensorReadings.mov">
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/Example_Distance_Output.png" height="350" width="400">
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="300" name="Two Sensor Readings">
+                                            <source src="assets/videos/Lab3/TwoSensorReadings.mov">
                                         </video>
 
-                                        <img>
+                                        <br>
+                                        <br>
 
                                         Next, I explored the three distance modes (short, medium, and long) that the ToF sensor has. The short distance 
                                         mode is good for sensing immediate obstacles. However, if there's the occasional larger distance that needs to 
                                         be detected, this mode would cause a problem since it wouldn't be able to detect it (it has a max of 1.3m). 
-                                        The long distance mode is good for checking that there is a lot of open space in front of the robot. It might be 
+                                        The long distance mode is good for checking that there is a lot of open space in front of the robot. It might 
                                         not be as helpful if there are abrupt close obstacles since this would lead to fluctuations in close and far distance 
-                                        sensing. This mode is also more error prone where there are inconsistencies in the surrounding environment. The medium 
+                                        sensing. This mode is also more error prone when there are inconsistencies in the surrounding environment. The medium 
                                         distance mode should be the happy middle of the previous two modes. A slight disadvantage is that it's not specialized 
                                         in short or long distances. Ultimately, I chose the short distance mode for the robot because I believe we will mainly want 
-                                        to measure nearby obstacles. Given the size of the robot, this mode will create a large sensing area around the robot.
+                                        to detect nearby obstacles. Given the size of the robot, this mode will create a large sensing area around the robot.
 
+                                        <br>
                                         <br>
 
                                         The code snippet below shows how I set the distance mode for both sensors.
 
-                                        <img src="assets/img/Lab3/SetDistanceMode.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/SetDistanceMode.png" height="250" width="400">
+
+                                        <br>
+                                        <br>
 
                                         Then, I tested the accuracy of this distance mode. For each measurement, I averaged 25 values and used <code>millis()</code> 
                                         to find the average ranging time. The images below include the graph and the code used to generate that graph. The blue line 
                                         represents sensor 1, the orange line represents sensor 2, and the green line represents the line <code>y = x</code>. Overall, 
-                                        the sensors weren't too far off and measured distances fairly close to what I expected.
+                                        the sensors weren't too far off and measured distances were fairly close to what I expected.
+
+                                        <br>
+                                        <br>
 
                                         <img src="assets/img/Lab3/SensorAccuracyCode.png" height="450" width="500">
 
+                                        <br>
+                                        <br>
+
                                         <img src="assets/img/Lab3/SensorAccuracyPlot.png" height="450" width="500">
 
+                                        <br>
+                                        <br>
+
                                         I experimented with different surfaces. When I used the sensor on different colors and other flat surfaces (wood, cloth), 
-                                        the accuracy didn't change significantly. However, when I used it to detect uneven/bumpy surfaces (small pile of objects, 
-                                        crumpled up paper), the values still ended up being fairly consistent.
+                                        the accuracy didn't change significantly. Even when I used it to detect uneven/bumpy surfaces (small pile of objects, 
+                                        crumpled up paper), the values still ended up being fairly consistent. This demonstrates that these sensors are fairly 
+                                        robust.
                                         
                                     </p>
 
@@ -622,9 +661,15 @@
                                         The ToF sensors utilize laser pulses to measure distances. Infrared distance sensors measure the reflected infrared (IR) light, 
                                         and then use it to estimate the location of an object. Specifically, the angles of reflected beams are analyzed.
 
+                                        <br>
+                                        <br>
+
                                         There are active and passive IR sensors. Active sensors are able to emit and detect IR radiation, while passive sensors 
                                         are only able to detect IR radiation. If I was to use an IR distance sensor on the robot, I would use an active IR sensor 
                                         so that I could detect any type of obstacles, since it isn't common for objects to emit significant IR radiation. 
+
+                                        <br>
+                                        <br>
                                         
                                         Generally, IR distance sensors are faily small and are capable of measuring distances to complex surfaces and objects. 
                                         One problem with infrared sensors is that the light conditions can significantly affect the performance of the sensor.
@@ -639,27 +684,36 @@
                                         When I set it to the minimum (<code>20 ms</code>), I was able to more than halve the ranging time (shown below). 
                                         The images below include the code snippet to modify the timing budget and the observed results.
 
-                                        <img src="assets/img/Lab3/SmallestTimingBudget.png" height="450" width="500">
+                                        <br>
+                                        <br>
 
-                                        <img src="assets/img/Lab3/SmallestTimingBudget_Output.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/SmallestTimingBudget.png" height="250" width="400">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/SmallestTimingBudget_Output.png" height="400" width="500">
                                     </p>
 
                                     <h3>"Signal and Sigma"</h3>
                                     <p class="mb-4">
-                                        The last aspect of the ToF sensors that I analyzed was its "signal and sigma" parameters. These parameters specify if 
+                                        The last aspect of the ToF sensors that I analyzed was their "signal and sigma" parameters. These parameters specify if 
                                         the sensor's readings are valid, which allowed me to discard invalid measurements. I used the minimum timing budget 
-                                        (<code>20 ms</code>) with the short distance mode, but abruptly changing the distance to an object didn't impact the range 
+                                        (<code>20 ms</code>) with the short distance mode, and abruptly changing the distance to an object didn't impact the range 
                                         status (it remained good). However, the signal rate did fluctuate after these changes. The video below reflects these 
                                         trials.
 
-                                        <video controls="controls" width="300" height="200" name="Status and Rate">
+                                        <video controls="controls" width="400" height="300" name="Status and Rate">
                                             <source src="assets/videos/Lab3/StatusAndRate.mov">
                                         </video>
 
+                                        <br>
+                                        <br>
+
                                         At the end of the video, the range status changed because the distance exceeded the maximum <code>1.3m</code> of this mode, which was a 
                                         result of me trying to push the fluctuation limits (practically <code>0.0m</code> to <code>1.3m</code>). I was surprised 
-                                        by this behavior since I expected rapid fluctuations to cause the signal too fail, at least occasionally. I'll have to check 
-                                        this again prior too completing future lab tasks, and possible increase the timing budget accordingly.
+                                        by this behavior since I expected rapid fluctuations to cause the signal to fail, at least occasionally. I'll have to check 
+                                        this again prior too completing future lab tasks, and possibly increase the timing budget accordingly.
                                     </p>
 
                                     <h1>Inertial Measurement Unit</h1>
@@ -669,20 +723,30 @@
                                         First, I soldered the IMU's connections, which were also daisy chained to the previous ToF sensors. The soldered sensor is depicted 
                                         below.
 
-                                        <img>
+                                        <br>
+                                        <br>
 
-                                        Then, I installed the apropriate Arduino library: <code>SparkFun 9DOF IMU Breakout - ICM 20948</code>. I ran the same provided code 
+                                        <img src="assets/img/Lab3/IMU_Final.png" height="350" width="400">
+
+                                        <br>
+                                        <br>
+
+                                        Then, I installed the appropriate Arduino library: <code>SparkFun 9DOF IMU Breakout - ICM 20948</code>. I ran the same provided code 
                                         to display the sensor's I2C address, but this just printed all addresses since multiple sensors were connected.
 
                                         <br>
+                                        <br>
 
                                         I ran the basic example which displayed various sensor values. I modified the script and set <code>AD0_VAL</code> to 0 because the ADR 
-                                        jumper is closed. By default the ADR jumper is open, which requires this value to be 1, but that doesn't work correctly for my circuit 
+                                        jumper is closed. By default, the ADR jumper is open, which requires this value to be 1, but that doesn't work correctly for my circuit 
                                         since the ADR jumper is closed. The video below shows the changes based on accelerations in the x, y, and z directions, respectively. 
                                         Rotating the IMU about each axis increased the Gyroscope's values for that sensor. I added a one second delay between each display 
                                         to make it easier to analyze the changes on the serial monitor output.
 
-                                        <video controls="controls" width="300" height="200" name="IMU">
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="400" height="300" name="IMU">
                                             <source src="assets/videos/Lab3/IMU.mov">
                                         </video>
                                         
@@ -692,53 +756,109 @@
                                     <p class="mb-4">
                                         Next, I used the accelerometer data to compute pitch and roll. I used the formulas from lecture and focused on the output values 
                                         at <code>-90, 0, and 90</code> degrees for pitch and roll. The image below shows the code used to perform this calculation.
+
+                                        <br>
+                                        <br>
                                         
-                                        <img src="assets/img/Lab3/Pitch_Roll_From_Acc.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Pitch_Roll_From_Acc.png" height="350" width="400">
+                                        <br>
                                         
-                                        The images below show the output pitch calculations at -90, 0, and 90 degree angles, respectively.
+                                        The images below show the output calculations for pitch at -90, 0, and 90 degree angles, respectively.
 
-                                        <img src="assets/img/Lab3/Pitch_-90.png" height="450" width="500">
-                                        <img src="assets/img/Lab3/Pitch_0.png" height="450" width="500">
-                                        <img src="assets/img/Lab3/Pitch_90.png" height="450" width="500">
+                                        <br>
+                                        <br>
+                                        <img src="assets/img/Lab3/Pitch_-90.png" height="350" width="400">
+                                        <br>
+                                        <hr>
+                                        <img src="assets/img/Lab3/Pitch_0.png" height="350" width="400">
+                                        <br>
+                                        <hr>
+                                        <img src="assets/img/Lab3/Pitch_90.png" height="350" width="400">
+                                        <br>
+                                        <br>
 
-                                        The images below show the output roll calculations at -90, 0, and 90 degree angles, respectively.
+                                        The images below show the output calculations for roll at -90, 0, and 90 degree angles, respectively.
 
-                                        <img src="assets/img/Lab3/Roll_-90.png" height="450" width="500">
-                                        <img src="assets/img/Lab3/Roll_0.png" height="450" width="500">
-                                        <img src="assets/img/Lab3/Roll_90.png" height="450" width="500">
+                                        <br>
+                                        <br>
+                                        <img src="assets/img/Lab3/Roll_-90.png" height="350" width="400">
+                                        <br>
+                                        <hr>
+                                        <img src="assets/img/Lab3/Roll_0.png" height="350" width="400">
+                                        <br>
+                                        <hr>
+                                        <img src="assets/img/Lab3/Roll_90.png" height="350" width="400">
+                                        <br>
+                                        <br>
 
-                                        ADD RATIONALE IF THESE VALUES ARE CORRECT.
+                                        For both pitch and roll, the expected values were <code>-1.57 (-pi/2), 0, and 1.57 (pi/2)</code>, which is fairly 
+                                        close to the computed values. The maximum error is <code>0.20</code>, which is less than <code>15%</code> error.
+
+                                        <br>
+                                        <br>
 
                                         Then, I plotted the frequency response as a result of tapping on the sensor. I referenced this 
                                         <a href = "https://alphabold.com/fourier-transform-in-python-vibration-analysis/">resource</a> for example Python code. 
                                         I updated the Arduino code to print out the pitch and time values.
 
+                                        <br>
+                                        <br>
+
                                         <img src="assets/img/Lab3/Pitch_Time_Values.png" height="450" width="500">
 
-                                        Then, I loaded this data into Python and performed FFT.
+                                        <br>
+                                        <br>
 
-                                        <img src="assets/img/Lab3/FFT.png" height="450" width="500">
+                                        Then, I loaded this data into Python and performed FFT.
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/FFT.png" height="400" width="450">
+
+                                        <br>
+                                        <br>
 
                                         Below are the resulting time domain and frequency response plots, respectively.
 
                                         <img src="assets/img/Lab3/Pitch_Time_Domain.png" height="450" width="500">
                                         <img src="assets/img/Lab3/Pitch_Frequency_Response.png" height="450" width="500">
 
+                                        <br>
+                                        <br>
+
                                         The goal of this analysis was to identify a cutoff frequency for the low-pass filter to help eliminate noise.
                                         A higher cutoff frequency implies that rapid movements above the high frequency should not affect the pitch values. 
                                         The frequency response plot didn't reflect a lot of noise readings, so I just used a cutoff frequency of 50 Hz since 
                                         my future measurements will likely not be greater than 50 Hz. The code snippet below shows the calculation of the 
-                                        alpha value (<code>0.4652</code>) for the filter.
+                                        alpha value (<code>0.4652</code>) for the filter (based on the formulas in the lecture slides).
+
+                                        <br>
+                                        <br>
 
                                         <img src="assets/img/Lab3/Pitch_Alpha_Calculation.png" height="450" width="500">
 
+                                        <br>
+                                        <br>
+
                                         When the complimentary low pass filter utilized the calculated alpha value of <code>0.4652</code> it didn't have 
-                                        much of an impact on the results as the plots from the serial plotter looked fairly similar. 
+                                        much of an impact on the results as the plots from the serial plotter looked fairly similar. The blue and green 
+                                        lines are the acceleration values calculated from the accelerometer, and the red and orange lines are the filtered values.
+
+                                        <br>
+                                        <br>
                                         
                                         <img src="assets/img/Lab3/CompFilter_alpha_46.png" height="450" width="500">
 
+                                        <br>
+                                        <br>
+
                                         However, using an alpha value of <code>0.14</code> did have an impact. The new plot showed that the pitch and roll values 
-                                        calculated from the accelerometer were sensitive to spaces (AT THESE SPECIFIC TIMES), but the filtered values were not.
+                                        calculated from the accelerometer were sensitive to taps at <code>t = 125, t = 175</code>, but the filtered values were 
+                                        not.
+
+                                        <br>
+                                        <br>
 
                                         <img src="assets/img/Lab3/CompFilter_alpha_14.png" height="450" width="500">
 
@@ -750,16 +870,29 @@
                                         calculations. The gyroscope calculated pitch and roll values were significantly different from the accelerometer's calculated 
                                         values and the low pass filtered values. The outputs of the Gyroscope's calculations are below.
 
-                                        <img src="assets/img/Lab3/Gyro_YPR.png" height="450" width="500">
+                                        <br>
+                                        <br>
 
-                                        <img src="assets/img/Lab3/Gyroscope_1a_dt30.png" height="450" width="500">
+                                        <img src="assets/img/Lab3/Gyro_YPR.png" height="400" width="600">
 
-                                        The Gyroscope readings tend to drift away from zero. I experimented with lowering the sampling frequency by a factor of 
-                                        ten, and this made the error even worse.
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/Gyroscope_1a_dt30.png" height="400" width="600">
+
+                                        <br>
+                                        <br>
+
+                                        In the plot above, the green and grey lines are the Gyroscope readings. They tend to drift away from zero. I experimented 
+                                        with lowering the sampling frequency by a factor of ten, and this made the error even worse.
+
+                                        <br>
+                                        <br>
 
                                         <img src="assets/img/Lab3/Gyroscope_1a_dt300.png" height="450" width="500">
 
-                                        <img>
+                                        <br>
+                                        <br>
 
                                         Next, I tried to improve the accuracy and stablility of the pitch and roll values by implementing a complimentary filter. 
                                         For this filter, I started with the sampe alpha value as the one I used for the acceleration filter (<code>0.14</code>), 
@@ -767,7 +900,10 @@
                                         that had the least error for the originial gyroscope calculations. This resulted in less drift, with the fluctuations in 
                                         the middle of the plot a result of rapid rotations.
 
-                                        <img src="assets/img/Lab3/Gyro_Comp_Filter_alpha04.png" height="450" width="500">
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/Gyro_Comp_Filter_alpha04.png" height="400" width="650">
                                         
                                     </p>
 
@@ -775,19 +911,31 @@
                                     <p class="mb-4">
                                         The last part of the lab involved using the magnetometer. I converted the data from the magnetomer into yaw angle by using 
                                         the formulas presented in lecture. The image below shows sample output data.
-                                        
-                                        <img src="assets/img/Lab3/ConvertingMagnetometerDataToYaw.png" height="450" width="500">
 
-                                        I noticed some interested trends in the sensor data. The magnetometer's data didn't fluctuate a lot. Its values would 
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab3/ConvertingMagnetometerDataToYaw.png" height="350" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        I noticed some interesting trends in the sensor data. The magnetometer's data didn't fluctuate a lot. Its values would 
                                         change after time intervals, and sometimes remain constant for a substantial period of time. I attempted to find 
                                         the magnetic north, at which one component should be zero and another component should be at a maximum. The graph 
                                         below plots the output data while I attempted to find magnetic north.
 
-                                        <img src="assets/img/Lab3/MagnetometerOutput.png" height="450" width="500">
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab3/MagnetometerOutput.png" height="350" width="400">
+
+                                        <br>
+                                        <br>
 
                                         In the graph, one component's magnitude is somewhat close to 0 and another is around 35 mT. As I varied the pitch, 
                                         the magnetometer's values didn't change significantly. Overall, I expected to see more fluctuations in the data, but 
-                                        this is the output I got from the iMU.
+                                        this is the output I observed from the IMU.
                                     </p>
 
 
