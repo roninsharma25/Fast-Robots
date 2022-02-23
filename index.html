@@ -100,7 +100,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/game.png" alt="..." />
+                            <img class="img-fluid" style="width:360px;" src="assets/img/Lab4/Car_Top.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 4</div>
                     </div>
@@ -189,7 +189,7 @@
                                     </p>
 
                                     <h1>Materials</h1>
-                                    <p >Artemis Nano</p>
+                                    <p>Artemis Nano</p>
                                     <p class="mb-4">USB C-to-C Cable</p>
 
                                     <h1>Setup</h1>
@@ -321,7 +321,7 @@
                                     </p>
 
                                     <h1>Materials</h1>
-                                    <p >Artemis Nano</p>
+                                    <p>Artemis Nano</p>
                                     <p class="mb-4">USB C-to-C Cable</p>
                                     <p>Bluetooth 4.0 Low Energy Micro Adaptor</p>
 
@@ -346,6 +346,10 @@
                                         to obtain the Artemis Nano's MAC address, which can be seen below.
                                         
                                         <img src="assets/img/Lab2/ArtemisMACAddress.png" height="150" width="500">
+<<<<<<< HEAD
+
+=======
+>>>>>>> 11b55fc1d79159ea42542b53d91ee702b0a6f474
                                         <br>
                                     
                                         I had to use this MAC address as a final configuration step for BLE. The provided Python code had a 
@@ -520,7 +524,7 @@
                                     </p>
 
                                     <h1>Materials</h1>
-                                    <p >Artemis Nano</p>
+                                    <p>Artemis Nano</p>
                                     <p>USB C-to-C Cable</p>
                                     <p>Two 4m Time-of-Flight Distance Sensors</p>
                                     <p>9DOF Inertial Measurement Unit Sensor</p>
@@ -962,7 +966,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 4</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 4: Characterize Your Car</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -970,9 +974,287 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/game.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab4/Car_Top.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Coming soon!</p>
+                                    <h1>Overview</h1>
+                                    <p class="mb-4">
+                                        The purpose of this lab was to understand the capabilities of the RC car. I performed the necessary 
+                                        steps to power the Artemis Nano Board with a battery. Then I performed simple measurements and more 
+                                        complicated experimental analyses to learn about the car's abilities and limitations.
+                                    </p>
+
+                                    <h1>Materials</h1>
+                                    <p>Artemis Nano</p>
+                                    <p>USB C-to-C Cable</p>
+                                    <p>Battery Packs (600mAh and 850 mAh)</p>
+                                    <p>2mm JST Connector</p>
+                                    <p>RC Car</p>
+                                    
+
+                                    <h1>Artemis Nano Setup</h1>
+                                    <p class="mb-4">
+                                        First, I setup the Artemis Nano to be battery powered. This allowed me to use the Artemis untethered to my computer. 
+                                        I soldered the 600mAh battery's connector to the 2mm JST connector, which fit into the Artemis. I was able to charge the 
+                                        battery by connecting the Artemis to my computer by using the USB C-to-C cable.
+                                    </p>
+
+                                    <h1>Simple Measurements</h1>
+                                    <p class="mb-4">
+                                        I started by measuring the dimensions of the car. The complete dimensions are 18 cm x 14.5 cm x 8 cm. The diameter of the wheel 
+                                        is 8.5 cm. Here are images of the top and bottom of the car.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab4/Car_Top.png" height="400">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab4/Car_Bottom.png" height="400">
+
+                                        <br>
+                                        <br>
+                                        
+                                        When using the ToF sensors in future labs, I may want to identify the location of the robot. Ideally, I'd want to 
+                                        know the center of the robot. However, the ToF sensors will not be located at the center of the robot, and instead one will be 
+                                        on the front and the other will be on the side. By measuring the dimension of the robot, for the front ToF sensor, I can add the 
+                                        distance detected to half of the length of the car. Similarly, for the side ToF sensor, I can add the distance detected to half 
+                                        of the width of the car. The IMU's accelerometer will be used to calculate distance traveled, so using that data in addition to 
+                                        these measurements will allow me to pinpoint the center of the robot.
+
+                                        <br>
+                                        <br>
+
+                                        I also measured the small compartment on the car which will be used to store some components such as the Artemis Nano Board, which 
+                                        is depicted below.
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab4/Compartment.png" height="400">
+
+                                        <br>
+                                        <br>
+
+                                        I can probably keep some components in addition to the Artemis Board in the compartment, and can use this measurement to plan 
+                                        which components will fit. The dimensions of the compartment were 6.5 cm x 3.5 cm x 2.5 cm. However, I plan to keep the top 
+                                        open so the height of this compartment doesn't matter.
+
+                                        <img>
+
+                                        <br>
+                                        <br>
+
+                                        Lastly, I measured the battery life time. This will allow me to plan for future labs, since I will know how long I can operate the 
+                                        robot without needing to change the battery. I experimented with five batteries, and the life times were between 8-9 minutes.
+                                    </p>
+
+                                    <h1>Experimental Analyses</h1>
+
+                                    <i>Collaborator: Chris Chan</i>
+
+                                    <h3>Straight Line Movement</h3>
+                                    <p class="mb-4">
+                                        In future labs, the robot will be moving a lot. I believe one important aspect will be to keep the robot as straight as possible 
+                                        when it is moving forward. I will end up using PID to help with this, but I wanted to assess how straight the robot moves on its 
+                                        own. I tested moving the car straight on two surfaces: a carpet and a couch. I tried to pick fairly extreme types of surfaces 
+                                        to stress test the car's movement. It moved fairly straight on the carpet, with some slight angular movements, but it was much 
+                                        more angled on the couch. Hopefully I'll be able to use better surfaces for the later labs, but PID will also help with straightening 
+                                        out the motion.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Movement Carpet">
+                                            <source src="assets/videos/Lab4/Move_Carpet.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Movement Couch">
+                                            <source src="assets/videos/Lab4/Move_Couch.mov">
+                                        </video>
+                                    </p>
+
+                                    <h3>Turning Mechanism</h3>
+                                    <p class="mb-4">
+                                        Next, I explored how well the car can turn around its own axis. When it detects obstacles in future labs, it will definitely 
+                                        need to maneuver around them. For instance, an obstacle can suddenly appear, and the robot will need to immediately turn to 
+                                        avoid it. For this reason, I wanted to check how fast and reliable the car can turn. The two videos below show the robot turning 
+                                        on two different surfaces.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Turning Table">
+                                            <source src="assets/videos/Lab4/Spin_Table.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Turning Carpet">
+                                            <source src="assets/videos/Lab4/Turning.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        In both scenarios, the robot does move while turning, and this is much more apparent in the carpet turning as compared to the table turning. 
+                                        However, I don't believe this will be a big problem because I don't believe the robot will need to replicate this action. It may need to perform a 
+                                        180 degree turn, but it will not need to consistently turn for an elongated period of time. As a result, the apparent drift from continuously 
+                                        turning shouldn't be a problem moving forward.
+                                    </p>
+
+                                    <h3>Car Stunts/Tricks</h3>
+
+                                    <h4>Ramp</h4>
+                                    <p class="mb-4">
+                                        Next, I wanted to test how well I can operate the car manually. This allowed me to understand the "upper limit" of what the robot will be 
+                                        able to do. It also allowed me to think about the commands the Artemis will need to perform these types of actions. Overall, I learned 
+                                        that it is fairly simple to have the robot do tricks, since they only require a few combinations of commands (forward/backward and vice versa).
+
+                                        <br>
+                                        <br>
+
+                                        I started by seeing if I could drive the car up a fairly steep incline. I used wooden planks with velcro to create the incline. I tried this 
+                                        several times but didn't have a ton of success. Usually, the car would make it up part of the ramp, but then it would fall off the side of the 
+                                        ramp. The following two videos show failed attempts to get to the top of the ramp.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Ramp Fail 1">
+                                            <source src="assets/videos/Lab4/Ramp_Fail1.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Ramp Fail 2">
+                                            <source src="assets/videos/Lab4/Ramp_Fail2.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        Eventually, I was able to get the robot to the top of the ramp.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" height="400" name="Ramp Success">
+                                            <source src="assets/videos/Lab4/Ramp_Success.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+                                    </p>
+                                    
+                                    <h4>Flips</h4>
+                                    <p class="mb-4">
+                                        Next, I experimented with getting the robot to flip. I was able to do this fairly easily. I moved the robot forward and 
+                                        then quickly flipped the direction, which caused it to flip. The video below demonstrates this behavior.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Flips">
+                                            <source src="assets/videos/Lab4/Flips.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        I also tried to get the car to land on its side following a flip. I achieved this by moving the robot forward, then quickly 
+                                        changing directions, and then I quickly turned the robot slightly to the right. This didn't always work since sometimes the 
+                                        robot would just fall over. The video below demonstrates a working example of the robot ending up on its side.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Flips Side">
+                                            <source src="assets/videos/Lab4/Flips_Side.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        The video below shows a full suite of stunts.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="800" name="Flips Side">
+                                            <source src="assets/videos/Lab4/Flips_and_Tricks2.mov">
+                                        </video>
+                                    </p>
+
+                                    <h3>Launching Distance</h3>
+                                    <p class="mb-4">
+
+                                        Lastly, I measured the maximum launching distance of the car. I started the car at the edge of a circular table and then launched 
+                                        it towards a couch. The table had a larger height than the couch. Here are the distances and heights of the setup.
+
+                                        <p>Height of table: 70 cm</p>
+                                        <p>Diameter of the table (distance traveled by the car): 118 cm</p>
+                                        <p>Height of the couch: 46 cm</p>
+                                        
+                                        <br>
+                                        <br>
+                                        
+                                        The image below depicts the car at the edge of the table prior to the launch.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab4/Launch_Setup.png" height="300" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        I tested various distances to identify how far the car could travel. The four videos below show the success at covering 76 and 78 cm, along 
+                                        with the failure to cover 80 and 82 cm, respectively.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Launch 76">
+                                            <source src="assets/videos/Lab4/Launch_76_Success.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Launch 78">
+                                            <source src="assets/videos/Lab4/Launch_78_Success.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Launch 80">
+                                            <source src="assets/videos/Lab4/Launch_80_Fail.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Launch 82">
+                                            <source src="assets/videos/Lab4/Launch_82_Fail.mov">
+                                        </video>
+                                        
+                                        <br>
+                                        <br>
+
+                                        I wanted to test this because I didn't have a lot of success with driving the car up a ramp. Even though this wasn't the same, 
+                                        this allowed me to learn more about manually operating the car. Even though I probably won't directly use this information 
+                                        in later labs, it was a lot of fun to see how far the car could travel. 
+                                    </p>
+
+
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
                                         Close Window
