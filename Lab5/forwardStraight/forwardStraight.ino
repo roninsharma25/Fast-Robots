@@ -3,7 +3,7 @@ int m1_pin1 = 2;
 int m1_pin2 = 3;
 
 // Motor 2
-int m2_pin1 = 15;
+int m2_pin1 = 14;
 int m2_pin2 = 16;
 
 void setup() {
