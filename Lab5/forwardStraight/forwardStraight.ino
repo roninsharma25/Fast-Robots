@@ -29,7 +29,11 @@ void loop() {
   analogWrite(m2_pin1, 100);
   analogWrite(m2_pin2, 0);
 
-  delay(500);
+  unsigned long startTime = millis();
+  int count = 0;
+  while (millis() - startTime < 5) {
+    count += 1;
+  }
 
   // Stop
   analogWrite(m1_pin1, 0);

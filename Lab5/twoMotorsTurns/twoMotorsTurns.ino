@@ -1,10 +1,10 @@
 // Motor 1
-int m1_pin1 = A2;
-int m1_pin2 = A3;
+int m1_pin1 = 2;
+int m1_pin2 = 3;
 
 // Motor 2
-int m2_pin1 = A5;
-int m2_pin2 = 6;
+int m2_pin1 = 15;
+int m2_pin2 = 16;
 
 // Constants
 int m1_val = 100;
@@ -40,7 +40,7 @@ void loop() {
 
 void turnRight() {
   analogWrite(m1_pin1, m1_val);
-  analogWrite(m1_pin2, m1_val);
+  analogWrite(m1_pin2, 0);
 
   analogWrite(m2_pin1, 0);
   analogWrite(m2_pin2, 0);
@@ -51,15 +51,15 @@ void turnLeft() {
   analogWrite(m1_pin2, 0);
 
   analogWrite(m2_pin1, m2_val);
-  analogWrite(m2_pin2, m2_val);
+  analogWrite(m2_pin2, 0);
 }
 
 void moveForward() {
   analogWrite(m1_pin1, m1_val);
-  analogWrite(m1_pin2, m1_val);
+  analogWrite(m1_pin2, 0);
 
   analogWrite(m2_pin1, m2_val);
-  analogWrite(m2_pin2, m2_val);
+  analogWrite(m2_pin2, 0);
 }
 
 void stopRobot() {

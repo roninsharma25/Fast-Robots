@@ -1,7 +1,7 @@
 // Motor 1
 
-int pin1 = A2;
-int pin2 = A3;
+int pin1 = 2;
+int pin2 = 3;
 
 void setup() {
   // put your setup code here, to run once:
@@ -15,17 +15,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  Serial.println("loop");
 
   // Forward
-  analogWrite(pin1, 200);
-  analogWrite(pin2, 200);
+  analogWrite(pin1, 0);
+  analogWrite(pin2, 100);
 
-  delay(500);
+  delay(2000);
 
   // Stop
   analogWrite(pin1, 0);
   analogWrite(pin2, 0);
 
-  delay(500);
+  delay(2000);
 
 }
