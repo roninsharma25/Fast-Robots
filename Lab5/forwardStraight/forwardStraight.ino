@@ -22,16 +22,18 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
+  delay(1000);
+
   // Forward
-  analogWrite(m1_pin1, 100);
+  analogWrite(m1_pin1, 115);
   analogWrite(m1_pin2, 0);
 
-  analogWrite(m2_pin1, 100);
-  analogWrite(m2_pin2, 0);
+  analogWrite(m2_pin1, 0);
+  analogWrite(m2_pin2, 110);
 
   unsigned long startTime = millis();
   int count = 0;
-  while (millis() - startTime < 5) {
+  while (millis() - startTime < 1500) {
     count += 1;
   }
 
@@ -42,6 +44,6 @@ void loop() {
   analogWrite(m2_pin1, 0);
   analogWrite(m2_pin2, 0);
 
-  delay(500);
+  while(1);
 
 }

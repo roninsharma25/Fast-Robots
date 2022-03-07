@@ -14,12 +14,9 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println("loop");
-
   // Forward
-  analogWrite(pin1, 0);
-  analogWrite(pin2, 100);
+  analogWrite(pin1, 100);
+  analogWrite(pin2, 0);
 
   delay(2000);
 
@@ -27,6 +24,8 @@ void loop() {
   analogWrite(pin1, 0);
   analogWrite(pin2, 0);
 
-  delay(2000);
+  while(1);
+  
+  //delay(2000);
 
 }
