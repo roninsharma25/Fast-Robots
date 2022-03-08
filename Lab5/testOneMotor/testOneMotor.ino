@@ -4,13 +4,10 @@ int pin1 = 2;
 int pin2 = 3;
 
 void setup() {
-  // put your setup code here, to run once:
-
   Serial.begin(9600);
   
   pinMode(pin1, OUTPUT);
   pinMode(pin2, OUTPUT);
-
 }
 
 void loop() {
@@ -25,7 +22,4 @@ void loop() {
   analogWrite(pin2, 0);
 
   while(1);
-  
-  //delay(2000);
-
 }
