@@ -1304,11 +1304,33 @@
                                     
                                     <h1>Setup</h1>
                                     <p class="mb-4">
+                                        In the previous, I demonstrated that I could manually control the RC car. In this lab, I had to modify 
+                                        the car to allow the Artemis board to control it. One of the primary considerations was the speed of the 
+                                        car, hence the course name: <i>Fast</i> Robots. To increase the speed of the car, I parallel coupled each 
+                                        motor driver. This allowed me to double the amount of current delivered to the motor. I had to use PWM pins 
+                                        on the Artemis board to control the motor drivers. I reeferenced the pinout diagrams 
+                                        <a href="https://cdn.sparkfun.com/assets/5/5/1/6/3/RedBoard-Artemis-Nano.pdf">here</a> to determine which 
+                                        pins support PWM on the Artemis Nano. Based on the motor driver's documentation, which can be found 
+                                        <a href="https://www.pololu.com/product-info-merged/2130">here</a>, I decided to hook up the motor drivers 
+                                        as show below.
+
+                                        <img>
+
+                                        I had to solder the majority of the connections. I also had to disassemble some parts of the RC car. Specifically, 
+                                        I removed the blue shell, chassis LEDs, and control PCB. Lastly, I mounted all components on the car (sensors, 
+                                        motor drivers, Artemis Nano). The images below depict everything assembled.
+
                                         
                                     </p>
 
                                     <h1>Basic Motor Operation</h1>
                                     <p class="mb-4">
+                                        To test the operation of the motors, I placed the car on its side and experimented with running the motor in 
+                                        both directions. The two videos below show the expected functionality.
+
+                                        <video></video>
+
+                                        <video></video>
                                         
                                     </p>
 
@@ -1316,6 +1338,8 @@
 
                                     <h3>Lower Limit of the Motor</h3>
                                     <p class="mb-4">
+                                        Next, I determined the lowest PWM signal I could send to the motor drivers such that the robot still moved on the 
+                                        ground. In the code snippet below, I simply varied the value written to pins A2, A3, A14, and A16.
                                         
                                     </p>
 
