@@ -110,7 +110,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/safe.png" alt="..." />
+                            <img class="img-fluid" style="width:360px;" src="assets/img/Lab5/Robot2.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 5</div>
                     </div>
@@ -1285,7 +1285,7 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/safe.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab5/Robot2.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
 
                                     <h1>Overview</h1>
@@ -1304,21 +1304,55 @@
                                     
                                     <h1>Setup</h1>
                                     <p class="mb-4">
-                                        In the previous, I demonstrated that I could manually control the RC car. In this lab, I had to modify 
+                                        In the previous lab, I demonstrated that I could manually control the RC car. In this lab, I had to modify 
                                         the car to allow the Artemis board to control it. One of the primary considerations was the speed of the 
                                         car, hence the course name: <i>Fast</i> Robots. To increase the speed of the car, I parallel coupled each 
                                         motor driver. This allowed me to double the amount of current delivered to the motor. I had to use PWM pins 
-                                        on the Artemis board to control the motor drivers. I reeferenced the pinout diagrams 
+                                        on the Artemis board to control the motor drivers. I referenced the pinout diagrams 
                                         <a href="https://cdn.sparkfun.com/assets/5/5/1/6/3/RedBoard-Artemis-Nano.pdf">here</a> to determine which 
                                         pins support PWM on the Artemis Nano. Based on the motor driver's documentation, which can be found 
                                         <a href="https://www.pololu.com/product-info-merged/2130">here</a>, I decided to hook up the motor drivers 
-                                        as show below.
+                                        as shown below.
 
-                                        <img>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/MotorDriverConnections.png" width="300">
+
+                                        <br>
 
                                         I had to solder the majority of the connections. I also had to disassemble some parts of the RC car. Specifically, 
                                         I removed the blue shell, chassis LEDs, and control PCB. Lastly, I mounted all components on the car (sensors, 
                                         motor drivers, Artemis Nano). The images below depict everything assembled.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/Robot1.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/Robot2.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/Robot3.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/Robot4.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/Robot5.png" width="300">
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/Robot6.png" width="300">
 
                                         
                                     </p>
@@ -1326,12 +1360,59 @@
                                     <h1>Basic Motor Operation</h1>
                                     <p class="mb-4">
                                         To test the operation of the motors, I placed the car on its side and experimented with running the motor in 
-                                        both directions. The two videos below show the expected functionality.
+                                        both directions. The code snippet below shows how I initialized the motor driver's PWM pins, and used <code>analogWrite</code> 
+                                        to write the PWM signal values.
 
-                                        <video></video>
+                                        <br>
+                                        <br>
 
-                                        <video></video>
+                                        <img src="assets/img/Lab5/testOneMotor.png" width="300">
+
+                                        <br>
                                         
+                                        The two videos below show the expected functionality of the wheels turning in both directions.
+
+                                        <video controls="controls" width="300" height="200" name="Launch 82">
+                                            <source src="assets/videos/Lab5/MotorsTurn1.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" height="200" name="Launch 82">
+                                            <source src="assets/videos/Lab5/MotorsTurn2.mov">
+                                        </video>
+                                        
+                                        <br>
+
+                                        Then, I expanded this to two motors. I initialized the additional two PWM pins, as shown by the code snippet below.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/setupTwoMotorPins.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        Similar to before, I had to initialize the additional pins, as shown below.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/setupTwoMotorPins2.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        I then replicated the <code>analogWrite</code> code for the second motor, as shown below.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/PWMTwoMotors.png" width="300">
+
+                                        <br>
                                     </p>
 
                                     <h1>Basic Car Motion</h1>
@@ -1339,30 +1420,82 @@
                                     <h3>Lower Limit of the Motor</h3>
                                     <p class="mb-4">
                                         Next, I determined the lowest PWM signal I could send to the motor drivers such that the robot still moved on the 
-                                        ground. In the code snippet below, I simply varied the value written to pins A2, A3, A14, and A16.
+                                        ground. I simply varied the PWM value written to pins A2, A3, A14, and A16. I tested moving 
+                                        the robot on a flat table with a similar amount of friction to the lab floor. I discovered that the lowest PWM signal 
+                                        at which the robot was still able to move was 40. The video below shows the robot moving at this speed.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab5/RobotLowPWM.mov">
+                                        </video>
                                         
                                     </p>
 
                                     <h3>Straight Line Motion</h3>
                                     <p class="mb-4">
+                                        Next, I made the robot move in a straight line. I had to use different PWM values to achieve straight line motion. Specifically, 
+                                        I had to offset the two motors' PWM values by 5. The code snippet below depicts this logic.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/forwardStraight.png" width="300">
                                         
+                                        <br>
+                                        <br>
+
+                                        The video below shows the robot moving in a straight line for 2m.
+
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab5/StraightLineMotion.mov">
+                                        </video>
                                     </p>
 
                                     <h3>Simple Turning Motion</h3>
                                     <p class="mb-4">
+                                        Next, I experimented with making the robot perform basic turns. This allowed me to verify that the robot is capable of turning.
+                                        I separated the turning logic into different functions, as shown in this code snippet.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/twoMotorsTurnFunctions.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        I used the <code>delay</code> function to specify the turning angles (longer delays imply larger angles).
+
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab5/twoMotorsTurnsLoop.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        The video below shows the robot performing these turns.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab5/RobotTurns.mov">
+                                        </video>
                                         
                                     </p>
 
                                     <h1>Frequency Generation</h1>
                                     <p class="mb-4">
+                                        According to the <a href="https://www.arduino.cc/en/Reference/AnalogWrite&prev=search">Arduino website</a>, <code>analogWrite</code> 
+                                        produces a PWM signal with a frequency of <code>490 Hz</code>. During my tests, I observed that rapid changes to the PWM signal values 
+                                        are not precisely reflected by the motors. The motor driver's datasheet indicates that each motor driver's max PWM frequency is 
+                                        <code>50 kHz</code>. This indicates that I could increase the PWM frequency up to 10x its current value. However, I don't believe the 
+                                        motors will necessarily respond to such a drastic increase since the analog PWM signal is still just an average.
                                         
                                     </p>
-
-                                    <h1>Ramping Up and Down the Car's Speed</h1>
-                                    <p class="mb-4">
-                                        
-                                    </p>
-
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
