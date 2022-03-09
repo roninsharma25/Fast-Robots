@@ -6,6 +6,9 @@ int m1_pin2 = 3;
 int m2_pin1 = 14;
 int m2_pin2 = 16;
 
+int motor1Val = 40; //115;
+int motor2Val = 40; //110;
+
 void setup() {
   // put your setup code here, to run once:
 
@@ -25,15 +28,15 @@ void loop() {
   delay(1000);
 
   // Forward
-  analogWrite(m1_pin1, 115);
+  analogWrite(m1_pin1, motor1Val);
   analogWrite(m1_pin2, 0);
 
   analogWrite(m2_pin1, 0);
-  analogWrite(m2_pin2, 110);
+  analogWrite(m2_pin2, motor2Val);
 
   unsigned long startTime = millis();
   int count = 0;
-  while (millis() - startTime < 1500) {
+  while (millis() - startTime < 10000) {
     count += 1;
   }
 

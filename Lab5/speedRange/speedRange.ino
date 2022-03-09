@@ -257,6 +257,22 @@ void setup() {
 
   // Add BLE service
   BLE.addService(testService);
+
+  tx_characteristic_float.writeValue(0.0);
+
+  tx_estring_value.clear();
+
+  // Append the string literal "[->"
+  tx_estring_value.append("[->");
+
+  // Append the float value
+  tx_estring_value.append(9.0);
+
+  // Append the string literal "<-]"
+  tx_estring_value.append("<-]");
+
+  // Write the value to the characteristic
+  tx_characteristic_string.writeValue(tx_estring_value.c_str());
   
   pinMode(m1_pin1, OUTPUT);
   pinMode(m1_pin2, OUTPUT);
@@ -264,39 +280,61 @@ void setup() {
   pinMode(m2_pin1, OUTPUT);
   pinMode(m2_pin2, OUTPUT);
 
-  // SSet starting motor values
+  // Set starting motor values
   m1_val = 50;
   m2_val = 50;
+
+  Serial.print("Advertising BLE with MAC: ");
+  Serial.println(BLE.address());
 
   BLE.advertise();
 }
 
+void delay_(int time_, BLEDevice ble) {
+  unsigned long startTime = millis();
+  while (millis() - startTime < time_) {
+     int check = ble.connected();
+  }
+}
+
 void loop() {
   BLEDevice central = BLE.central();
+
+  if (central) {
+    Serial.println("Address: ");
+    Serial.println(central.address());
+  }
   
   for (int i = 0; i < 10; i++) {
+    Serial.println("before central");
     if (central) {
+      Serial.println("in for");
       startTime = millis(); // store the starting time
     
       moveForward(m1_val, m2_val);
-      delay(100);
+      delay_(100, central);
       myICM.getAGMT();
-      delay(100);
+      delay_(100, central);
   
       // Use accelerometer to calculate the speed
-      float acc = myICM.accX() * (millis() - startTime); // UPDATE with the correct direction
+      float accX = myICM.accX()/1000 * (millis() - startTime);
+      float accY = myICM.accY()/1000 * (millis() - startTime);
+      float accZ = myICM.accZ()/1000 * (millis() - startTime);
   
       // Send data via Bluetooth
-      tx_characteristic_float.writeValue(acc);
+      tx_characteristic_float.writeValue(accX);
+      tx_characteristic_float.writeValue(accY);
+      tx_characteristic_float.writeValue(accZ);
       
       // Ramp up speeds
       m1_val += 10;
       m2_val += 10;
     } else {
       i--;
+      central = BLE.central();
     }
 
-    delay(200);
+    delay_(200, central);
   }
 }
 
