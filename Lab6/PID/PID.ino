@@ -364,11 +364,20 @@ void delay_(int time_, BLEDevice ble) {
 }
 
 void loop() {
+
+  // Check sensors
+  myICM.getAGMT();
+  delay_(100, central);
+  float accX = myICM.accX()/1000;
+  delay_(100, central);
+
+  // Send data over bluetooth
+  
   central = BLE.central();
 
   if (central) {
-    //Serial.println("Address: ");
-    //Serial.println(central.address());
+    tx_characteristic_float4.writeValue(accX);
+    
     if (rx_characteristic_string.written()) {
         handle_command();
     }
