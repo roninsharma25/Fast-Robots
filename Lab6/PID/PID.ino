@@ -203,7 +203,7 @@ handle_command()
 
             Serial.println("IN CASE MOVE FORWARD");
 
-            int motor_speed_1, motor_speed_2, duration;
+            int motor_speed_1, motor_speed_2, forward;
 
             // Extract the next value from the command string as an int
             success = robot_cmd.get_next_value(motor_speed_1);
@@ -216,15 +216,15 @@ handle_command()
                 return;
 
             // Extract the next value from the command string as an int
-            success = robot_cmd.get_next_value(duration); // time in milliseconds
+            success = robot_cmd.get_next_value(forward); // forward or backwards
             if (!success)
                 return;
 
             Serial.println(motor_speed_1);
             Serial.println(motor_speed_2);
-            Serial.println(duration);
+            Serial.println(forward);
 
-            moveForwardCase(motor_speed_1, motor_speed_2, duration);
+            moveForwardCase(motor_speed_1, motor_speed_2, forward);
 
             break;
 
@@ -433,10 +433,25 @@ void stopRobot() {
   analogWrite(m2_pin2, 0);
 }
 
-void moveForwardCase(int speed1, int speed2, int duration) {
-  moveForward(speed1, speed2);
-  delay_(duration, central);
-  stopRobot();
+void moveForwardCase(int speed1, int speed2, int forward) {
+  
+  if (forward == 0) {
+    Serial.print("forward");
+    analogWrite(m1_pin1, speed1);
+    analogWrite(m1_pin2, 0);
+    
+    analogWrite(m2_pin1, 0);
+    analogWrite(m2_pin2, speed2);
+    
+  } else {
+    
+    Serial.print("backward");
+    analogWrite(m1_pin1, 0);
+    analogWrite(m1_pin2, speed1);
+    
+    analogWrite(m2_pin1, speed2);
+    analogWrite(m2_pin2, 0);
+  }
 }
 
 void getIMUCase() {
