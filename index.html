@@ -346,10 +346,7 @@
                                         to obtain the Artemis Nano's MAC address, which can be seen below.
                                         
                                         <img src="assets/img/Lab2/ArtemisMACAddress.png" height="150" width="500">
-<<<<<<< HEAD
 
-=======
->>>>>>> 11b55fc1d79159ea42542b53d91ee702b0a6f474
                                         <br>
                                     
                                         I had to use this MAC address as a final configuration step for BLE. The provided Python code had a 
@@ -1495,6 +1492,88 @@
                                         <code>50 kHz</code>. This indicates that I could increase the PWM frequency up to 10x its current value. However, I don't believe the 
                                         motors will necessarily respond to such a drastic increase since the analog PWM signal is still just an average.
                                         
+                                    </p>
+
+                                    <h1>Speed Ramp Up/Down</h1>
+
+                                    <p class="mb-4">
+                                        The last part of the lab involving slowly increasing and decreasing the robot's speed, and using the attached sensors to calculate the 
+                                        speed. I used Bluetooth to send commands to the robot as well as transmit sensor data back to my laptop. The two images below show the 
+                                        Python ramp up and ramp down code, respectively. This wirelessly instructed the robot to move forward at the specified speed, and then 
+                                        obtained the robot's velocity (<code>acceleration * time</code>) from the IMU.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/RampUp.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/RampDown.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        The following two snippets show the Arduino code. Based on the direction provided, I wrote the appropriate values to each PWM pin.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/MoveForward.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/MoveForwardCase.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        The images below show the outputs of three unique trials. The last trial only includes the ramp up logic. I didn't want to move the robot too fast, 
+                                        so the fastest speed I achieved was <code>0.5171 m/s</code>.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/RampUpDown1.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/RampUpDown2.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab5/LargestRampUp.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        The videos below show each trial.
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab5/RampUpDown1.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab5/RampUpDown2.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab5/RampUpFastest.mov">
+                                        </video>
+
                                     </p>
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
