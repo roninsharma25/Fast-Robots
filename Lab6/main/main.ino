@@ -1,5 +1,5 @@
 #include "mainBLE.h"
-#include "setupSensors.h"
+#include "mainSensors.h"
 #include "motors.h"
 
 unsigned long startTime;
@@ -10,6 +10,7 @@ void setup() {
   Serial.begin(9600);
 
   initializeSensors();
+  setupMotors();
   startBLE();
 
 }
@@ -17,8 +18,7 @@ void setup() {
 void loop() {
 
   // Send data over bluetooth
-  sendDataBLE();
+  sendDataBLE(myICM);
   delay(100);
 
 }
-

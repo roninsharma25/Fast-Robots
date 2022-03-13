@@ -26,11 +26,11 @@ void setupMotors() {
 }
 
 void writePWM() {
-    analogWrite(m1_pin1, m1.speed1a);
-    analogWrite(m1_pin1, m1.speed1b);
+    analogWrite(m1_pin1, m.speed1a);
+    analogWrite(m1_pin1, m.speed1b);
 
-    analogWrite(m2_pin1, m2.speed2a);
-    analogWrite(m2_pin2, m2.speed2b);
+    analogWrite(m2_pin1, m.speed2a);
+    analogWrite(m2_pin2, m.speed2b);
 }
 
 void moveForward(int speed1, int speed2) {

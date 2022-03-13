@@ -43,6 +43,7 @@ float tx_float_value = 0.0;
 
 // PID
 struct PID p;
+struct PIDInfo p_info;
 
 //////////// Global Variables ////////////
 
@@ -88,8 +89,20 @@ void startBLE() {
 
 }
 
+void getIMUCase(ICM_20948_I2C icm) {
+  icm.getAGMT();
+  float accX = icm.accX()/1000;
+
+  char char_arr[MAX_MSG_SIZE];
+
+  tx_characteristic_float4.writeValue(accX);
+
+  Serial.print("Sent back: ");
+  Serial.println(accX);
+}
+
 void
-handle_command()
+handle_command(ICM_20948_I2C icm)
 {   
     // Set the command string from the characteristic value
     robot_cmd.set_cmd_string(rx_characteristic_string.value(),
@@ -258,7 +271,7 @@ handle_command()
          */
         case GET_IMU:
 
-          getIMUCase();
+          getIMUCase(icm);
           
           break;
         
@@ -266,30 +279,31 @@ handle_command()
          * UPDATE_PID
          */
         case UPDATE_PID:
-            float float_a, float_b, float_c, float_d;
+            float float_aa, float_bb, float_cc, float_dd;
 
             // Extract the first value from the command string as a float
-            success = robot_cmd.get_next_value(float_a);
+            success = robot_cmd.get_next_value(float_aa);
             if (!success)
                 return;
 
             // Extract the second value from the command string as a float
-            success = robot_cmd.get_next_value(float_b);
+            success = robot_cmd.get_next_value(float_bb);
             if (!success)
                 return;
 
             // Extract the third value from the command string as a float
-            success = robot_cmd.get_next_value(float_c);
+            success = robot_cmd.get_next_value(float_cc);
             if (!success)
                 return;
 
             // Extract the fourth value from the command string as a float
-            success = robot_cmd.get_next_value(float_d);
+            success = robot_cmd.get_next_value(float_dd);
             if (!success)
                 return;
             
-            p = setPID(float_a, float_b, float_c, float_d);
-
+            p = setPID(float_aa, float_bb, float_cc, float_dd, 0);
+            p_info = setPIDInfo(&m, 50, 50);
+ 
           break;
 
         /* 
@@ -304,26 +318,16 @@ handle_command()
     }
 }
 
-void getIMUCase() {
-  myICM.getAGMT();
-  float accX = myICM.accX()/1000;
+void sendDataBLE(ICM_20948_I2C icm) {
+  central = BLE.central();
 
-  char char_arr[MAX_MSG_SIZE];
-
-  tx_characteristic_float4.writeValue(accX);
-
-  Serial.print("Sent back: ");
-  Serial.println(accX);
-}
-
-void sendDataBLE() {
-      central = BLE.central();
+  float sendValue = 10;
 
   if (central) {
-    tx_characteristic_float4.writeValue(accX);
+    tx_characteristic_float4.writeValue(sendValue);
     
     if (rx_characteristic_string.written()) {
-        handle_command();
+        handle_command(icm);
     }
   }
 }

@@ -1,42 +1,45 @@
-float error;
 
 struct PID {
-    float setpoint, k_p, k_i, k_d;
-}
+    float setpoint, k_p, k_i, k_d, prev_error;
+};
 
-struct PID setPID(float a, float b, float c, float d) {
+struct PID setPID(float a, float b, float c, float d, float e) {
     struct PID p;
 
     p.setpoint = a;
     p.k_p = a;
     p.k_i = b;
     p.k_d = d;
+    p.prev_error = e;
 
     return p;
 }
 
-// UPDATE WITH ACTUAL INPUT INFO FOR PID CONTROLLER
-struct INFO {
-    float x;
+// UPDATE WITH MORE INPUT INFO FOR PID CONTROLLER
+struct PIDInfo {
+    struct motorSpeeds;
+    float sensorVal1, sensorVal2;
+};
+
+struct PIDInfo setPIDInfo(struct motorSpeeds *m, float sv1, float sv2) {
+    struct PIDInfo x;
+
+    //x->motorSpeeds = m;
+    x.sensorVal1 = sv1;
+    x.sensorVal2 = sv2;
+
+    return x;
 }
 
-struct INFO setINFO(float x) {
-    struct INFO x;
-
-    x.x = x;
-
-    return x
-}
-
-float PIDController(PID p, INFO i, int PID_type) {
+float PIDController(struct PID *p, struct PIDInfo *i, int PID_type) {
 
     // Calculate error using i
-    error = i.x;
+    float error = i->sensorVal1;
 
     switch (PID_type) {
         
         case 0: // P
-            return p.k_p * error;
+            return p->k_p * error;
             break;
 
         case 1: // PI
@@ -49,7 +52,7 @@ float PIDController(PID p, INFO i, int PID_type) {
             break;
 
         default: // P
-            return p.k_p * error;
+            return p->k_p * error;
             break;
     }
 }

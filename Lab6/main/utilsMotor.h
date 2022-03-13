@@ -1,6 +1,6 @@
 struct motorSpeeds {
     float speed1a, speed1b, speed2a, speed2b;
-}
+};
 
 struct motorSpeeds setMotorSpeeds(float a, float b, float c, float d) {
     struct motorSpeeds m;
@@ -12,4 +12,3 @@ struct motorSpeeds setMotorSpeeds(float a, float b, float c, float d) {
 
     return m;
 }
-
