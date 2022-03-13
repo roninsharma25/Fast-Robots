@@ -10,3 +10,4 @@ class CMD(Enum):
     MOVE_FORWARD = 6
     STOP_ROBOT = 7
     GET_IMU = 8
+    UPDATE_PID = 9

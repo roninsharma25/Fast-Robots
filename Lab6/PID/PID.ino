@@ -58,6 +58,9 @@ RobotCommand robot_cmd(":|");
 EString tx_estring_value;
 float tx_float_value = 0.0;
 
+// PID Constants
+float setpoint, k_p, k_i, k_d;
+
 enum CommandTypes
 {
     PING,
@@ -68,7 +71,8 @@ enum CommandTypes
     SET_VEL,
     MOVE_FORWARD,
     STOP_ROBOT,
-    GET_IMU
+    GET_IMU,
+    UPDATE_PID
 };
 
 void
@@ -245,6 +249,39 @@ handle_command()
           
           break;
         
+         /*
+         * UPDATE_PID
+         */
+        case UPDATE_PID:
+            float float_a, float_b, float_c, float_d;
+
+            // Extract the first value from the command string as a float
+            success = robot_cmd.get_next_value(float_a);
+            if (!success)
+                return;
+
+            // Extract the second value from the command string as a float
+            success = robot_cmd.get_next_value(float_b);
+            if (!success)
+                return;
+
+            // Extract the third value from the command string as a float
+            success = robot_cmd.get_next_value(float_c);
+            if (!success)
+                return;
+
+            // Extract the fourth value from the command string as a float
+            success = robot_cmd.get_next_value(float_d);
+            if (!success)
+                return;
+
+            setpoint = float_a;
+            k_p = float_b;
+            k_i = float_c;
+            k_d = float_d;
+
+          break;
+
         /* 
          * The default case may not capture all types of invalid commands.
          * It is safer to validate the command string on the central device (in python)
@@ -382,38 +419,6 @@ void loop() {
         handle_command();
     }
   }
-  
-//  for (int i = 0; i < 10; i++) {
-//    Serial.println("before central");
-//    if (central) {
-//      Serial.println("in for");
-//      startTime = millis(); // store the starting time
-//    
-//      moveForward(m1_val, m2_val);
-//      delay_(100, central);
-//      myICM.getAGMT();
-//      delay_(100, central);
-//  
-//      // Use accelerometer to calculate the speed
-//      float accX = myICM.accX()/1000 * (millis() - startTime);
-//      float accY = myICM.accY()/1000 * (millis() - startTime);
-//      float accZ = myICM.accZ()/1000 * (millis() - startTime);
-//  
-//      // Send data via Bluetooth
-//      tx_characteristic_float.writeValue(accX);
-//      tx_characteristic_float.writeValue(accY);
-//      tx_characteristic_float.writeValue(accZ);
-//      
-//      // Ramp up speeds
-//      m1_val += 10;
-//      m2_val += 10;
-//    } else {
-//      i--;
-//      central = BLE.central();
-//    }
-//
-//    delay_(200, central);
-//  }
 }
 
 
@@ -437,6 +442,9 @@ void moveForwardCase(int speed1, int speed2, int forward) {
   
   if (forward == 0) {
     Serial.print("forward");
+
+    // update speed1 and speed2 based on sensors
+    
     analogWrite(m1_pin1, speed1);
     analogWrite(m1_pin2, 0);
     
