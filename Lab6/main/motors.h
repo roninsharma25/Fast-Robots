@@ -47,3 +47,18 @@ void stopRobot() {
     m = setMotorSpeeds(0, 0, 0, 0);
     writePWM();
 }
+
+void moveForwardCase(int speed1, int speed2, int forward) {
+  
+  if (forward == 0) {
+
+    Serial.print("forward");
+    moveForward(speed1, speed2);
+    
+  } else {
+    
+    Serial.print("backward");
+    moveBackward(speed1, speed2);
+
+  }
+}

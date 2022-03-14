@@ -13,21 +13,6 @@ enum CommandTypes
     UPDATE_PID
 };
 
-void moveForwardCase(int speed1, int speed2, int forward) {
-  
-  if (forward == 0) {
-
-    Serial.print("forward");
-    moveForward(speed1, speed2);
-    
-  } else {
-    
-    Serial.print("backward");
-    moveBackward(speed1, speed2);
-
-  }
-}
-
 void delay_(int time_, BLEDevice ble) {
   unsigned long startTime = millis();
   while (millis() - startTime < time_) {

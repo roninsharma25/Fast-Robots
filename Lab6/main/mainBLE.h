@@ -101,8 +101,7 @@ void getIMUCase(ICM_20948_I2C icm) {
   Serial.println(accX);
 }
 
-void
-handle_command(ICM_20948_I2C icm)
+int handle_command(ICM_20948_I2C icm)
 {   
     // Set the command string from the characteristic value
     robot_cmd.set_cmd_string(rx_characteristic_string.value(),
@@ -120,7 +119,7 @@ handle_command(ICM_20948_I2C icm)
 
     // Check if the last tokenization was successful and return if failed
     if (!success) {
-        return;
+        return 0;
     }
 
     // Handle the command type accordingly
@@ -136,6 +135,7 @@ handle_command(ICM_20948_I2C icm)
             Serial.print("Sent back: ");
             Serial.println(tx_estring_value.c_str());
 
+            return 1;
             break;
         /*
          * Extract two integers from the command string
@@ -146,18 +146,19 @@ handle_command(ICM_20948_I2C icm)
             // Extract the next value from the command string as an integer
             success = robot_cmd.get_next_value(int_a);
             if (!success)
-                return;
+                return 0;
 
             // Extract the next value from the command string as an integer
             success = robot_cmd.get_next_value(int_b);
             if (!success)
-                return;
+                return 0;
 
             Serial.print("Two Integers: ");
             Serial.print(int_a);
             Serial.print(", ");
             Serial.println(int_b);
-            
+
+            return 2;
             break;
         /*
          * Extract three floats from the command string
@@ -168,17 +169,17 @@ handle_command(ICM_20948_I2C icm)
             // Extract the first value from the command string as a float
             success = robot_cmd.get_next_value(float_a);
             if (!success)
-                return;
+                return 0;
 
             // Extract the second value from the command string as a float
             success = robot_cmd.get_next_value(float_b);
             if (!success)
-                return;
+                return 0;
 
             // Extract the third value from the command string as a float
             success = robot_cmd.get_next_value(float_c);
             if (!success)
-                return;
+                return 0;
 
             // Display the three floats
             Serial.print("Three Floats: ");
@@ -187,7 +188,8 @@ handle_command(ICM_20948_I2C icm)
             Serial.print(float_b);
             Serial.print(", ");
             Serial.println(float_c);
-            
+
+            return 3;
             break;
         /*
          * Add a prefix and postfix to the string value extracted from the command string
@@ -199,7 +201,7 @@ handle_command(ICM_20948_I2C icm)
             // Extract the next value from the command string as a character array
             success = robot_cmd.get_next_value(char_arr);
             if (!success)
-                return;
+                return 0;
 
             tx_estring_value.clear();
             tx_estring_value.append("Robot says -> ");
@@ -209,7 +211,8 @@ handle_command(ICM_20948_I2C icm)
 
             Serial.print("Sent back: ");
             Serial.println(tx_estring_value.c_str());
-            
+
+            return 4;
             break;
         /*
          * DANCE
@@ -217,6 +220,7 @@ handle_command(ICM_20948_I2C icm)
         case DANCE:
             Serial.println("Look Ma, I'm Dancin'!");
 
+            return 5;
             break;
         
         /*
@@ -224,6 +228,7 @@ handle_command(ICM_20948_I2C icm)
          */
         case SET_VEL:
 
+            return 6;
             break;
 
         /*
@@ -238,17 +243,17 @@ handle_command(ICM_20948_I2C icm)
             // Extract the next value from the command string as an int
             success = robot_cmd.get_next_value(motor_speed_1);
             if (!success)
-                return;
+                return 0;
 
             // Extract the next value from the command string as an int
             success = robot_cmd.get_next_value(motor_speed_2);
             if (!success)
-                return;
+                return 0;
 
             // Extract the next value from the command string as an int
             success = robot_cmd.get_next_value(forward); // forward or backwards
             if (!success)
-                return;
+                return 0;
 
             Serial.println(motor_speed_1);
             Serial.println(motor_speed_2);
@@ -256,6 +261,7 @@ handle_command(ICM_20948_I2C icm)
 
             moveForwardCase(motor_speed_1, motor_speed_2, forward);
 
+            return 7;
             break;
 
         /*
@@ -264,6 +270,8 @@ handle_command(ICM_20948_I2C icm)
         case STOP_ROBOT:
           
           stopRobot();
+
+          return 8;
           break;
 
         /*
@@ -272,7 +280,8 @@ handle_command(ICM_20948_I2C icm)
         case GET_IMU:
 
           getIMUCase(icm);
-          
+
+          return 9;
           break;
         
          /*
@@ -284,26 +293,27 @@ handle_command(ICM_20948_I2C icm)
             // Extract the first value from the command string as a float
             success = robot_cmd.get_next_value(float_aa);
             if (!success)
-                return;
+                return 0;
 
             // Extract the second value from the command string as a float
             success = robot_cmd.get_next_value(float_bb);
             if (!success)
-                return;
+                return 0;
 
             // Extract the third value from the command string as a float
             success = robot_cmd.get_next_value(float_cc);
             if (!success)
-                return;
+                return 0;
 
             // Extract the fourth value from the command string as a float
             success = robot_cmd.get_next_value(float_dd);
             if (!success)
-                return;
+                return 0;
             
             p = setPID(float_aa, float_bb, float_cc, float_dd, 0);
             p_info = setPIDInfo(&m, 50, 50);
- 
+
+          return 10;
           break;
 
         /* 
@@ -314,11 +324,13 @@ handle_command(ICM_20948_I2C icm)
         default:
             Serial.print("Invalid Command Type: ");
             Serial.println(cmd_type);
+
+            return 0;
             break;
     }
 }
 
-void sendDataBLE(ICM_20948_I2C icm) {
+int sendDataBLE(ICM_20948_I2C icm) {
   central = BLE.central();
 
   float sendValue = 10;
@@ -327,7 +339,9 @@ void sendDataBLE(ICM_20948_I2C icm) {
     tx_characteristic_float4.writeValue(sendValue);
     
     if (rx_characteristic_string.written()) {
-        handle_command(icm);
+        return handle_command(icm);
     }
   }
+  
+  return 0;
 }
