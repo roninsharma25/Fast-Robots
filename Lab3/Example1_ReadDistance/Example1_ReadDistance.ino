@@ -36,14 +36,14 @@ unsigned long rangingTime;
 
 void setup(void)
 {
-  digitalWrite(4, LOW);
+  digitalWrite(6, LOW);
   Wire.begin();
 
   Serial.begin(115200);
   Serial.println("VL53L1X Qwiic Test");
 
   distanceSensor2.setI2CAddress(0x32); // set a different I2C address for the second sensor
-  digitalWrite(4, HIGH);
+  digitalWrite(6, HIGH);
 
   if (distanceSensor.begin() != 0) //Begin returns 0 on a good init
   {

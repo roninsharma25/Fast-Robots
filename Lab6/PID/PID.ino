@@ -6,6 +6,9 @@
 #include "ICM_20948.h"
 #include "Math.h"
 
+#include <Wire.h>
+#include "SparkFun_VL53L1X.h"
+
 #define SERIAL_PORT Serial
 
 #define SPI_PORT SPI // Your desired SPI port.       Used only when "USE_SPI" is defined
@@ -61,6 +64,29 @@ float tx_float_value = 0.0;
 // PID Constants
 float setpoint, k_p, k_i, k_d;
 
+// Store data for PID debugging
+bool movingForward;
+int numberDistanceMeasurements = 500;
+int distances[500];
+int distanceIndex;
+bool distanceMeasurementsDone;
+
+// ToF Sensors
+SFEVL53L1X distanceSensor;
+//Uncomment the following line to use the optional shutdown and interrupt pins.
+//SFEVL53L1X distanceSensor(Wire, SHUTDOWN_PIN, INTERRUPT_PIN);
+SFEVL53L1X distanceSensor2;
+
+float tof1;
+float tof2;
+
+unsigned long startTime;
+unsigned long rangingTime;
+
+// Motors
+int motorSpeed1;
+int motorSpeed2;
+
 enum CommandTypes
 {
     PING,
@@ -74,6 +100,25 @@ enum CommandTypes
     GET_IMU,
     UPDATE_PID
 };
+
+void resetDistanceArray() {
+  distanceIndex = 0;
+  distanceMeasurementsDone = false;
+}
+
+void setupTOF() {
+  digitalWrite(6, LOW);
+  Wire.begin();
+  distanceSensor2.setI2CAddress(0x32); // set a different I2C address for the second sensor
+  digitalWrite(6, HIGH);
+
+  resetDistanceArray();
+
+  Serial.println("Sensors online!");
+
+  distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
+  distanceSensor2.startRanging();
+}
 
 void
 handle_command()
@@ -207,6 +252,9 @@ handle_command()
 
             Serial.println("IN CASE MOVE FORWARD");
 
+            // reset the distance array
+            resetDistanceArray();
+
             int motor_speed_1, motor_speed_2, forward;
 
             // Extract the next value from the command string as an int
@@ -227,6 +275,9 @@ handle_command()
             Serial.println(motor_speed_1);
             Serial.println(motor_speed_2);
             Serial.println(forward);
+
+            motorSpeed1 = motor_speed_1;
+            motorSpeed2 = motor_speed_2;
 
             moveForwardCase(motor_speed_1, motor_speed_2, forward);
 
@@ -253,32 +304,32 @@ handle_command()
          * UPDATE_PID
          */
         case UPDATE_PID:
-            float float_a, float_b, float_c, float_d;
+            float float_aa, float_bb, float_cc, float_dd;
 
             // Extract the first value from the command string as a float
-            success = robot_cmd.get_next_value(float_a);
+            success = robot_cmd.get_next_value(float_aa);
             if (!success)
                 return;
 
             // Extract the second value from the command string as a float
-            success = robot_cmd.get_next_value(float_b);
+            success = robot_cmd.get_next_value(float_bb);
             if (!success)
                 return;
 
             // Extract the third value from the command string as a float
-            success = robot_cmd.get_next_value(float_c);
+            success = robot_cmd.get_next_value(float_cc);
             if (!success)
                 return;
 
             // Extract the fourth value from the command string as a float
-            success = robot_cmd.get_next_value(float_d);
+            success = robot_cmd.get_next_value(float_dd);
             if (!success)
                 return;
 
-            setpoint = float_a;
-            k_p = float_b;
-            k_i = float_c;
-            k_d = float_d;
+            setpoint = float_aa;
+            k_p = float_bb;
+            k_i = float_cc;
+            k_d = float_dd;
 
           break;
 
@@ -306,12 +357,12 @@ int m2_pin2 = 16;
 int m1_val;
 int m2_val;
 
-unsigned long startTime;
-
 float acc;
 
 void setup() {
   Serial.begin(9600);
+
+  setupTOF();
 
   #ifdef USE_SPI
     SPI_PORT.begin();
@@ -376,6 +427,8 @@ void setup() {
 
   // Write the value to the characteristic
   tx_characteristic_string.writeValue(tx_estring_value.c_str());
+
+  movingForward = false;
   
   pinMode(m1_pin1, OUTPUT);
   pinMode(m1_pin2, OUTPUT);
@@ -394,8 +447,8 @@ void setup() {
 }
 
 void delay_(int time_, BLEDevice ble) {
-  unsigned long startTime = millis();
-  while (millis() - startTime < time_) {
+  unsigned long startTime2 = millis();
+  while (millis() - startTime2 < time_) {
      int check = ble.connected();
   }
 }
@@ -403,22 +456,94 @@ void delay_(int time_, BLEDevice ble) {
 void loop() {
 
   // Check sensors
-  myICM.getAGMT();
-  delay_(100, central);
-  float accX = myICM.accX()/1000;
-  delay_(100, central);
+//  myICM.getAGMT();
+//  delay_(100, central);
+//  float accX = myICM.accX()/1000;
+//  delay_(100, central);
 
   // Send data over bluetooth
   
   central = BLE.central();
 
   if (central) {
-    tx_characteristic_float4.writeValue(accX);
+    tx_characteristic_float4.writeValue(10);
     
     if (rx_characteristic_string.written()) {
         handle_command();
     }
   }
+
+  if (movingForward) {
+    // check TOF sensor and stop if the distance is too small
+    //tof1 = getTOF1();
+    tof2 = getTOF2();
+    tx_characteristic_float3.writeValue(tof2);
+    //Serial.print("TOF1: ");
+    //Serial.print(tof1);
+    Serial.print("TOF2: ");
+    Serial.println(tof2);
+    PID(tof2);
+    distances[distanceIndex] = tof2;
+    distanceIndex++;
+
+    if (distanceIndex >= numberDistanceMeasurements) {
+      distanceMeasurementsDone = true;
+      //sendDistanceData();
+    }
+  }
+}
+
+void sendDistanceData() {
+  /*numberDistanceMeasurements = 500;
+int distances[numberDistanceMeasurements];
+int distanceIndex;
+bool distanceMeasurementsDone;*/
+
+  for (int i = 0; i < numberDistanceMeasurements; i++) {
+    tx_characteristic_float3.writeValue(distances[i]); // TOF2
+    delay(100);
+  }
+  
+}
+
+void PID(float sensorValue) {
+
+  if (sensorValue <= setpoint + 100) { // stop the robot
+    Serial.print("Sensor Value: ");
+    Serial.println(sensorValue);
+    stopRobot();
+  } else {
+      // P
+      float delta = k_p * (sensorValue - setpoint);
+      Serial.print("Delta: ");
+      Serial.println(delta);
+
+      float newSpeed1 = motorSpeed1 + delta;
+      float newSpeed2 = motorSpeed2 + delta;
+
+      Serial.println(newSpeed1);
+      Serial.println(newSpeed2);
+
+      // write new speeds ***
+      moveForwardCase(newSpeed1, newSpeed2, 0);
+  }
+}
+
+
+int getTOF1() {
+  int distance = distanceSensor.getDistance(); // Get the result of the measurement from the sensor (in mm)
+  distanceSensor.clearInterrupt();
+  distanceSensor.stopRanging();
+
+  return distance;
+}
+
+int getTOF2() {
+  int distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
+  distanceSensor2.clearInterrupt();
+  //distanceSensor2.stopRanging();
+
+  return distance2;
 }
 
 
@@ -431,6 +556,7 @@ void moveForward(int speed1, int speed2) {
 }
 
 void stopRobot() {
+  movingForward = false;
   analogWrite(m1_pin1, 0);
   analogWrite(m1_pin2, 0);
 
@@ -439,26 +565,28 @@ void stopRobot() {
 }
 
 void moveForwardCase(int speed1, int speed2, int forward) {
+
+  movingForward = true;
   
   if (forward == 0) {
     Serial.print("forward");
 
     // update speed1 and speed2 based on sensors
     
-    analogWrite(m1_pin1, speed1);
-    analogWrite(m1_pin2, 0);
-    
-    analogWrite(m2_pin1, 0);
-    analogWrite(m2_pin2, speed2);
-    
-  } else {
-    
-    Serial.print("backward");
     analogWrite(m1_pin1, 0);
     analogWrite(m1_pin2, speed1);
     
     analogWrite(m2_pin1, speed2);
     analogWrite(m2_pin2, 0);
+    
+  } else {
+    
+    Serial.print("backward");
+    analogWrite(m1_pin1, speed1);
+    analogWrite(m1_pin2, 0);
+    
+    analogWrite(m2_pin1, 0);
+    analogWrite(m2_pin2, speed2);
   }
 }
 
