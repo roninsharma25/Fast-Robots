@@ -1648,17 +1648,76 @@
                                         Since the smallest PWM signal is 30, the smallest value of <code>k_p = 30 / 1700 = 0.018</code>. Theoretically, the optimal <code>k_p</code> could be 
                                         fairly large since the error might be small and the maximum PWM signal that I allowed was <code>150</code>. After performing some basic tests with 
                                         <code>k_p</code> values between <code>0.5</code> and <code>0.8</code>, I realized that this sped the robot up very quickly and it was not able to 
-                                        adequately recover and would end up hitting the wall.
+                                        adequately recover and would end up hitting the wall. The plot and video below show this behavior.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Bad_Trial.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Launch 82">
+                                            <source src="assets/videos/Lab6/Crash.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        At low speeds, the simple P controller worked fine. I used <code>k_p = 0.05</code> and a starting motor value of <code>50</code>.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial4.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 4">
+                                            <source src="assets/videos/Lab6/Trial4.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        At the higher speeds, if the robot didn't crash into the wall, it's momentum typically carried it closer to the wall. The plot and 
+                                        video below shows an example of this.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial5.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 4">
+                                            <source src="assets/videos/Lab6/Trial5.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
 
                                     </p>
 
                                     <h1>Proportional-Integral Controller</h1>
                                     <p class="mb-4">
 
+                                        Next, I added in an integral term to see how much it would improve the controller. Overall, it worked rather poorly since 
+                                        it mainly just compounded the previous problem.
+
+                                        ADD CODE SNIPPET
+
+                                        This term accumulates the previous error for each time step. As a result, as the robot was far away from the setpoint, the 
+                                        error was large, which made the cumulative error large, which significantly increased the motor speeds. This just made it more 
+                                        likely for the robot to overshoot the setpoint. I experimented with using small values for <code>k_i (0.0001-0.1)</code>, but they 
+                                        still resulted in the robot overshooting the setpoint.
 
                                     </p>
 
-                                    <h1>Proportional-Derative Controller</h1>
+                                    <h1>Proportional-Derivative Controller</h1>
                                     <p class="mb-4">
 
                                         I implemented a PD controller to help prevent the robot from hitting the wall. As the name suggests, the derivative term accounts for the rate 
@@ -1675,6 +1734,61 @@
                                         
                                         As a result, I thought that I would need a fairly large <code>p_d</code> constant, so that I could rapidly account for when the robot approached the 
                                         setpoint and preemptively slow down the motors before the robot reached the setpoint.
+
+                                        <br>
+                                        
+                                        I performed three trials, and two worked somewhat well. For each trial, I set the starting motor speed to <code>75</code>. For the first trial (depicted below), 
+                                        I set <code>p_k = 0.30</code> and <code>p_d = 0.80</code>. This resulted in the robot hitting into the wall. As a result, I reduced both <code>p_k</code> and 
+                                        <code>p_d</code> with the hopes of making the robot slow down more before the setpoint.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial30.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 4">
+                                            <source src="assets/videos/Lab6/Trial30.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        For the second trial (depicted below), I set <code>p_k = 0.20</code> and <code>p_d = 0.70</code>. DESCRIBE WHAT HAPPENED.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial31.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 4">
+                                            <source src="assets/videos/Lab6/Trial31.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        For the third trial (depicted below), I set <code>p_k = 0.25</code> and <code>p_d = 0.75</code>. DESCRIBE WHAT HAPPENED.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial32.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 4">
+                                            <source src="assets/videos/Lab6/Trial32.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
 
 
                                     </p>
