@@ -63,9 +63,12 @@ float tx_float_value = 0.0;
 
 // PID Constants
 float setpoint, k_p, k_i, k_d;
+float cumulativeError;
 
 // Store data for PID debugging
 bool movingForward;
+bool startedMoving;
+bool noPID;
 int numberDistanceMeasurements = 500;
 int distances[500];
 int distanceIndex;
@@ -84,8 +87,8 @@ unsigned long startTime;
 unsigned long rangingTime;
 
 // Motors
-int motorSpeed1;
-int motorSpeed2;
+float motorSpeed1;
+float motorSpeed2;
 
 enum CommandTypes
 {
@@ -114,7 +117,7 @@ void setupTOF() {
 
   resetDistanceArray();
 
-  Serial.println("Sensors online!");
+  //Serial.println("Sensors online!");
 
   distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
   distanceSensor2.startRanging();
@@ -255,7 +258,7 @@ handle_command()
             // reset the distance array
             resetDistanceArray();
 
-            int motor_speed_1, motor_speed_2, forward;
+            int motor_speed_1, motor_speed_2, forward, doPID;
 
             // Extract the next value from the command string as an int
             success = robot_cmd.get_next_value(motor_speed_1);
@@ -271,6 +274,13 @@ handle_command()
             success = robot_cmd.get_next_value(forward); // forward or backwards
             if (!success)
                 return;
+
+            // Extract the next value from the command string as an int
+            success = robot_cmd.get_next_value(doPID); // determine whether to do PID or not
+            if (!success)
+                return;
+
+            noPID = doPID == 1;
 
             Serial.println(motor_speed_1);
             Serial.println(motor_speed_2);
@@ -288,7 +298,7 @@ handle_command()
          */
         case STOP_ROBOT:
           
-          stopRobot();
+          stopRobotFast();
           break;
 
         /*
@@ -325,6 +335,9 @@ handle_command()
             success = robot_cmd.get_next_value(float_dd);
             if (!success)
                 return;
+
+            noPID = false;
+            startedMoving = false;
 
             setpoint = float_aa;
             k_p = float_bb;
@@ -429,6 +442,9 @@ void setup() {
   tx_characteristic_string.writeValue(tx_estring_value.c_str());
 
   movingForward = false;
+  startedMoving = false;
+  noPID = true;
+  cumulativeError = 0;
   
   pinMode(m1_pin1, OUTPUT);
   pinMode(m1_pin2, OUTPUT);
@@ -473,21 +489,26 @@ void loop() {
     }
   }
 
-  if (movingForward) {
+  if (noPID == false && startedMoving) {
     // check TOF sensor and stop if the distance is too small
     //tof1 = getTOF1();
     tof2 = getTOF2();
     tx_characteristic_float3.writeValue(tof2);
     //Serial.print("TOF1: ");
     //Serial.print(tof1);
-    Serial.print("TOF2: ");
-    Serial.println(tof2);
-    PID(tof2);
+    //Serial.print("TOF2: ");
+    //Serial.println(tof2);
+
+    if (movingForward) {
+      PID(tof2);
+    }
+    
     distances[distanceIndex] = tof2;
     distanceIndex++;
 
     if (distanceIndex >= numberDistanceMeasurements) {
       distanceMeasurementsDone = true;
+      startedMoving = false;
       //sendDistanceData();
     }
   }
@@ -508,29 +529,63 @@ bool distanceMeasurementsDone;*/
 
 void PID(float sensorValue) {
 
-  if (sensorValue <= setpoint + 100) { // stop the robot
+  if (sensorValue <= setpoint + 50) { // stop the robot
     Serial.print("Sensor Value: ");
     Serial.println(sensorValue);
-    stopRobot();
+    stopRobotFast();
   } else {
       // P
-      float delta = k_p * (sensorValue - setpoint);
-      Serial.print("Delta: ");
-      Serial.println(delta);
+      float error = sensorValue - setpoint;
+      float delta_p = k_p * error;
+      //Serial.print("Delta P: ");
+      //Serial.println(delta_p);
 
-      float newSpeed1 = motorSpeed1 + delta;
-      float newSpeed2 = motorSpeed2 + delta;
+      //motorSpeed1 = motorSpeed1 + delta_p;
+      //motorSpeed2 = motorSpeed2 + delta_p;
+      motorSpeed1 = delta_p;
+      motorSpeed2 = delta_p;
 
-      Serial.println(newSpeed1);
-      Serial.println(newSpeed2);
+      // Deadband and max PWM signal thresholding
+      if (motorSpeed1 < 30) {
+        motorSpeed1 = 30;
+      } else if (motorSpeed1 > 150) {
+        motorSpeed1 = 150;
+      }
 
-      // write new speeds ***
-      moveForwardCase(newSpeed1, newSpeed2, 0);
+      if (motorSpeed2 < 30) {
+        motorSpeed2 = 30;
+      } else if (motorSpeed2 > 150) {
+        motorSpeed2 = 150;
+      }
+
+
+      //Serial.println(motorSpeed1);
+      //Serial.println(motorSpeed2);
+
+      // I
+//      cumulativeError += error;
+//      float delta_i = k_i * cumulativeError;
+//
+//      Serial.print("Delta I: ");
+//      Serial.println(delta_i);
+//
+//      // Deadband and max PMW signal thresholding
+//      if (newSpeed1 > 30 && newSpeed1 < 255) {
+//        newSpeed1 = motorSpeed1 + delta_i;
+//      }
+//
+//      if (newSpeed2 > 30 && newSpeed2 < 255) {
+//        newSpeed2 = motorSpeed2 + delta_i;
+//      }
+
+      // write new speeds
+      moveForwardCase(motorSpeed1, motorSpeed2, 0);
   }
 }
 
 
 int getTOF1() {
+  distanceSensor.startRanging();
   int distance = distanceSensor.getDistance(); // Get the result of the measurement from the sensor (in mm)
   distanceSensor.clearInterrupt();
   distanceSensor.stopRanging();
@@ -539,6 +594,7 @@ int getTOF1() {
 }
 
 int getTOF2() {
+  //distanceSensor2.startRanging();
   int distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
   distanceSensor2.clearInterrupt();
   //distanceSensor2.stopRanging();
@@ -564,15 +620,22 @@ void stopRobot() {
   analogWrite(m2_pin2, 0);
 }
 
-void moveForwardCase(int speed1, int speed2, int forward) {
+void stopRobotFast() {
+  movingForward = false;
+  analogWrite(m1_pin1, 255);
+  analogWrite(m1_pin2, 255);
+
+  analogWrite(m2_pin1, 255);
+  analogWrite(m2_pin2, 255);
+}
+
+void moveForwardCase(float speed1, float speed2, int forward) {
 
   movingForward = true;
+  startedMoving = true;
   
   if (forward == 0) {
-    Serial.print("forward");
 
-    // update speed1 and speed2 based on sensors
-    
     analogWrite(m1_pin1, 0);
     analogWrite(m1_pin2, speed1);
     
@@ -580,13 +643,13 @@ void moveForwardCase(int speed1, int speed2, int forward) {
     analogWrite(m2_pin2, 0);
     
   } else {
-    
-    Serial.print("backward");
+
     analogWrite(m1_pin1, speed1);
     analogWrite(m1_pin2, 0);
     
     analogWrite(m2_pin1, 0);
     analogWrite(m2_pin2, speed2);
+
   }
 }
 
@@ -598,6 +661,6 @@ void getIMUCase() {
 
   tx_characteristic_float4.writeValue(accX);
 
-  Serial.print("Sent back: ");
-  Serial.println(accX);
+  //Serial.print("Sent back: ");
+  //Serial.println(accX);
 }
