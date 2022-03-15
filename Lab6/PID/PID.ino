@@ -63,14 +63,14 @@ float tx_float_value = 0.0;
 
 // PID Constants
 float setpoint, k_p, k_i, k_d;
-float cumulativeError;
+float cumulativeError, prevError;
 
 // Store data for PID debugging
 bool movingForward;
 bool startedMoving;
 bool noPID;
-int numberDistanceMeasurements = 500;
-int distances[500];
+int numberDistanceMeasurements = 2000;
+int distances[2000];
 int distanceIndex;
 bool distanceMeasurementsDone;
 
@@ -87,8 +87,12 @@ unsigned long startTime;
 unsigned long rangingTime;
 
 // Motors
+float motorSpeed;
 float motorSpeed1;
 float motorSpeed2;
+
+float motorValues[2000];
+int motorIndex;
 
 enum CommandTypes
 {
@@ -116,6 +120,7 @@ void setupTOF() {
   digitalWrite(6, HIGH);
 
   resetDistanceArray();
+  motorIndex = 0;
 
   //Serial.println("Sensors online!");
 
@@ -286,10 +291,12 @@ handle_command()
             Serial.println(motor_speed_2);
             Serial.println(forward);
 
+            motorSpeed = motor_speed_1;
             motorSpeed1 = motor_speed_1;
             motorSpeed2 = motor_speed_2;
 
             moveForwardCase(motor_speed_1, motor_speed_2, forward);
+            startTime = millis();
 
             break;
 
@@ -297,7 +304,8 @@ handle_command()
          * STOP_ROBOT
          */
         case STOP_ROBOT:
-          
+
+          startedMoving = false;
           stopRobotFast();
           break;
 
@@ -406,7 +414,6 @@ void setup() {
     }
   }
 
-
   BLE.begin();
 
   // Set advertised local name and service
@@ -445,6 +452,7 @@ void setup() {
   startedMoving = false;
   noPID = true;
   cumulativeError = 0;
+  prevError = 0;
   
   pinMode(m1_pin1, OUTPUT);
   pinMode(m1_pin2, OUTPUT);
@@ -499,9 +507,9 @@ void loop() {
     //Serial.print("TOF2: ");
     //Serial.println(tof2);
 
-    if (movingForward) {
-      PID(tof2);
-    }
+    //if (movingForward) {
+    PID(tof2, millis() - startTime);
+    //}
     
     distances[distanceIndex] = tof2;
     distanceIndex++;
@@ -527,59 +535,64 @@ bool distanceMeasurementsDone;*/
   
 }
 
-void PID(float sensorValue) {
+void PID(float sensorValue, unsigned long dt) {
 
-  if (sensorValue <= setpoint + 50) { // stop the robot
+  if (sensorValue <= setpoint + 50 && sensorValue >= setpoint - 50) { // stop the robot
     Serial.print("Sensor Value: ");
     Serial.println(sensorValue);
     stopRobotFast();
+    startTime = millis();
+
   } else {
-      // P
+
       float error = sensorValue - setpoint;
-      float delta_p = k_p * error;
+
+      // dir is 0 when going forward and 1 when going backwards
+      // error < 0 --> passed setpoint so go backwards
+      int dir = 0;
+      if (error < 0) {
+        dir = 1;
+      }
+
+      // P
+      float delta_p = abs(k_p * error);
+
       //Serial.print("Delta P: ");
       //Serial.println(delta_p);
 
-      //motorSpeed1 = motorSpeed1 + delta_p;
-      //motorSpeed2 = motorSpeed2 + delta_p;
-      motorSpeed1 = delta_p;
-      motorSpeed2 = delta_p;
+      // I
+      cumulativeError += error * dt;
+      float delta_i = k_i * cumulativeError;
+
+      // Serial.print("Delta I: ");
+      // Serial.println(delta_i);
+
+      // D
+      float errorChange = error - prevError;
+      float delta_d = abs(k_d * errorChange / dt);
+
+      motorSpeed = delta_p + delta_i + delta_d;
 
       // Deadband and max PWM signal thresholding
-      if (motorSpeed1 < 30) {
-        motorSpeed1 = 30;
-      } else if (motorSpeed1 > 150) {
-        motorSpeed1 = 150;
+      if (motorSpeed < 30) {
+        motorSpeed = 30;
+      } else if (motorSpeed > 150) {
+        motorSpeed = 150;
       }
 
-      if (motorSpeed2 < 30) {
-        motorSpeed2 = 30;
-      } else if (motorSpeed2 > 150) {
-        motorSpeed2 = 150;
-      }
-
+      // Write motor speed to TOF1
+      tx_characteristic_float2.writeValue(motorSpeed);
 
       //Serial.println(motorSpeed1);
       //Serial.println(motorSpeed2);
 
-      // I
-//      cumulativeError += error;
-//      float delta_i = k_i * cumulativeError;
-//
-//      Serial.print("Delta I: ");
-//      Serial.println(delta_i);
-//
-//      // Deadband and max PMW signal thresholding
-//      if (newSpeed1 > 30 && newSpeed1 < 255) {
-//        newSpeed1 = motorSpeed1 + delta_i;
-//      }
-//
-//      if (newSpeed2 > 30 && newSpeed2 < 255) {
-//        newSpeed2 = motorSpeed2 + delta_i;
-//      }
+      startTime = millis();
+      prevError = error;
 
       // write new speeds
-      moveForwardCase(motorSpeed1, motorSpeed2, 0);
+      moveForwardCase(motorSpeed, motorSpeed, dir);
+      
+      
   }
 }
 
