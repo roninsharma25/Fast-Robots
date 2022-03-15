@@ -1598,7 +1598,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 6</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 6: Closed-Loop Control (PID)</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -1608,7 +1608,109 @@
                                     <!-- Portfolio Modal - Image-->
                                     <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
-                                    <p class="mb-4">Coming soon!</p>
+                                    <h1>Overview</h1>
+                                    <p class="mb-4">
+                                        The purpose of this lab was to implement PID control. I improved upon the BLE protocol 
+                                        I used in lab 2 to make debugging much easier. Incrementally, I fine-tuped my PID 
+                                        control based on the system requirements and ultimately got it working for slower 
+                                        speeds. I will continue to improve it over the next two labs.
+                                    </p>
+
+                                    <h1>Materials</h1>
+                                    <p>Artemis Nano</p>
+                                    <p>USB C-to-C Cable</p>
+                                    <p>Battery Packs (600mAh and 850mAh)</p>
+                                    <p>2 dual motor drivers</p>
+                                    <p>ToF sensor</p>
+                                    <p>RC Car</p>
+                                    
+                                    <h1>BLE Protocol Improvement</h1>
+                                    <p class="mb-4">
+
+                                    </p>
+
+                                    <h1>Task Overview</h1>
+                                    <p class="mb-4">
+
+                                        I chose to work on Task A: Don't Hit the Wall. The goal was to drive the robot fast in the direction of a wall and then stop 
+                                        when the robot is <code>300 mm</code> from the wall. I relied on my front ToF sensor to determine the distance to the wall.
+                                        For my PID controller, I needed to define the setpoint and error. Since the objective was to have the robot stop at <code>300 mm</code>, 
+                                        I chose a setpoint of <code>300</code>. I defined the error as <code>Front ToF Sensor Reading - Setpoint</code>.
+
+                                    </p>
+
+                                    <h1>Initial Proportional Controller</h1>
+                                    <p class="mb-4">
+
+                                        I started simple by implementing a P controller. Thus, I set the motor value to <code>k_p * error</code>, where <code>k_p</code> was 
+                                        the proportional constant. From the previous lab, the minimum PWM signal was 30. Additionally, I capped the signal at 150 since I didn't want the 
+                                        robot to go too fast while I was tuning the controller. Since the ultimate stunt will require 2 meters, the maximum error is 1700 (<code>mm</code>). 
+                                        Since the smallest PWM signal is 30, the smallest value of <code>k_p = 30 / 1700 = 0.018</code>. Theoretically, the optimal <code>k_p</code> could be 
+                                        fairly large since the error might be small and the maximum PWM signal that I allowed was <code>150</code>. After performing some basic tests with 
+                                        <code>k_p</code> values between <code>0.5</code> and <code>0.8</code>, I realized that this sped the robot up very quickly and it was not able to 
+                                        adequately recover and would end up hitting the wall.
+
+                                    </p>
+
+                                    <h1>Proportional-Integral Controller</h1>
+                                    <p class="mb-4">
+
+
+                                    </p>
+
+                                    <h1>Proportional-Derative Controller</h1>
+                                    <p class="mb-4">
+
+                                        I implemented a PD controller to help prevent the robot from hitting the wall. As the name suggests, the derivative term accounts for the rate 
+                                        of change of the error. Specifically, I stored the previous error and compared that to the current error. If the error was decreasing, which was 
+                                        indicated by <code>current error - previous error < 0</code>, then this reduced the speed of the motors, since it meant that we were getting closer 
+                                        to the setpoint. On the other hand, if the error was increasing, then the speed of the motors increased, with the goal of getting closer to the 
+                                        setpoint.
+
+                                        <br>
+
+                                        While observing my initial P and PI controllers, I noticed that the robot was frequently hitting into the wall. This was especially noticeable when 
+                                        I used a larger starting speed or started farther away from the wall, which resulted in the robot reaching a larger maximum speed. The fundamental problem 
+                                        was that the robot didn't stop fast enough once it reached the setpoint. 
+                                        
+                                        As a result, I thought that I would need a fairly large <code>p_d</code> constant, so that I could rapidly account for when the robot approached the 
+                                        setpoint and preemptively slow down the motors before the robot reached the setpoint.
+
+
+                                    </p>
+
+                                    <h1>Proportional-Integral-Derivative Controller</h1>
+                                    <p class="mb-4">
+
+
+                                    </p>
+
+                                    <h1>Other Considerations</h1>
+                                    <p class="mb-4">
+
+                                        <h3>Deadband and Max PWM Signal Thresholding</h3>
+                                    
+                                        I had to account for deadband. From the previous lab, I found that PWM signals below 30 barely run on the floor (carpet where I 
+                                        did most of my testing). On the other hand, I had to limit the max PWM signal that I sent to the motors.
+
+
+                                        <h3>Sampling frequency</h3>
+
+
+                                        <h3>Backwards Movement</h3>
+
+                                        In my initial implementations, I solely made the robot go forward and then stop when it reached the setpoint. As I discussed previously, 
+                                        this frequently resulted in the robot crashing into the wall. I had implemented this feature by setting the motor value to <code>30</code> 
+                                        if the new value was less than <code>30</code>. This forced negative values to 30, which still moved the robot forward. I updated logic by 
+                                        analyzing the sign of the error. If <code>error > 0</code>, then the robot hadn't reached the setpoint yet, so I continued moving the robot 
+                                        forward. On the other hand, if <code>error < 0</code>, then the robot had reached and passed the setpoint, so I flipped the diirection variable 
+                                        and made the robot move backward.
+
+                                    </p>
+
+
+
+
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
                                         Close Window
