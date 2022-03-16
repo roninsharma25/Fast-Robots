@@ -537,7 +537,7 @@ bool distanceMeasurementsDone;*/
 
 void PID(float sensorValue, unsigned long dt) {
 
-  if (sensorValue <= setpoint + 100 && sensorValue >= setpoint - 10) { // stop the robot
+  if (sensorValue <= setpoint + 50 && sensorValue >= setpoint - 10) { // stop the robot
     Serial.print("Sensor Value: ");
     Serial.println(sensorValue);
     stopRobotFast();
