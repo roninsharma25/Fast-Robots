@@ -537,7 +537,7 @@ bool distanceMeasurementsDone;*/
 
 void PID(float sensorValue, unsigned long dt) {
 
-  if (sensorValue <= setpoint + 50 && sensorValue >= setpoint - 50) { // stop the robot
+  if (sensorValue <= setpoint + 100 && sensorValue >= setpoint - 10) { // stop the robot
     Serial.print("Sensor Value: ");
     Serial.println(sensorValue);
     stopRobotFast();
@@ -555,23 +555,17 @@ void PID(float sensorValue, unsigned long dt) {
       }
 
       // P
-      float delta_p = abs(k_p * error);
-
-      //Serial.print("Delta P: ");
-      //Serial.println(delta_p);
+      float delta_p = k_p * error;
 
       // I
       cumulativeError += error * dt;
       float delta_i = k_i * cumulativeError;
 
-      // Serial.print("Delta I: ");
-      // Serial.println(delta_i);
-
       // D
       float errorChange = error - prevError;
-      float delta_d = abs(k_d * errorChange / dt);
+      float delta_d = k_d * errorChange / dt;
 
-      motorSpeed = delta_p + delta_i + delta_d;
+      motorSpeed = abs(delta_p + delta_i + delta_d);
 
       // Deadband and max PWM signal thresholding
       if (motorSpeed < 30) {
@@ -583,16 +577,12 @@ void PID(float sensorValue, unsigned long dt) {
       // Write motor speed to TOF1
       tx_characteristic_float2.writeValue(motorSpeed);
 
-      //Serial.println(motorSpeed1);
-      //Serial.println(motorSpeed2);
-
       startTime = millis();
       prevError = error;
 
       // write new speeds
       moveForwardCase(motorSpeed, motorSpeed, dir);
-      
-      
+
   }
 }
 
@@ -606,11 +596,9 @@ int getTOF1() {
   return distance;
 }
 
-int getTOF2() {
-  //distanceSensor2.startRanging();
+int getTOF2() { // Front sensor
   int distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
   distanceSensor2.clearInterrupt();
-  //distanceSensor2.stopRanging();
 
   return distance2;
 }
@@ -673,7 +661,4 @@ void getIMUCase() {
   char char_arr[MAX_MSG_SIZE];
 
   tx_characteristic_float4.writeValue(accX);
-
-  //Serial.print("Sent back: ");
-  //Serial.println(accX);
 }
