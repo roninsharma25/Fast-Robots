@@ -1627,6 +1627,135 @@
                                     <h1>BLE Protocol Improvement</h1>
                                     <p class="mb-4">
 
+                                        I started by improving the BLE protocol that I had used in lab two. This made debugging and performing simple tasks, such as 
+                                        adjusting the location of the robot, much easier. I had to generate additional uuids and create more characteristics, since I 
+                                        was going to be trasmitting more data using bluetooth.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/BLE_additional_uuids.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/BLE_additional_characteristics.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        Then, I updated the robot control class provided. I implemented functions that 
+                                        would automatically store sensor values using a notification handler, update the fields that stored these values, and explicitly obtain 
+                                        sensor values.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/RC_Class_1.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/RC_Class_2.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/RC_Class_3.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        For all of these functions, I had corresponding Arduino coode that performed the task. The two images below show example functions called 
+                                        to obtain sensor values.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/getTOFFunction.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/getIMUCaseFunction.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        Additionally, I created functions to control the robot. I created a robot to move the robot forward. I wanted to be able to use 
+                                        this function for multiple tasks, so I added in arguments for speed, direction, and whether the robot should perform PID 
+                                        while moving.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/RC_move_forward.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        On the Arduino side, I set variables accordingly, wwhen this command was run, as depicted in the first image below. Then, this 
+                                        would call another function which set the values of the PWM pins based on the direction, as shown in the second image.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/moveForwardCase.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/moveForwardCaseFunction.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        I also added in a function to stop the robot. I frequently used this command to avoid crashing into walls.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/RC_stop_robot.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        Similar to the more forward situation, I implemented essentially the same logic on the Arduino side. The only difference 
+                                        was the function called and the values written to the PWM pins.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/stopRobotCase.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/stopRobotFastFunction.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        I also created a function for updating the PID constants. This allowed me to easily experiment with changing the values of the 
+                                        constants as well as the setpoint.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/RC_update_PID.png" width="300">
+
+                                        <br>
+                                        <br>
+
                                     </p>
 
                                     <h1>Task Overview</h1>
@@ -1637,13 +1766,47 @@
                                         For my PID controller, I needed to define the setpoint and error. Since the objective was to have the robot stop at <code>300 mm</code>, 
                                         I chose a setpoint of <code>300</code>. I defined the error as <code>Front ToF Sensor Reading - Setpoint</code>.
 
+                                        <br>
+                                        <br>
+
+                                        When I implemented any PID controller, my general workflow included calculating the respective value, set the motor speed to the value, 
+                                        write that value to the BLE characteristic, and lastly write that value to the PWM pins. The following three images show these steps.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_P.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_setMotor.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_end.png" width="300">
+
+                                        <br>
+                                        <br>
+
                                     </p>
 
                                     <h1>Initial Proportional Controller</h1>
                                     <p class="mb-4">
 
                                         I started simple by implementing a P controller. Thus, I set the motor value to <code>k_p * error</code>, where <code>k_p</code> was 
-                                        the proportional constant. From the previous lab, the minimum PWM signal was 30. Additionally, I capped the signal at 150 since I didn't want the 
+                                        the proportional constant.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_P.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        From the previous lab, the minimum PWM signal was 30. Additionally, I capped the signal at 150 since I didn't want the 
                                         robot to go too fast while I was tuning the controller. Since the ultimate stunt will require 2 meters, the maximum error is 1700 (<code>mm</code>). 
                                         Since the smallest PWM signal is 30, the smallest value of <code>k_p = 30 / 1700 = 0.018</code>. Theoretically, the optimal <code>k_p</code> could be 
                                         fairly large since the error might be small and the maximum PWM signal that I allowed was <code>150</code>. After performing some basic tests with 
@@ -1708,7 +1871,13 @@
                                         Next, I added in an integral term to see how much it would improve the controller. Overall, it worked rather poorly since 
                                         it mainly just compounded the previous problem.
 
-                                        ADD CODE SNIPPET
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_I.png" width="300">
+
+                                        <br>
+                                        <br>
 
                                         This term accumulates the previous error for each time step. As a result, as the robot was far away from the setpoint, the 
                                         error was large, which made the cumulative error large, which significantly increased the motor speeds. This just made it more 
@@ -1725,6 +1894,14 @@
                                         indicated by <code>current error - previous error < 0</code>, then this reduced the speed of the motors, since it meant that we were getting closer 
                                         to the setpoint. On the other hand, if the error was increasing, then the speed of the motors increased, with the goal of getting closer to the 
                                         setpoint.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_D.png" width="300">
+
+                                        <br>
+                                        <br>
 
                                         <br>
 
@@ -1796,6 +1973,65 @@
                                     <h1>Proportional-Integral-Derivative Controller</h1>
                                     <p class="mb-4">
 
+                                        Lastly, I combined everything to improve the controller. From my previous analysis, I knew that I wanted the integral term 
+                                        to be small, so I experimented with extremely small values (<code>< 0.0001</code>). I used similar constants for 
+                                        the proportional and derivative terms, but after experimentation settled on <code>k_p = 0.35, k_i = 0.00001, and 
+                                        k_d = 0.75</code>. I have included three successful runs below. For each trial, the starting motor value was <code>75</code> 
+                                        and the setpoint was <code>300</code>.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial100.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 100">
+                                            <source src="assets/videos/Lab6/Trial100.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial101.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 101">
+                                            <source src="assets/videos/Lab6/Trial101.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/Trial102.png" width="300">
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 102">
+                                            <source src="assets/videos/Lab6/Trial102.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        I also tried it on a different surface and it worked well.
+
+                                        <br>
+                                        <br>
+                                        
+                                        <video controls="controls" width="300" name="Trial 60">
+                                            <source src="assets/videos/Lab6/Trial60_15.mov">
+                                        </video>
+
+                                        <br>
+                                        <br>
+
+                                        Overall, I was able to achieve a maximum speed of <code>1.44 m/s</code>. I hope to improve on this during the next 
+                                        two labs as I develop a better controller.
 
                                     </p>
 
@@ -1805,10 +2041,23 @@
                                         <h3>Deadband and Max PWM Signal Thresholding</h3>
                                     
                                         I had to account for deadband. From the previous lab, I found that PWM signals below 30 barely run on the floor (carpet where I 
-                                        did most of my testing). On the other hand, I had to limit the max PWM signal that I sent to the motors.
+                                        did most of my testing). On the other hand, I had to limit the max PWM signal that I sent to the motors since I didn't want the 
+                                        robot to crash during testing.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_deadband_threshold.png" width="300">
+
+                                        <br>
+                                        <br>
 
 
-                                        <h3>Sampling frequency</h3>
+                                        <h3>Sampling Frequency</h3>
+
+                                        I didn't have a problem with the default sampling frequency so I didn't change it. I removed unnecessary <code>Serial.println()</code> 
+                                        statements from the code to avoid reducing the sampling frequency. In the next labs, I may increase the sampling frequency as I attempt 
+                                        to make the robot move faster.
 
 
                                         <h3>Backwards Movement</h3>
@@ -1819,6 +2068,28 @@
                                         analyzing the sign of the error. If <code>error > 0</code>, then the robot hadn't reached the setpoint yet, so I continued moving the robot 
                                         forward. On the other hand, if <code>error < 0</code>, then the robot had reached and passed the setpoint, so I flipped the diirection variable 
                                         and made the robot move backward.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PID_error_direction.png" width="300">
+
+                                        <br>
+                                        <br>
+
+                                        <h3>"Hacks"</h3>
+
+                                        The main "hack" I used was stopping the robot when it was <code>50 mm</code> away from the setpoint when moving forward and <code>10 mm</code> away 
+                                        when moving backwards. I did this to "help" the PID controller. I was more conservative when moving backwards since the typical backwards speeds 
+                                        were smaller, so the robot had less momentum while moving backwards.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab6/PIDStopClose.png" width="300">
+
+                                        <br>
+                                        <br>
 
                                     </p>
 
