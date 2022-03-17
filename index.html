@@ -100,7 +100,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="width:360px;" src="assets/img/Lab4/Car_Top.png" alt="..." />
+                            <img class="img-fluid" style="width:300px;" src="assets/img/Lab4/Car_Top.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 4</div>
                     </div>
@@ -110,7 +110,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="width:360px;" src="assets/img/Lab5/Robot2.png" alt="..." />
+                            <img class="img-fluid" style="width:300px;" src="assets/img/Lab5/Robot2.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 5</div>
                     </div>
@@ -120,7 +120,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/submarine.png" alt="..." />
+                            <img class="img-fluid" style="height:400px;" src="assets/img/Lab6/Robot.jpeg" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 6</div>
                     </div>
@@ -1606,12 +1606,12 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab6/PID.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
                                         The purpose of this lab was to implement PID control. I improved upon the BLE protocol 
-                                        I used in lab 2 to make debugging much easier. Incrementally, I fine-tuped my PID 
+                                        I used in lab 2 to make debugging much easier. Incrementally, I fine-tuned my PID 
                                         control based on the system requirements and ultimately got it working for slower 
                                         speeds. I will continue to improve it over the next two labs.
                                     </p>
@@ -1666,7 +1666,7 @@
                                         <br>
                                         <br>
 
-                                        For all of these functions, I had corresponding Arduino coode that performed the task. The two images below show example functions called 
+                                        For all of these functions, I had corresponding Arduino code that performed the task. The two images below show example functions called 
                                         to obtain sensor values.
 
                                         <br>
@@ -1677,15 +1677,12 @@
                                         <br>
                                         <br>
 
-                                        <br>
-                                        <br>
-
                                         <img src="assets/img/Lab6/getIMUCaseFunction.png" width="300">
 
                                         <br>
                                         <br>
 
-                                        Additionally, I created functions to control the robot. I created a robot to move the robot forward. I wanted to be able to use 
+                                        Additionally, I created functions to control the robot. I created a function to move the robot forward. I wanted to be able to use 
                                         this function for multiple tasks, so I added in arguments for speed, direction, and whether the robot should perform PID 
                                         while moving.
 
@@ -1697,16 +1694,13 @@
                                         <br>
                                         <br>
 
-                                        On the Arduino side, I set variables accordingly, wwhen this command was run, as depicted in the first image below. Then, this 
+                                        On the Arduino side, I set variables accordingly, when this command was run, as depicted in the first image below. Then, this 
                                         would call another function which set the values of the PWM pins based on the direction, as shown in the second image.
 
                                         <br>
                                         <br>
 
                                         <img src="assets/img/Lab6/moveForwardCase.png" width="500">
-
-                                        <br>
-                                        <br>
 
                                         <br>
                                         <br>
@@ -1726,16 +1720,13 @@
                                         <br>
                                         <br>
 
-                                        Similar to the more forward situation, I implemented essentially the same logic on the Arduino side. The only difference 
+                                        Similar to the move forward situation, I implemented essentially the same logic on the Arduino side. The only difference 
                                         was the function called and the values written to the PWM pins.
 
                                         <br>
                                         <br>
 
                                         <img src="assets/img/Lab6/stopRobotCase.png" width="300">
-
-                                        <br>
-                                        <br>
 
                                         <br>
                                         <br>
@@ -1769,8 +1760,8 @@
                                         <br>
                                         <br>
 
-                                        When I implemented any PID controller, my general workflow included calculating the respective value, set the motor speed to the value, 
-                                        write that value to the BLE characteristic, and lastly write that value to the PWM pins. The following three images show these steps.
+                                        When I implemented any PID controller, my general workflow included calculating the respective value, setting the motor speed to the value, 
+                                        writing that value to the BLE characteristic, and lastly writing that value to the PWM pins. The following three images show these steps.
 
                                         <br>
                                         <br>
@@ -1810,7 +1801,7 @@
                                         robot to go too fast while I was tuning the controller. Since the ultimate stunt will require 2 meters, the maximum error is 1700 (<code>mm</code>). 
                                         Since the smallest PWM signal is 30, the smallest value of <code>k_p = 30 / 1700 = 0.018</code>. Theoretically, the optimal <code>k_p</code> could be 
                                         fairly large since the error might be small and the maximum PWM signal that I allowed was <code>150</code>. After performing some basic tests with 
-                                        <code>k_p</code> values between <code>0.5</code> and <code>0.8</code>, I realized that this sped the robot up very quickly and it was not able to 
+                                        <code>k_p</code> values between <code>0.05</code> and <code>0.8</code>, I realized that this sped the robot up very quickly and it was not able to 
                                         adequately recover and would end up hitting the wall. The plot and video below show this behavior.
 
                                         <br>
@@ -1879,9 +1870,9 @@
                                         <br>
                                         <br>
 
-                                        This term accumulates the previous error for each time step. As a result, as the robot was far away from the setpoint, the 
+                                        This term accumulates the error for each time step. As a result, as the robot was far away from the setpoint, the 
                                         error was large, which made the cumulative error large, which significantly increased the motor speeds. This just made it more 
-                                        likely for the robot to overshoot the setpoint. I experimented with using small values for <code>k_i (0.0001-0.1)</code>, but they 
+                                        likely for the robot to overshoot the setpoint. I experimented with using small values for <code>k_i = (0.0001-0.1)</code>, but they 
                                         still resulted in the robot overshooting the setpoint.
 
                                     </p>
@@ -1933,7 +1924,9 @@
                                         <br>
                                         <br>
 
-                                        For the second trial (depicted below), I set <code>p_k = 0.20</code> and <code>p_d = 0.70</code>. DESCRIBE WHAT HAPPENED.
+                                        For the second trial (depicted below), I set <code>p_k = 0.20</code> and <code>p_d = 0.70</code>. This worked better, but once the 
+                                        robot passed the setpoint, it wasn't able to move back. Specifically, the PWM signals were too small for it to move backwards. I 
+                                        increased the constants to try to combat this.
 
                                         <br>
                                         <br>
@@ -1950,7 +1943,9 @@
                                         <br>
                                         <br>
 
-                                        For the third trial (depicted below), I set <code>p_k = 0.25</code> and <code>p_d = 0.75</code>. DESCRIBE WHAT HAPPENED.
+                                        For the third trial (depicted below), I set <code>p_k = 0.25</code> and <code>p_d = 0.75</code>. This trial also worked, but similar 
+                                        to the previous trial, the robot didn't make it back to the setpoint. It did reach a larger top speed with this trial, since I increased 
+                                        the <code>p_k</code> constant.
 
                                         <br>
                                         <br>
@@ -1974,7 +1969,7 @@
                                     <p class="mb-4">
 
                                         Lastly, I combined everything to improve the controller. From my previous analysis, I knew that I wanted the integral term 
-                                        to be small, so I experimented with extremely small values (<code>< 0.0001</code>). I used similar constants for 
+                                        to be small, so I experimented with extremely small values (<code><0.0001</code>). I used similar constants for 
                                         the proportional and derivative terms, but after experimentation settled on <code>k_p = 0.35, k_i = 0.00001, and 
                                         k_d = 0.75</code>. I have included three successful runs below. For each trial, the starting motor value was <code>75</code> 
                                         and the setpoint was <code>300</code>.
