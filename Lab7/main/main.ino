@@ -1,13 +1,11 @@
-#include "BLECStringCharacteristic.h"
 #include "EString.h"
 #include "RobotCommand.h"
-#include <ArduinoBLE.h>
 
 #include "ICM_20948.h"
 #include "Math.h"
 
-#include <Wire.h>
-#include "SparkFun_VL53L1X.h"
+#include "motors.h"
+#include "ble.h"
 
 #define SERIAL_PORT Serial
 
@@ -26,34 +24,6 @@ ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
 #endif
 
 
-//////////// BLE UUIDs ////////////
-#define BLE_UUID_TEST_SERVICE "9A48ECBA-2E92-082F-C079-9E75AAE428B1"
-
-#define BLE_UUID_RX_STRING "9750f60b-9c9c-4158-b620-02ec9521cd99"
-
-#define BLE_UUID_TX_FLOAT "27616294-3063-4ecc-b60b-3470ddef2938"
-#define BLE_UUID_TX_STRING "f235a225-6735-4d73-94cb-ee5dfce9ba83"
-#define BLE_UUID_TX_TOF1 "8fdf6466-8bd1-48e7-8744-814e57775ebd"
-#define BLE_UUID_TX_TOF2 "d1ae58eb-8f6b-46b7-83f8-bbe541e772cc"
-#define BLE_UUID_TX_IMU "73d4b8ab-890d-4e4c-b926-a6e294d50c9b"
-//////////// BLE UUIDs ////////////
-
-//////////// Global Variables ////////////
-BLEService testService(BLE_UUID_TEST_SERVICE);
-
-BLECStringCharacteristic rx_characteristic_string(BLE_UUID_RX_STRING, BLEWrite, MAX_MSG_SIZE);
-
-BLECStringCharacteristic tx_characteristic_string(BLE_UUID_TX_STRING, BLERead | BLENotify, MAX_MSG_SIZE);
-
-
-BLEFloatCharacteristic tx_characteristic_float(BLE_UUID_TX_FLOAT, BLERead | BLENotify);
-
-BLEFloatCharacteristic tx_characteristic_float2(BLE_UUID_TX_TOF1, BLERead | BLENotify);
-BLEFloatCharacteristic tx_characteristic_float3(BLE_UUID_TX_TOF2, BLERead | BLENotify);
-BLEFloatCharacteristic tx_characteristic_float4(BLE_UUID_TX_IMU, BLERead | BLENotify);
-
-BLEDevice central;
-
 // RX
 RobotCommand robot_cmd(":|");
 
@@ -66,19 +36,11 @@ float setpoint, k_p, k_i, k_d;
 float cumulativeError, prevError;
 
 // Store data for PID debugging
-bool movingForward;
-bool startedMoving;
 bool noPID;
 int numberDistanceMeasurements = 2000;
 int distances[2000];
 int distanceIndex;
 bool distanceMeasurementsDone;
-
-// ToF Sensors
-SFEVL53L1X distanceSensor;
-//Uncomment the following line to use the optional shutdown and interrupt pins.
-//SFEVL53L1X distanceSensor(Wire, SHUTDOWN_PIN, INTERRUPT_PIN);
-SFEVL53L1X distanceSensor2;
 
 float tof1;
 float tof2;
@@ -92,7 +54,9 @@ float motorSpeed1;
 float motorSpeed2;
 
 float motorValues[2000];
-int motorIndex;
+
+BLEDevice central;
+
 
 enum CommandTypes
 {
@@ -113,25 +77,11 @@ void resetDistanceArray() {
   distanceMeasurementsDone = false;
 }
 
-void setupTOF() {
-  digitalWrite(6, LOW);
-  Wire.begin();
-  distanceSensor2.setI2CAddress(0x32); // set a different I2C address for the second sensor
-  digitalWrite(6, HIGH);
-
-  resetDistanceArray();
-  motorIndex = 0;
-
-  //Serial.println("Sensors online!");
-
-  distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
-  distanceSensor2.startRanging();
-}
-
 void
 handle_command()
 {   
     // Set the command string from the characteristic value
+    // UPDATE -- PASS TO BLE HEADER FILE
     robot_cmd.set_cmd_string(rx_characteristic_string.value(),
                              rx_characteristic_string.valueLength());
 
@@ -366,14 +316,6 @@ handle_command()
     }
 }
 
-// Motor 1
-int m1_pin1 = 2;
-int m1_pin2 = 3;
-
-// Motor 2
-int m2_pin1 = 14;
-int m2_pin2 = 16;
-
 // Motor Starting Values
 int m1_val;
 int m2_val;
@@ -414,67 +356,16 @@ void setup() {
     }
   }
 
-  BLE.begin();
+  setupBLE();
+  setupMotors();
 
-  // Set advertised local name and service
-  BLE.setDeviceName("Artemis BLE");
-  BLE.setLocalName("Artemis BLE");
-  BLE.setAdvertisedService(testService);
-
-  // Add BLE characteristics
-  testService.addCharacteristic(tx_characteristic_float);
-  testService.addCharacteristic(tx_characteristic_float2);
-  testService.addCharacteristic(tx_characteristic_float3);
-  testService.addCharacteristic(tx_characteristic_float4);
-  testService.addCharacteristic(tx_characteristic_string);
-  testService.addCharacteristic(rx_characteristic_string);
-
-  // Add BLE service
-  BLE.addService(testService);
-
-  tx_characteristic_float.writeValue(0.0);
-
-  tx_estring_value.clear();
-
-  // Append the string literal "[->"
-  tx_estring_value.append("[->");
-
-  // Append the float value
-  tx_estring_value.append(9.0);
-
-  // Append the string literal "<-]"
-  tx_estring_value.append("<-]");
-
-  // Write the value to the characteristic
-  tx_characteristic_string.writeValue(tx_estring_value.c_str());
-
-  movingForward = false;
-  startedMoving = false;
   noPID = true;
   cumulativeError = 0;
   prevError = 0;
   
-  pinMode(m1_pin1, OUTPUT);
-  pinMode(m1_pin2, OUTPUT);
-
-  pinMode(m2_pin1, OUTPUT);
-  pinMode(m2_pin2, OUTPUT);
-
   // Set starting motor values
   m1_val = 50;
   m2_val = 50;
-
-  Serial.print("Advertising BLE with MAC: ");
-  Serial.println(BLE.address());
-
-  BLE.advertise();
-}
-
-void delay_(int time_, BLEDevice ble) {
-  unsigned long startTime2 = millis();
-  while (millis() - startTime2 < time_) {
-     int check = ble.connected();
-  }
 }
 
 void loop() {
@@ -490,9 +381,8 @@ void loop() {
   central = BLE.central();
 
   if (central) {
-    tx_characteristic_float4.writeValue(10);
     
-    if (rx_characteristic_string.written()) {
+    if (checkRXCharString()) {
         handle_command();
     }
   }
@@ -501,7 +391,7 @@ void loop() {
     // check TOF sensor and stop if the distance is too small
     //tof1 = getTOF1();
     tof2 = getTOF2();
-    tx_characteristic_float3.writeValue(tof2);
+    writeTXFloat3(tof2);
     //Serial.print("TOF1: ");
     //Serial.print(tof1);
     //Serial.print("TOF2: ");
@@ -529,7 +419,7 @@ int distanceIndex;
 bool distanceMeasurementsDone;*/
 
   for (int i = 0; i < numberDistanceMeasurements; i++) {
-    tx_characteristic_float3.writeValue(distances[i]); // TOF2
+    writeTXFloat3(distances[i]); // TOF2
     delay(100);
   }
   
@@ -575,7 +465,7 @@ void PID(float sensorValue, unsigned long dt) {
       }
 
       // Write motor speed to TOF1
-      tx_characteristic_float2.writeValue(motorSpeed);
+      writeTXFloat2(motorSpeed);
 
       startTime = millis();
       prevError = error;
@@ -603,62 +493,11 @@ int getTOF2() { // Front sensor
   return distance2;
 }
 
-
-void moveForward(int speed1, int speed2) {
-  analogWrite(m1_pin1, speed1);
-  analogWrite(m1_pin2, 0);
-
-  analogWrite(m2_pin1, 0);
-  analogWrite(m2_pin2, speed2);
-}
-
-void stopRobot() {
-  movingForward = false;
-  analogWrite(m1_pin1, 0);
-  analogWrite(m1_pin2, 0);
-
-  analogWrite(m2_pin1, 0);
-  analogWrite(m2_pin2, 0);
-}
-
-void stopRobotFast() {
-  movingForward = false;
-  analogWrite(m1_pin1, 255);
-  analogWrite(m1_pin2, 255);
-
-  analogWrite(m2_pin1, 255);
-  analogWrite(m2_pin2, 255);
-}
-
-void moveForwardCase(float speed1, float speed2, int forward) {
-
-  movingForward = true;
-  startedMoving = true;
-  
-  if (forward == 0) {
-
-    analogWrite(m1_pin1, 0);
-    analogWrite(m1_pin2, speed1);
-    
-    analogWrite(m2_pin1, speed2);
-    analogWrite(m2_pin2, 0);
-    
-  } else {
-
-    analogWrite(m1_pin1, speed1);
-    analogWrite(m1_pin2, 0);
-    
-    analogWrite(m2_pin1, 0);
-    analogWrite(m2_pin2, speed2);
-
-  }
-}
-
 void getIMUCase() {
   myICM.getAGMT();
   float accX = myICM.accX()/1000;
 
   char char_arr[MAX_MSG_SIZE];
 
-  tx_characteristic_float4.writeValue(accX);
+  writeTXFloat4(accX);
 }
