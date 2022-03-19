@@ -1,11 +1,9 @@
-#include "EString.h"
 #include "RobotCommand.h"
-
 #include "ICM_20948.h"
 #include "Math.h"
-
 #include "motors.h"
 #include "ble.h"
+#include "sensors.h"
 
 #define SERIAL_PORT Serial
 
@@ -28,22 +26,13 @@ ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
 RobotCommand robot_cmd(":|");
 
 // TX
-EString tx_estring_value;
 float tx_float_value = 0.0;
 
 // PID Constants
 float setpoint, k_p, k_i, k_d;
 float cumulativeError, prevError;
 
-// Store data for PID debugging
-bool noPID;
-int numberDistanceMeasurements = 2000;
-int distances[2000];
-int distanceIndex;
-bool distanceMeasurementsDone;
 
-float tof1;
-float tof2;
 
 unsigned long startTime;
 unsigned long rangingTime;
@@ -72,10 +61,7 @@ enum CommandTypes
     UPDATE_PID
 };
 
-void resetDistanceArray() {
-  distanceIndex = 0;
-  distanceMeasurementsDone = false;
-}
+
 
 void
 handle_command()
@@ -464,8 +450,8 @@ void PID(float sensorValue, unsigned long dt) {
         motorSpeed = 150;
       }
 
-      // Write motor speed to TOF1
-      writeTXFloat2(motorSpeed);
+      // Write motor speed to the corresponding float characteristic
+      writeTXFloatMotor(motorSpeed);
 
       startTime = millis();
       prevError = error;

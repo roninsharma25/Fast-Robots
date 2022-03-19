@@ -3,6 +3,8 @@
 
 #define DELIM_SIZE 9
 
+#define MAX_MSG_SIZE 151
+
 /**
  * Extract command type and values from a robot command string
  */

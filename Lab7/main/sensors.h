@@ -9,6 +9,21 @@ SFEVL53L1X distanceSensor2;
 
 int motorIndex;
 
+// Store data for PID debugging
+bool noPID;
+int numberDistanceMeasurements = 2000;
+int distances[2000];
+int distanceIndex;
+bool distanceMeasurementsDone;
+
+float tof1;
+float tof2;
+
+void resetDistanceArray() {
+  distanceIndex = 0;
+  distanceMeasurementsDone = false;
+}
+
 void setupTOF() {
   digitalWrite(6, LOW);
   Wire.begin();
@@ -23,4 +38,3 @@ void setupTOF() {
   distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
   distanceSensor2.startRanging();
 }
-

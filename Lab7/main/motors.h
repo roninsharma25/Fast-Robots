@@ -19,11 +19,6 @@ void setupMotors() {
 
     pinMode(m2_pin1, OUTPUT);
     pinMode(m2_pin2, OUTPUT);
-
-    Serial.print("Advertising BLE with MAC: ");
-    Serial.println(BLE.address());
-
-    BLE.advertise();
 }
 
 
@@ -75,11 +70,4 @@ void moveForward(int speed1, int speed2) {
 
   analogWrite(m2_pin1, 0);
   analogWrite(m2_pin2, speed2);
-}
-
-void delay_(int time_, BLEDevice ble) {
-  unsigned long startTime2 = millis();
-  while (millis() - startTime2 < time_) {
-     int check = ble.connected();
-  }
 }

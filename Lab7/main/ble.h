@@ -1,4 +1,5 @@
 #include "BLECStringCharacteristic.h"
+#include "EString.h"
 #include <ArduinoBLE.h>
 
 //////////// BLE UUIDs ////////////
@@ -11,9 +12,12 @@
 #define BLE_UUID_TX_TOF1 "8fdf6466-8bd1-48e7-8744-814e57775ebd"
 #define BLE_UUID_TX_TOF2 "d1ae58eb-8f6b-46b7-83f8-bbe541e772cc"
 #define BLE_UUID_TX_IMU "73d4b8ab-890d-4e4c-b926-a6e294d50c9b"
+#define BLE_UUID_TX_MOTOR "48cebb51-f8b4-4dee-ad4d-ec184d9e27ba"
 //////////// BLE UUIDs ////////////
 
 //////////// Global Variables ////////////
+EString tx_estring_value;
+
 BLEService testService(BLE_UUID_TEST_SERVICE);
 
 BLECStringCharacteristic rx_characteristic_string(BLE_UUID_RX_STRING, BLEWrite, MAX_MSG_SIZE);
@@ -26,6 +30,7 @@ BLEFloatCharacteristic tx_characteristic_float(BLE_UUID_TX_FLOAT, BLERead | BLEN
 BLEFloatCharacteristic tx_characteristic_float2(BLE_UUID_TX_TOF1, BLERead | BLENotify);
 BLEFloatCharacteristic tx_characteristic_float3(BLE_UUID_TX_TOF2, BLERead | BLENotify);
 BLEFloatCharacteristic tx_characteristic_float4(BLE_UUID_TX_IMU, BLERead | BLENotify);
+BLEFloatCharacteristic tx_characteristic_float_motor(BLE_UUID_TX_MOTOR, BLERead | BLENotify);
 
 void setupBLE() {
     BLE.begin();
@@ -40,6 +45,7 @@ void setupBLE() {
     testService.addCharacteristic(tx_characteristic_float2);
     testService.addCharacteristic(tx_characteristic_float3);
     testService.addCharacteristic(tx_characteristic_float4);
+    testService.addCharacteristic(tx_characteristic_float_motor);
     testService.addCharacteristic(tx_characteristic_string);
     testService.addCharacteristic(rx_characteristic_string);
 
@@ -61,6 +67,11 @@ void setupBLE() {
 
     // Write the value to the characteristic
     tx_characteristic_string.writeValue(tx_estring_value.c_str());
+
+    Serial.print("Advertising BLE with MAC: ");
+    Serial.println(BLE.address());
+
+    BLE.advertise();
 }
 
 bool checkRXCharString() {
@@ -77,4 +88,8 @@ void writeTXFloat3(float val) {
 
 void writeTXFloat4(float val) {
     tx_characteristic_float4.writeValue(val);
+}
+
+void writeTXFloatMotor(float val) {
+    tx_characteristic_float_motor.writeValue(val);
 }
