@@ -1,4 +1,23 @@
+"""
+Functions used in labs 6-8
+"""
 
+from ble import get_ble_controller
+from robotClass import *
+
+import numpy as np
+
+def setupRobot():
+    # Get ArtemisBLEController object
+    ble = get_ble_controller()
+
+    # Connect to the Artemis Device
+    ble.connect()
+
+    # Instantiate RobotControl class
+    rc = RobotControl(ble)
+    
+    return rc
 
 def distToVelocity(data):
     startTime = data[0][1]
@@ -62,33 +81,33 @@ def storeData(data, file):
             f.write("\n")
 
 
-def processRunData(file):
-    with open(file, 'r') as f:
-        x = f.read().splitlines()
+# def processRunData(file):
+#     with open(file, 'r') as f:
+#         x = f.read().splitlines()
     
-    calculate = False
-    comma = x[0].index(",")
-    oldSensorValue = float(x[0][1:comma])
-    oldTimeValue = float(x[0][comma+2:-1])
+#     calculate = False
+#     comma = x[0].index(",")
+#     oldSensorValue = float(x[0][1:comma])
+#     oldTimeValue = float(x[0][comma+2:-1])
 
-    for val in x[1:]:
+#     for val in x[1:]:
 
-        comma = val.index(",")
-        newSensorValue = float(val[1:comma])
-        newTimeValue = float(val[comma+2:-1])
+#         comma = val.index(",")
+#         newSensorValue = float(val[1:comma])
+#         newTimeValue = float(val[comma+2:-1])
 
-        #print(newTimeValue-oldTimeValue)
+#         #print(newTimeValue-oldTimeValue)
 
-        if (newTimeValue - oldTimeValue) > 0.01:
-            timeDelta = newTimeValue - oldTimeValue
-            sensorDelta = newSensorValue - oldSensorValue
+#         if (newTimeValue - oldTimeValue) > 0.01:
+#             timeDelta = newTimeValue - oldTimeValue
+#             sensorDelta = newSensorValue - oldSensorValue
             
-            speed = sensorDelta/(timeDelta * 1000) # convert mm/s to m/s
-            if speed > 0:
-                print(f'{speed} m/s')
+#             speed = sensorDelta/(timeDelta * 1000) # convert mm/s to m/s
+#             if speed > 0:
+#                 print(f'{speed} m/s')
 
-            oldTimeValue = newTimeValue
-            oldSensorValue = newSensorValue
+#             oldTimeValue = newTimeValue
+#             oldSensorValue = newSensorValue
 
 def plot(x):
     start_time = x[0][1]

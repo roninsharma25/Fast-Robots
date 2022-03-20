@@ -1,6 +1,7 @@
 
 bool movingForward;
 bool startedMoving;
+bool startWritingPWM;
 
 // Motor 1
 int m1_pin1 = 2;
@@ -13,6 +14,7 @@ int m2_pin2 = 16;
 void setupMotors() {
     movingForward = false;
     startedMoving = false;
+    startWritingPWM = false;
 
     pinMode(m1_pin1, OUTPUT);
     pinMode(m1_pin2, OUTPUT);

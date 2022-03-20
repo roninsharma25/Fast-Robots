@@ -32,8 +32,6 @@ float tx_float_value = 0.0;
 float setpoint, k_p, k_i, k_d;
 float cumulativeError, prevError;
 
-
-
 unsigned long startTime;
 unsigned long rangingTime;
 
@@ -98,6 +96,13 @@ handle_command()
 
             Serial.print("Sent back: ");
             Serial.println(tx_estring_value.c_str());
+
+            // USE PING TO TOGGLE BETWEEN WRITING MOTOR PWM VALUES
+            if (startWritingPWM) {
+              startWritingPWM = false;
+            } else {
+              startWritingPWM = true;
+            }
 
             break;
         /*
@@ -371,6 +376,10 @@ void loop() {
     if (checkRXCharString()) {
         handle_command();
     }
+
+    if (startWritingPWM) {
+      writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
+    }
   }
 
   if (noPID == false && startedMoving) {
@@ -395,6 +404,9 @@ void loop() {
       startedMoving = false;
       //sendDistanceData();
     }
+  } else if (startedMoving) { // still send data if the robot is moving forward without performing PID
+    tof2 = getTOF2();
+    writeTXFloat3(tof2);
   }
 }
 
