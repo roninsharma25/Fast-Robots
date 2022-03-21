@@ -2143,10 +2143,58 @@
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
-
+                                        The purpose of this lab was to implement a Kalman Filter. This allowed me to increase the speed of the robot as it 
+                                        approached the wall since I no longer had to solely rely on the front ToF sensor, which samples fairly slowly.
                                     </p>
 
                                     <h1>Materials</h1>
+                                    <p>Artemis Nano</p>
+                                    <p>USB C-to-C Cable</p>
+                                    <p>Battery Packs (600mAh and 850mAh)</p>
+                                    <p>ToF sensor</p>
+                                    <p>RC Car</p>
+
+                                    <h1>Step Response</h1>
+                                    <p class="mb-4">
+
+                                        I first executed a step response by keeping the robot stationary from the wall, then driving it at a constant 
+                                        PWM signal towards until it reached steady state, and lastly stopping the robot. I had to choose the step-size. In 
+                                        the previous PID lab, I computed the PWM value by using my PID controller. The PWM value was generally between 30 and 
+                                        130, so I chose the midpoint, 80, to be my step-size. I issued the appropriate commands over bluetooth (start collecting 
+                                        data values, move the robot with a PWM value of 80, stop the robot, stop collecting data values). I used the <code>PING</code> 
+                                        command to toggle between collecting and not collecting data values.
+
+                                        <img>
+
+                                        <img>
+
+                                        The following graphs display the ToF sensor output, calculated speeds from this distance data, and motor PWM input.
+
+                                        <img>
+
+                                        <img>
+
+                                        <img>
+
+                                        I used these graphs to measure the steady state speed and <code>90%</code> rise time. ADD EXPLANATION. From these values, 
+                                        I was able to create the A and B matrices.
+                                    
+                                    </p>
+
+                                    <h1>Kalman Filter: Setup</h1>
+                                    <p class="mb-4">
+                                    
+                                    </p>
+
+                                    <h1>Kalman Filter: Sanity Check</h1>
+                                    <p class="mb-4">
+                                    
+                                    </p>
+
+                                    <h1>Kalman Filter: Artemis Nano Implementation</h1>
+                                    <p class="mb-4">
+                                    
+                                    </p>
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
