@@ -38,7 +38,11 @@ def distToVelocity(data):
         prevDist = currDist
         prevTime = currTime
     
-    return [velocities, times]
+    output = []
+    for i in range(len(velocities)):
+        output.append((velocities[i], times[i]))
+    
+    return output
 
 
 def dataForPlot(data):
@@ -126,34 +130,40 @@ def calcRiseTime(data, start, max_, percent = 90):
             return val[1] - startTime
         
         
-def performKF(data, A, B, n = 2):
-    x = np.array([[sensorVal],[0]])
+def performKF(data, A, B, sigma, sigma_u, sigma_z, Delta_T, n = 2):
+    # data: [ [sensor values], [motor PWM values] ]
+    # Delta_T is the time between the first two datapoints
+    
+    x = np.array([[data[0][0]],[0]])
     
     Ad = np.eye(n) + Delta_T * A  # n is the dimension of your state space 
-    Bd = Delta_t * B
+    Bd = Delta_T * B
     
     # Use numpy linspace and interp to make data the same size (if needed)
     
+    kf_state = []
     # loop over data and perform KF
-    for val in data:
-        sensorVal = val[0]
-        timeVal = val[1]
+    for i in range(len(data[0])):
+        sensorVal = data[0][i]
+        motorPWMVal = data[1][i]
         
-        # STILL NEED TO ADD: sigma, y
-        kf(timeVal, sigma, sensorVal, y, Ad, Bd)
-
+        # Scale doown the motor pwm val since we scaled it to 1 before
+        x, sigma = kf(x, sigma, [[motorPWMVal / 80]], [[sensorVal]], sigma_u, sigma_z, Ad, Bd)
+        kf_state.append(x[:,0])
+    
+    return kf_state
 
 # C = 1 -> measure positive distance from the wall (initial state)
-def kf(mu, sigma, u, y, A, B, C = np.array([[1, 0]])):
+def kf(mu, sigma, u, y, sigma_u, sigma_z, A, B, C = np.array([[1, 0]])):
 
     mu_p = A.dot(mu) + B.dot(u) 
-    sigma_p = A.dot(sigma.dot(A.transpose())) + Sigma_u
+    sigma_p = A.dot(sigma.dot(A.transpose())) + sigma_u
     
     y_m = y-C.dot(mu_p)
-    sigma_m = C.dot(sigma_p.dot(C.transpose())) + Sigma_n
+    sigma_m = C.dot(sigma_p.dot(C.transpose())) + sigma_z
     kkf_gain = sigma_p.dot(C.transpose().dot(np.linalg.inv(sigma_m)))
 
     mu = mu_p + kkf_gain.dot(y_m)    
-    sigma=(np.eye(3)-kkf_gain.dot(C)).dot(sigma_p)
+    sigma=(np.eye(2)-kkf_gain.dot(C)).dot(sigma_p)
 
-    return mu,sigma            
+    return mu, sigma            
