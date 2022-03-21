@@ -2,6 +2,19 @@
 Robot class used in labs 6-8
 """
 
+from ble import get_ble_controller
+from base_ble import LOG
+from cmd_types import CMD
+from funcs import *
+from robotClass import *
+
+import time
+import numpy as np
+import matplotlib.pyplot as plt
+import asyncio
+
+LOG.propagate = False
+
 class RobotControl():
     # Initialize Function
     def __init__(self, ble):
@@ -90,12 +103,12 @@ class RobotControl():
         """
         speed: two element list ([motor1Speed, motor2Speed])
         time: duration of robot movement in seconds
-        forward:
+        forward: 0 to go forward, 1 to go backwards
         doPID: 0 when PID should be done and 1 otherwise
         """
-        self.tof_readings = []
-        self.tof2_readings = []
-        self.motor_readings = []
+        #self.tof_readings = []
+        #self.tof2_readings = []
+        #self.motor_readings = []
         
         self.ble.send_command(CMD.MOVE_FORWARD, f'{speed[0]}|{speed[1]}|{forward}|{doPID}')
     
@@ -108,8 +121,13 @@ class RobotControl():
     def updatePID(self, setpoint, k_p, k_i, k_d):
         self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}')
     
-    def pingRobot(self):
-        self.ble.send_command(CMD.PING)
+    def pingRobot(self, clear = False):
+        if (clear):
+            self.tof_readings = []
+            self.tof2_readings = []
+            self.motor_readings = []
+            
+        self.ble.send_command(CMD.PING, '')
 
 
  

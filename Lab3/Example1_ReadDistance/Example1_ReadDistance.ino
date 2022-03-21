@@ -59,8 +59,8 @@ void setup(void)
       ;
   }
   
-  distanceSensor.setDistanceModeShort();
-  distanceSensor2.setDistanceModeShort();
+  distanceSensor.setDistanceModeLong();
+  distanceSensor2.setDistanceModeLong();
 
   distanceSensor.setTimingBudgetInMs(20);
   distanceSensor2.setTimingBudgetInMs(20);

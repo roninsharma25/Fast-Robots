@@ -35,6 +35,12 @@ void setupTOF() {
 
   //Serial.println("Sensors online!");
 
+  distanceSensor.setDistanceModeShort();
+  distanceSensor2.setDistanceModeShort();
+
+  //distanceSensor.setTimingBudgetInMs(20);
+  //distanceSensor2.setTimingBudgetInMs(20);
+
   distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
   distanceSensor2.startRanging();
 }

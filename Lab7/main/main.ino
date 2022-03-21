@@ -59,7 +59,95 @@ enum CommandTypes
     UPDATE_PID
 };
 
+void getIMUCase() {
+  myICM.getAGMT();
+  float accX = myICM.accX()/1000;
 
+  char char_arr[MAX_MSG_SIZE];
+
+  writeTXFloat4(accX);
+}
+
+int getTOF1() {
+  distanceSensor.startRanging();
+  int distance = distanceSensor.getDistance(); // Get the result of the measurement from the sensor (in mm)
+  distanceSensor.clearInterrupt();
+  distanceSensor.stopRanging();
+
+  return distance;
+}
+
+int getTOF2() { // Front sensor
+  int distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
+  distanceSensor2.clearInterrupt();
+
+  return distance2;
+}
+
+
+void sendDistanceData() {
+  /*numberDistanceMeasurements = 500;
+int distances[numberDistanceMeasurements];
+int distanceIndex;
+bool distanceMeasurementsDone;*/
+
+  for (int i = 0; i < numberDistanceMeasurements; i++) {
+    writeTXFloat3(distances[i]); // TOF2
+    delay(100);
+  }
+  
+}
+
+void PID(float sensorValue, unsigned long dt) {
+
+  if (sensorValue <= setpoint + 50 && sensorValue >= setpoint - 10) { // stop the robot
+    Serial.print("Sensor Value: ");
+    Serial.println(sensorValue);
+    stopRobotFast();
+    startTime = millis();
+
+  } else {
+
+      float error = sensorValue - setpoint;
+
+      // dir is 0 when going forward and 1 when going backwards
+      // error < 0 --> passed setpoint so go backwards
+      int dir = 0;
+      if (error < 0) {
+        dir = 1;
+      }
+
+      // P
+      float delta_p = k_p * error;
+
+      // I
+      cumulativeError += error * dt;
+      float delta_i = k_i * cumulativeError;
+
+      // D
+      float errorChange = error - prevError;
+      float delta_d = k_d * errorChange / dt;
+
+      motorSpeed = abs(delta_p + delta_i + delta_d);
+
+      // Deadband and max PWM signal thresholding
+      if (motorSpeed < 30) {
+        motorSpeed = 30;
+      } else if (motorSpeed > 150) {
+        motorSpeed = 150;
+      }
+
+      // Write motor speed to the corresponding float characteristic
+      writeTXFloatMotor(motorSpeed);
+
+      startTime = millis();
+      prevError = error;
+
+      // write new speeds
+      moveForwardCase(motorSpeed, motorSpeed, dir);
+
+  }
+}
 
 void
 handle_command()
@@ -246,6 +334,7 @@ handle_command()
          */
         case STOP_ROBOT:
 
+          motorSpeed = 0;
           startedMoving = false;
           stopRobotFast();
           break;
@@ -377,8 +466,11 @@ void loop() {
         handle_command();
     }
 
+    // still send data if the robot is moving forward without performing PID
     if (startWritingPWM) {
       writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
+      tof2 = getTOF2();
+      writeTXFloat3(tof2);
     }
   }
 
@@ -404,98 +496,5 @@ void loop() {
       startedMoving = false;
       //sendDistanceData();
     }
-  } else if (startedMoving) { // still send data if the robot is moving forward without performing PID
-    tof2 = getTOF2();
-    writeTXFloat3(tof2);
   }
-}
-
-void sendDistanceData() {
-  /*numberDistanceMeasurements = 500;
-int distances[numberDistanceMeasurements];
-int distanceIndex;
-bool distanceMeasurementsDone;*/
-
-  for (int i = 0; i < numberDistanceMeasurements; i++) {
-    writeTXFloat3(distances[i]); // TOF2
-    delay(100);
-  }
-  
-}
-
-void PID(float sensorValue, unsigned long dt) {
-
-  if (sensorValue <= setpoint + 50 && sensorValue >= setpoint - 10) { // stop the robot
-    Serial.print("Sensor Value: ");
-    Serial.println(sensorValue);
-    stopRobotFast();
-    startTime = millis();
-
-  } else {
-
-      float error = sensorValue - setpoint;
-
-      // dir is 0 when going forward and 1 when going backwards
-      // error < 0 --> passed setpoint so go backwards
-      int dir = 0;
-      if (error < 0) {
-        dir = 1;
-      }
-
-      // P
-      float delta_p = k_p * error;
-
-      // I
-      cumulativeError += error * dt;
-      float delta_i = k_i * cumulativeError;
-
-      // D
-      float errorChange = error - prevError;
-      float delta_d = k_d * errorChange / dt;
-
-      motorSpeed = abs(delta_p + delta_i + delta_d);
-
-      // Deadband and max PWM signal thresholding
-      if (motorSpeed < 30) {
-        motorSpeed = 30;
-      } else if (motorSpeed > 150) {
-        motorSpeed = 150;
-      }
-
-      // Write motor speed to the corresponding float characteristic
-      writeTXFloatMotor(motorSpeed);
-
-      startTime = millis();
-      prevError = error;
-
-      // write new speeds
-      moveForwardCase(motorSpeed, motorSpeed, dir);
-
-  }
-}
-
-
-int getTOF1() {
-  distanceSensor.startRanging();
-  int distance = distanceSensor.getDistance(); // Get the result of the measurement from the sensor (in mm)
-  distanceSensor.clearInterrupt();
-  distanceSensor.stopRanging();
-
-  return distance;
-}
-
-int getTOF2() { // Front sensor
-  int distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
-  distanceSensor2.clearInterrupt();
-
-  return distance2;
-}
-
-void getIMUCase() {
-  myICM.getAGMT();
-  float accX = myICM.accX()/1000;
-
-  char char_arr[MAX_MSG_SIZE];
-
-  writeTXFloat4(accX);
 }
