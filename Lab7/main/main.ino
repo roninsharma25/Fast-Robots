@@ -4,6 +4,7 @@
 #include "motors.h"
 #include "ble.h"
 #include "sensors.h"
+#include "kf.h"
 
 #define SERIAL_PORT Serial
 
@@ -60,30 +61,16 @@ enum CommandTypes
 };
 
 void getIMUCase() {
-  myICM.getAGMT();
-  float accX = myICM.accX()/1000;
+//  myICM.getAGMT();
+//  float accX = myICM.accX()/1000;
+//
+//  char char_arr[MAX_MSG_SIZE];
+//
+//  writeTXFloat4(accX);
 
-  char char_arr[MAX_MSG_SIZE];
-
-  writeTXFloat4(accX);
+  float res = getTOF2();
+  writeTXFloat4(res);
 }
-
-int getTOF1() {
-  distanceSensor.startRanging();
-  int distance = distanceSensor.getDistance(); // Get the result of the measurement from the sensor (in mm)
-  distanceSensor.clearInterrupt();
-  distanceSensor.stopRanging();
-
-  return distance;
-}
-
-int getTOF2() { // Front sensor
-  int distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
-  distanceSensor2.clearInterrupt();
-
-  return distance2;
-}
-
 
 void sendDistanceData() {
   /*numberDistanceMeasurements = 500;
@@ -96,57 +83,6 @@ bool distanceMeasurementsDone;*/
     delay(100);
   }
   
-}
-
-void PID(float sensorValue, unsigned long dt) {
-
-  if (sensorValue <= setpoint + 50 && sensorValue >= setpoint - 10) { // stop the robot
-    Serial.print("Sensor Value: ");
-    Serial.println(sensorValue);
-    stopRobotFast();
-    startTime = millis();
-
-  } else {
-
-      float error = sensorValue - setpoint;
-
-      // dir is 0 when going forward and 1 when going backwards
-      // error < 0 --> passed setpoint so go backwards
-      int dir = 0;
-      if (error < 0) {
-        dir = 1;
-      }
-
-      // P
-      float delta_p = k_p * error;
-
-      // I
-      cumulativeError += error * dt;
-      float delta_i = k_i * cumulativeError;
-
-      // D
-      float errorChange = error - prevError;
-      float delta_d = k_d * errorChange / dt;
-
-      motorSpeed = abs(delta_p + delta_i + delta_d);
-
-      // Deadband and max PWM signal thresholding
-      if (motorSpeed < 30) {
-        motorSpeed = 30;
-      } else if (motorSpeed > 150) {
-        motorSpeed = 150;
-      }
-
-      // Write motor speed to the corresponding float characteristic
-      writeTXFloatMotor(motorSpeed);
-
-      startTime = millis();
-      prevError = error;
-
-      // write new speeds
-      moveForwardCase(motorSpeed, motorSpeed, dir);
-
-  }
 }
 
 void
@@ -191,6 +127,11 @@ handle_command()
             } else {
               startWritingPWM = true;
             }
+
+            //tof2 = getTOF2();
+            //setX(500);
+            x(0,0) = 800; //500;
+            x(0,1) = 0;
 
             break;
         /*
@@ -342,17 +283,17 @@ handle_command()
         /*
          * GET_IMU
          */
-        case GET_IMU:
-
+        case GET_IMU: // ACTUALLY RETURNS FRONT TOF SENSOR VALUE
+          //int res = getTOF2();
+          //writeTXFloat4(res);
           getIMUCase();
-          
           break;
         
          /*
          * UPDATE_PID
          */
         case UPDATE_PID:
-            float float_aa, float_bb, float_cc, float_dd;
+            float float_aa, float_bb, float_cc, float_dd, float_uu, float_zz;
 
             // Extract the first value from the command string as a float
             success = robot_cmd.get_next_value(float_aa);
@@ -374,6 +315,16 @@ handle_command()
             if (!success)
                 return;
 
+            // Extract the fifth value from the command string as a float
+            success = robot_cmd.get_next_value(float_uu);
+            if (!success)
+                return;
+
+            // Extract the sixth value from the command string as a float
+            success = robot_cmd.get_next_value(float_zz);
+            if (!success)
+                return;
+
             noPID = false;
             startedMoving = false;
 
@@ -382,7 +333,13 @@ handle_command()
             k_i = float_cc;
             k_d = float_dd;
 
-          break;
+            // Set KF parameters
+            sig_u(0,0) = float_uu;
+            sig_u(1,1) = float_uu;
+            
+            sig_z(0,0) = float_zz;
+
+            break;
 
         /* 
          * The default case may not capture all types of invalid commands.
@@ -460,6 +417,8 @@ void loop() {
   
   central = BLE.central();
 
+  tof2 = getTOF2();
+
   if (central) {
     
     if (checkRXCharString()) {
@@ -470,31 +429,111 @@ void loop() {
     if (startWritingPWM) {
       writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
       tof2 = getTOF2();
-      writeTXFloat3(tof2);
+      if (tof2 != -1000) writeTXFloat3(tof2);
+    }
+
+    if (kfPWMReady) {
+      // Write KF PWM value to the corresponding float characteristic
+      writeTXFloatKFMOTORPWM(x(1,0) / 100);
+      kfPWMReady = false;
     }
   }
 
   if (noPID == false && startedMoving) {
-    // check TOF sensor and stop if the distance is too small
-    //tof1 = getTOF1();
-    tof2 = getTOF2();
-    writeTXFloat3(tof2);
-    //Serial.print("TOF1: ");
-    //Serial.print(tof1);
-    //Serial.print("TOF2: ");
-    //Serial.println(tof2);
+    
+    Serial.println("Doing PID");
 
     //if (movingForward) {
-    PID(tof2, millis() - startTime);
+    tof2 = getTOF2();
+    //setX(tof2);
+    float kfOut = performKF(tof2, motorSpeed);
+    writeTXFloatKFTOF(kfOut);
+    
+    PID(tof2, millis() - startTime, kfOut);
     //}
     
-    distances[distanceIndex] = tof2;
-    distanceIndex++;
+    //distances[distanceIndex] = tof2;
+    //distanceIndex++;
 
-    if (distanceIndex >= numberDistanceMeasurements) {
-      distanceMeasurementsDone = true;
-      startedMoving = false;
+    //if (distanceIndex >= numberDistanceMeasurements) {
+    //  distanceMeasurementsDone = true;
+    //  startedMoving = false;
       //sendDistanceData();
-    }
+    //}
+  } else {
+    writeTXFloatKFTOF(x(0,0));
+    Serial.println(x(0,0));
   }
+}
+
+void PID(float sensorValue, unsigned long dt, float kfOut) {
+
+  if (kfOut <= setpoint + 50 && kfOut >= setpoint - 10) { // stop the robot
+    stopRobotFast();
+    startTime = millis();
+  } else {
+
+      float error = kfOut - setpoint;
+
+      // dir is 0 when going forward and 1 when going backwards
+      // error < 0 --> passed setpoint so go backwards
+      int dir = 0;
+      if (error < 0) {
+        dir = 1;
+      }
+
+      // P
+      float delta_p = k_p * error;
+
+      // I
+      cumulativeError += error * dt;
+      float delta_i = k_i * cumulativeError;
+
+      // D
+      float errorChange = error - prevError;
+      float delta_d = k_d * errorChange / dt;
+
+      motorSpeed = abs(delta_p + delta_i + delta_d);
+
+      // Deadband and max PWM signal thresholding
+      if (motorSpeed < 50) {
+        motorSpeed = 50;
+      } else if (motorSpeed > 100) {
+        motorSpeed = 100;
+      }
+
+      // Write motor speed to the corresponding float characteristic
+      writeTXFloatMotor(motorSpeed);
+
+      startTime = millis();
+      prevError = error;
+
+      // write new speeds
+      moveForwardCase(motorSpeed, motorSpeed, dir);
+
+  }
+}
+
+int getTOF1() {
+  distanceSensor.startRanging();
+  int distance = distanceSensor.getDistance(); // Get the result of the measurement from the sensor (in mm)
+  distanceSensor.clearInterrupt();
+  distanceSensor.stopRanging();
+
+  return distance;
+}
+
+int getTOF2() { // Front sensor
+
+  int distance2;
+  if (distanceSensor2.checkForDataReady()) {
+    distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
+    distanceSensor2.clearInterrupt();
+
+    Serial.println(distance2);
+  } else {
+    distance2 = -1000;
+  }
+  
+  return distance2;
 }

@@ -34,6 +34,9 @@ class RobotControl():
         
         self.motor_readings = [] # PWM values
         
+        self.kf_tof = [] # KF sensor estimates
+        self.kf_motor_pwm = [] # KF motor PWM values
+        
         # A variable to store the latest imu reading
         self.latest_imu_reading = None
         
@@ -45,6 +48,9 @@ class RobotControl():
         self.ble.start_notify(self.ble.uuid['RX_TOF2'], self.tof2_callback_handler)
         self.ble.start_notify(self.ble.uuid['RX_IMU'], self.imu_callback_handler)
         self.ble.start_notify(self.ble.uuid['RX_MOTOR'], self.motor_callback_handler)
+        self.ble.start_notify(self.ble.uuid['RX_KF_TOF'], self.kf_tof_callback_handler)
+        self.ble.start_notify(self.ble.uuid['RX_KF_MOTOR_PWM'], self.kf_motor_pwm_callback_handler)
+        
     
     def stop_notify(self, sensor):
         self.ble.stop_notify(ble.uuid[f'RX_{sensor}'])
@@ -66,6 +72,12 @@ class RobotControl():
     def motor_callback_handler(self, uuid, byte_array):
         self.motor_readings.append( ( self.ble.bytearray_to_float(byte_array), time.time() ) )
     
+    def kf_tof_callback_handler(self, uuid, byte_array):
+        self.kf_tof.append( ( self.ble.bytearray_to_float(byte_array), time.time() ) )
+    
+    def kf_motor_pwm_callback_handler(self, uuid, byte_array):
+        self.kf_motor_pwm.append( ( self.ble.bytearray_to_float(byte_array), time.time() ) )
+    
     def update_imu_readings(self):
         if len(self.imu_readings) > 10000:
             self.imu_readings = self.imu_readings[-10000:]
@@ -79,8 +91,10 @@ class RobotControl():
             self.tof2_readings = self.tof2_readings[-10000:]
     
     def get_front_tof(self):
-        self.latest_tof_front_reading = self.ble.receive_float(self.ble.uuid['RX_TOF2'])
-        print(self.latest_tof_front_reading)
+        #self.latest_tof_front_reading = self.ble.receive_float(self.ble.uuid['RX_TOF2'])
+        #print(self.latest_tof_front_reading)
+        
+        self.get_imu()
     
     def get_side_tof(self):
         self.latest_tof_side_reading = self.ble.receive_float(self.ble.uuid['RX_TOF1'])
@@ -118,14 +132,16 @@ class RobotControl():
         self.ble.send_command(CMD.STOP_ROBOT, '')
     
     # A function to instruct the robot to update PID constants
-    def updatePID(self, setpoint, k_p, k_i, k_d):
-        self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}')
+    def updatePID(self, setpoint, k_p, k_i, k_d, sig_u, sig_z):
+        self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}|{sig_u}|{sig_z}')
     
     def pingRobot(self, clear = False):
         if (clear):
             self.tof_readings = []
             self.tof2_readings = []
             self.motor_readings = []
+            self.kf_tof = []
+            self.kf_motor_pwm = []
             
         self.ble.send_command(CMD.PING, '')
 

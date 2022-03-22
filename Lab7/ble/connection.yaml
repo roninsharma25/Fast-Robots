@@ -11,3 +11,5 @@ characteristics:
   RX_TOF2: 'd1ae58eb-8f6b-46b7-83f8-bbe541e772cc'
   RX_IMU: '73d4b8ab-890d-4e4c-b926-a6e294d50c9b'
   RX_MOTOR: '48cebb51-f8b4-4dee-ad4d-ec184d9e27ba'
+  RX_KF_TOF: '82a5b4a1-5687-42cb-a7cb-b78d756757fe'
+  RX_KF_MOTOR_PWM: '19fec14e-0041-4fa5-b368-c5da2dd28ec7'

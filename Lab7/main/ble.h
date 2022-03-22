@@ -13,6 +13,8 @@
 #define BLE_UUID_TX_TOF2 "d1ae58eb-8f6b-46b7-83f8-bbe541e772cc"
 #define BLE_UUID_TX_IMU "73d4b8ab-890d-4e4c-b926-a6e294d50c9b"
 #define BLE_UUID_TX_MOTOR "48cebb51-f8b4-4dee-ad4d-ec184d9e27ba"
+#define BLE_UUID_TX_KF_TOF "82a5b4a1-5687-42cb-a7cb-b78d756757fe"
+#define BLE_UUID_TX_KF_MOTOR_PWM "19fec14e-0041-4fa5-b368-c5da2dd28ec7"
 //////////// BLE UUIDs ////////////
 
 //////////// Global Variables ////////////
@@ -32,6 +34,9 @@ BLEFloatCharacteristic tx_characteristic_float3(BLE_UUID_TX_TOF2, BLERead | BLEN
 BLEFloatCharacteristic tx_characteristic_float4(BLE_UUID_TX_IMU, BLERead | BLENotify);
 BLEFloatCharacteristic tx_characteristic_float_motor(BLE_UUID_TX_MOTOR, BLERead | BLENotify);
 
+BLEFloatCharacteristic tx_characteristic_float_KF_TOF(BLE_UUID_TX_KF_TOF, BLERead | BLENotify);
+BLEFloatCharacteristic tx_characteristic_float_KF_MOTOR_PWM(BLE_UUID_TX_KF_MOTOR_PWM, BLERead | BLENotify);
+
 void setupBLE() {
     BLE.begin();
 
@@ -46,6 +51,8 @@ void setupBLE() {
     testService.addCharacteristic(tx_characteristic_float3);
     testService.addCharacteristic(tx_characteristic_float4);
     testService.addCharacteristic(tx_characteristic_float_motor);
+    testService.addCharacteristic(tx_characteristic_float_KF_TOF);
+    testService.addCharacteristic(tx_characteristic_float_KF_MOTOR_PWM);
     testService.addCharacteristic(tx_characteristic_string);
     testService.addCharacteristic(rx_characteristic_string);
 
@@ -92,4 +99,12 @@ void writeTXFloat4(float val) {
 
 void writeTXFloatMotor(float val) {
     tx_characteristic_float_motor.writeValue(val);
+}
+
+void writeTXFloatKFTOF(float val) {
+    tx_characteristic_float_KF_TOF.writeValue(val);
+}
+
+void writeTXFloatKFMOTORPWM(float val) {
+    tx_characteristic_float_KF_MOTOR_PWM.writeValue(val);
 }

@@ -139,6 +139,9 @@ def performKF(data, A, B, sigma, sigma_u, sigma_z, Delta_T, n = 2):
     Ad = np.eye(n) + Delta_T * A  # n is the dimension of your state space 
     Bd = Delta_T * B
     
+    print(Ad)
+    print(Bd)
+    
     # Use numpy linspace and interp to make data the same size (if needed)
     
     kf_state = []
