@@ -121,7 +121,7 @@ handle_command()
             Serial.print("Sent back: ");
             Serial.println(tx_estring_value.c_str());
 
-            // USE PING TO TOGGLE BETWEEN WRITING MOTOR PWM VALUES
+            // Use PING to toggle between writing motor PWM values
             if (startWritingPWM) {
               startWritingPWM = false;
             } else {
