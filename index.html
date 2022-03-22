@@ -2183,17 +2183,73 @@
 
                                     <h1>Kalman Filter: Setup</h1>
                                     <p class="mb-4">
+
+                                        The first step in setting up the Kalman Filter was creating the process and sensor noise covariance matrices. I estimated 
+                                        the sensor variance and approximate levels of noise. ADD EXPLANATION.
+
+                                        THen, I created the C matrix. My state space had one state and two dimensions. The one state was measuring the distance 
+                                        to the wall. The two dimensions were distance to the wall and PWM motor value. As a result, my C matrix was <code>
+                                        [ [1, 0] ] </code>.
                                     
                                     </p>
 
                                     <h1>Kalman Filter: Sanity Check</h1>
                                     <p class="mb-4">
+
+                                        Before implementing the Kalman Filter on the Artemis, I tested it on data I recorded from the previous lab. I initialized 
+                                        the state vector to <code>[ [Starting ToF Value, 0] ]</code> since the robot started that far from the wall and was 
+                                        stationary. Next, I had to discretize my A and B matrices since I was running the Kalman Filter on pre-recorded data.
+
+                                        I used the following two equations: <code>Ad = np.eye(2) + Delta_T * A</code> and <code>Bd = Delta_t * B</code>, which 
+                                        were provided.
+
+                                        <br>
+
+                                        I used the following provided code to perform the Kalman Filter on data (ToF reading, motor PWM value) at one point in time.
+
+                                        <img>
+
+                                        I had to loop through all of the previous data, and call this function for every datapoint. Since I used the step response to 
+                                        general some of the KF parameters, I had to scale down the PWM motor value so that it was in the range <code>[0, 1]</code>. 
+                                        The plots below depict the output for my initial covariance matrices.
+
+                                        <img>
+
+                                        <img>
+
+                                        I experimented with these matrices to ensure the KF changed as I expected it to.
+
+                                        <img>
+
+                                        <img>
                                     
                                     </p>
 
                                     <h1>Kalman Filter: Artemis Nano Implementation</h1>
                                     <p class="mb-4">
                                     
+                                        I used the <code>BasicLinearAlgebra</code> library to implement the KF on my robot. The following code snippet shows the parameters 
+                                        that I initialized prior to the actual run.
+                                        
+                                        <img>
+
+                                        The following snippet shows the KF function that ran at every time step. When there was a new sensor value, I incorporated that value 
+                                        into the KF; otherwise, I simply used the KF to predict the sensor value.
+
+                                        <img>
+
+                                        I modified my PID logic to incorporate the output of this function. The main difference was that I used the output to determine 
+                                        the error, which I utilized in my PID logic.
+
+                                        <img>
+
+                                        The following images show the outputs of two runs. The KF did help since the ToF sensor is so slow, but I still need to fine tune 
+                                        the matrices based on the lab floor since I did most of my tests on a carpet.
+
+                                        <img>
+
+                                        <img>
+
                                     </p>
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
