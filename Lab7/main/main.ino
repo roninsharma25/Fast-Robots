@@ -128,9 +128,9 @@ handle_command()
               startWritingPWM = true;
             }
 
-            //tof2 = getTOF2();
-            //setX(500);
-            x(0,0) = 800; //500;
+            int startingDistance;
+            success = robot_cmd.get_next_value(startingDistance);
+            x(0,0) = startingDistance;
             x(0,1) = 0;
 
             break;
@@ -445,7 +445,6 @@ void loop() {
 
     //if (movingForward) {
     tof2 = getTOF2();
-    //setX(tof2);
     float kfOut = performKF(tof2, motorSpeed);
     writeTXFloatKFTOF(kfOut);
     

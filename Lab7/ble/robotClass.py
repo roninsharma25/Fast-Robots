@@ -135,7 +135,7 @@ class RobotControl():
     def updatePID(self, setpoint, k_p, k_i, k_d, sig_u, sig_z):
         self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}|{sig_u}|{sig_z}')
     
-    def pingRobot(self, clear = False):
+    def pingRobot(self, startX = 500, clear = False):
         if (clear):
             self.tof_readings = []
             self.tof2_readings = []
@@ -143,7 +143,7 @@ class RobotControl():
             self.kf_tof = []
             self.kf_motor_pwm = []
             
-        self.ble.send_command(CMD.PING, '')
+        self.ble.send_command(CMD.PING, f'{startX}')
 
 
  

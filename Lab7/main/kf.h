@@ -35,8 +35,6 @@ Matrix<1,1> oldTOFVal;
 
 bool kfPWMReady = false;
 
-// https://github.com/tomstewart89/BasicLinearAlgebra/blob/master/examples/HowToUse/HowToUse.ino
-
 float performKF(float tof, float motorSpeed) {
     Matrix<2,1> mu_p = Ad * x + Bd * motorSpeed/100;
     Matrix<2,2> sigma_p = Ad * sig * ~Ad + sig_u;
@@ -61,8 +59,4 @@ float performKF(float tof, float motorSpeed) {
     sig = (I_2 - (kkf_gain * C)) * sigma_p;
     kfPWMReady = true;
     return x(0,0); // return the new value
-}
-
-void setX(float value_) {
-    x(0, 0) = value_;
 }
