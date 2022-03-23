@@ -1,4 +1,11 @@
 
+// Motors
+float motorSpeed;
+float motorSpeed1;
+float motorSpeed2;
+
+float motorValues[2000];
+
 bool movingForward;
 bool startedMoving;
 bool startWritingPWM;

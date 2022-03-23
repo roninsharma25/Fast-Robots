@@ -6,23 +6,6 @@
 #include "sensors.h"
 #include "kf.h"
 
-#define SERIAL_PORT Serial
-
-#define SPI_PORT SPI // Your desired SPI port.       Used only when "USE_SPI" is defined
-#define CS_PIN 2     // Which pin you connect CS to. Used only when "USE_SPI" is defined
-
-#define WIRE_PORT Wire // Your desired Wire port.      Used when "USE_SPI" is not defined
-#define AD0_VAL 0      // The value of the last bit of the I2C address.                \
-                       // On the SparkFun 9DoF IMU breakout the default is 1, and when \
-                       // the ADR jumper is closed the value becomes 0
-
-#ifdef USE_SPI
-ICM_20948_SPI myICM; // If using SPI create an ICM_20948_SPI object
-#else
-ICM_20948_I2C myICM; // Otherwise create an ICM_20948_I2C object
-#endif
-
-
 // RX
 RobotCommand robot_cmd(":|");
 
@@ -36,60 +19,34 @@ float cumulativeError, prevError;
 unsigned long startTime;
 unsigned long rangingTime;
 
-// Motors
-float motorSpeed;
-float motorSpeed1;
-float motorSpeed2;
+// Stunt
+unsigned long stuntStartTime;
+unsigned long flipFinishedTime;
+bool startedStunt = false;
+bool flipFinished = false;
+bool allDone = false;
 
-float motorValues[2000];
-
-BLEDevice central;
-
-
-enum CommandTypes
-{
-    PING,
-    SEND_TWO_INTS,
-    SEND_THREE_FLOATS,
-    ECHO,
-    DANCE,
-    SET_VEL,
-    MOVE_FORWARD,
-    STOP_ROBOT,
-    GET_IMU,
-    UPDATE_PID
-};
 
 void getIMUCase() {
-//  myICM.getAGMT();
-//  float accX = myICM.accX()/1000;
-//
-//  char char_arr[MAX_MSG_SIZE];
-//
-//  writeTXFloat4(accX);
+  myICM.getAGMT();
+  float accX = myICM.accX()/1000;
 
-  float res = getTOF2();
-  writeTXFloat4(res);
+  char char_arr[MAX_MSG_SIZE];
+
+  writeTXFloat4(accX);
 }
 
 void sendDistanceData() {
-  /*numberDistanceMeasurements = 500;
-int distances[numberDistanceMeasurements];
-int distanceIndex;
-bool distanceMeasurementsDone;*/
-
   for (int i = 0; i < numberDistanceMeasurements; i++) {
     writeTXFloat3(distances[i]); // TOF2
     delay(100);
   }
-  
 }
 
 void
 handle_command()
 {   
     // Set the command string from the characteristic value
-    // UPDATE -- PASS TO BLE HEADER FILE
     robot_cmd.set_cmd_string(rx_characteristic_string.value(),
                              rx_characteristic_string.valueLength());
 
@@ -131,7 +88,6 @@ handle_command()
               startWritingPWM = true;
             }
 
-            
             x(0,0) = startingDistance;
             x(0,1) = 0;
 
@@ -409,17 +365,11 @@ void setup() {
 
 void loop() {
 
-  // Check sensors
-//  myICM.getAGMT();
-//  delay_(100, central);
-//  float accX = myICM.accX()/1000;
-//  delay_(100, central);
-
-  // Send data over bluetooth
+  while (allDone) { }
   
   central = BLE.central();
 
-  tof2 = getTOF2();
+  //tof2 = getTOF2();
 
   if (central) {
     
@@ -441,34 +391,53 @@ void loop() {
     }
   }
 
-  if (noPID == false && startedMoving) {
+  if (!startedStunt && !noPID && startedMoving) {
 
-    //if (movingForward) {
     tof2 = getTOF2();
     float kfOut = performKF(tof2, motorSpeed);
     writeTXFloatKFTOF(kfOut);
     
     PID(tof2, millis() - startTime, kfOut);
-    //}
-    
-    //distances[distanceIndex] = tof2;
-    //distanceIndex++;
 
-    //if (distanceIndex >= numberDistanceMeasurements) {
-    //  distanceMeasurementsDone = true;
-    //  startedMoving = false;
-      //sendDistanceData();
-    //}
   } else {
+    
     writeTXFloatKFTOF(x(0,0));
+
+    if (!flipFinished) {
+        if ( (millis() - stuntStartTime) > 2000 ) { // allocate 2 seconds for the flip
+            flipFinished = true;
+            flipFinishedTime = millis();
+        }
+    } else { // flip is finished
+      
+      // Move backwards for two seconds
+      if ( (millis() - flipFinishedTime) > 2000 ) {
+        
+        allDone = true;
+        stopRobot();
+
+      } else {
+
+        moveForwardCase(75, 75, 1);
+
+      }
+    }
   }
 }
 
 void PID(float sensorValue, unsigned long dt, float kfOut) {
 
-  if (kfOut <= setpoint + 50 && kfOut >= setpoint - 10) { // stop the robot
+  if (kfOut <= setpoint + 200) { // start performing flip
+    stopRobotFast();
+
+    startedStunt = true;
+    stuntStartTime = millis();
+    
+  } else if (kfOut <= setpoint + 50 && kfOut >= setpoint - 10) { // stop the robot
+ 
     stopRobotFast();
     startTime = millis();
+
   } else {
 
       float error = kfOut - setpoint;
@@ -508,7 +477,6 @@ void PID(float sensorValue, unsigned long dt, float kfOut) {
 
       // write new speeds
       moveForwardCase(motorSpeed, motorSpeed, dir);
-
   }
 }
 

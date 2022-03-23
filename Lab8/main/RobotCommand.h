@@ -5,6 +5,20 @@
 
 #define MAX_MSG_SIZE 151
 
+enum CommandTypes
+{
+    PING,
+    SEND_TWO_INTS,
+    SEND_THREE_FLOATS,
+    ECHO,
+    DANCE,
+    SET_VEL,
+    MOVE_FORWARD,
+    STOP_ROBOT,
+    GET_IMU,
+    UPDATE_PID
+};
+
 /**
  * Extract command type and values from a robot command string
  */

@@ -18,6 +18,8 @@
 //////////// BLE UUIDs ////////////
 
 //////////// Global Variables ////////////
+BLEDevice central;
+
 EString tx_estring_value;
 
 BLEService testService(BLE_UUID_TEST_SERVICE);
