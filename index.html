@@ -2298,12 +2298,12 @@
                                         <br>
                                         <br>
 
-                                        <img src="assets/img/Lab7/Covariance_Matrices_Model.png" width="500">
+                                        <img src="assets/img/Lab7/Covariance_Matrices_Sensor.png" width="500">
                                         
                                         <br>
                                         <br>
 
-                                        <img src="assets/img/Lab7/Python_KF_Model.png" width="500">
+                                        <img src="assets/img/Lab7/Python_KF_Sensor.png" width="500">
 
                                         <br>
                                         <br>
@@ -2315,12 +2315,12 @@
                                         <br>
                                         <br>
 
-                                        <img src="assets/img/Lab7/Covariance_Matrices_Sensor.png" width="500">
+                                        <img src="assets/img/Lab7/Covariance_Matrices_Model.png" width="500">
                                         
                                         <br>
                                         <br>
 
-                                        <img src="assets/img/Lab7/Python_KF_Sensor.png" width="500">
+                                        <img src="assets/img/Lab7/Python_KF_Model.png" width="500">
 
                                         <br>
                                         <br>
@@ -2344,7 +2344,7 @@
                                         <br>
 
                                         The following snippet shows the KF function that ran at every time step. When there was a new sensor value, I incorporated that value 
-                                        into the KF; otherwise, I simply used the KF to predict the sensor value.
+                                        into the KF and performed the update step; otherwise, I didn't perform the update step and simply used the KF in the PID controller.
 
                                         <br>
                                         <br>
@@ -2354,8 +2354,8 @@
                                         <br>
                                         <br>
 
-                                        I modified my PID logic to incorporate the output of this function. The main difference was that I used the output to determine 
-                                        the error, which I utilized in my PID logic.
+                                        I modified my PID logic to incorporate the output of this function. The main difference was that I used the function's output, 
+                                        instead of the front ToF sensor reading, to determine the error.
 
                                         <br>
                                         <br>
@@ -2366,11 +2366,12 @@
                                         <br>
 
                                         The following videos and images show the outputs of three runs. For each run, I kept the PID coefficients the same, and only 
-                                        varied the process noise covariance matrix value. The values I used were <code>1000, 1500, and 1000</code>, respectively. I 
-                                        varied this parameter to assess the impact of following the front ToF's sensor values more closely. The blue line depicts the 
-                                        KF output and the red dots are the front ToF sensor outputs. The KF did help since the ToF sensor is so slow, but I still need 
-                                        to fine tune the matrices based on the lab floor since I did most of my tests on a carpet. I was able to reduce the oscillations 
-                                        about the setpoint, which were very prevalent in previous labs.
+                                        varied the process noise covariance matrix value. The values I used were <code>1000, 1500, and 1000</code>, respectively. For 
+                                        the PID controller, <code>P = 0.05, I = 0, D = 0.75</code>. I varied this parameter to assess the impact of following the front 
+                                        ToF's sensor values more closely. The blue line depicts the KF output and the red dots are the front ToF sensor outputs. 
+                                        The KF did help since the ToF sensor is so slow, but I still need to fine tune the matrices based on the lab floor since I 
+                                        did most of my tests on a carpet. I was able to reduce the oscillations about the setpoint, which were very prevalent in 
+                                        previous labs.
 
                                         <br>
                                         <br>
