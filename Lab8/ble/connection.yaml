@@ -1,0 +1,15 @@
+artemis_address: 'C0:83:B0:6C:9A:3C'
+
+ble_service: '310b7eb1-8a6e-4ea7-a31d-95f8eaa41b11'
+
+characteristics:
+  TX_CMD_STRING: '9750f60b-9c9c-4158-b620-02ec9521cd99'
+
+  RX_FLOAT: '27616294-3063-4ecc-b60b-3470ddef2938'
+  RX_STRING: 'f235a225-6735-4d73-94cb-ee5dfce9ba83'
+  RX_TOF1: '8fdf6466-8bd1-48e7-8744-814e57775ebd'
+  RX_TOF2: 'd1ae58eb-8f6b-46b7-83f8-bbe541e772cc'
+  RX_IMU: '73d4b8ab-890d-4e4c-b926-a6e294d50c9b'
+  RX_MOTOR: '48cebb51-f8b4-4dee-ad4d-ec184d9e27ba'
+  RX_KF_TOF: '82a5b4a1-5687-42cb-a7cb-b78d756757fe'
+  RX_KF_MOTOR_PWM: '19fec14e-0041-4fa5-b368-c5da2dd28ec7'
