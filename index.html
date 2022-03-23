@@ -2164,20 +2164,53 @@
                                         data values, move the robot with a PWM value of 80, stop the robot, stop collecting data values). I used the <code>PING</code> 
                                         command to toggle between collecting and not collecting data values.
 
-                                        <img>
+                                        <br>
+                                        <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab7/Python_StepResponse.png" width="500">
 
-                                        The following graphs display the ToF sensor output, calculated speeds from this distance data, and motor PWM input.
+                                        <br>
+                                        <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab7/Arduino_PingUpdate.png" width="500">
 
-                                        <img>
+                                        <br>
+                                        <br>
 
-                                        <img>
+                                        The following graphs display the ToF sensor output, calculated velocities from this distance data, and motor PWM input.
 
-                                        I used these graphs to measure the steady state speed and <code>90%</code> rise time. ADD EXPLANATION. From these values, 
-                                        I was able to create the A and B matrices.
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Trial400_TOF.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Trial400_Velocity.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Trial400_PWM.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        I used these graphs to measure the steady state speed and <code>90%</code> rise time <code>(t_90)</code>. I used the velocity graph 
+                                        to determine the steady state speed. The initial spike in velocity around 4 seconds was when the robot started 
+                                        moving. It reached steady state a little bit after 6 seconds, at which the speed was approoximately constant at 
+                                        <code>2000 mm/s</code>. I calculated <code>90% of this speed</code> and determined how long it took for the robot 
+                                        to reach this speed, starting from the time of the initial spike (when the robot started moving). I analyzed the graph 
+                                        and determined this time to be <code>2.5339</code> seconds. Based on the examples from lecture, my A matrix was 
+                                        <code>[ [ 0, 1], [0, -d/m] ]</code>, where <code>d = 1 / (steady state speed)</code> and 
+                                        <code>m = (-d * t_90) / ln(1-0.9)</code>. This resulted in <code>[ [0,1], [0, -0.9087] ]</code> for the A matrix. My 
+                                        B matrix was <code>[ [0], [1/m] ]</code>, which resulted in <code>[ [0], [1817.4489] ]</code>.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/AB_Matrices.png" width="500">
                                     
                                     </p>
 
@@ -2185,11 +2218,22 @@
                                     <p class="mb-4">
 
                                         The first step in setting up the Kalman Filter was creating the process and sensor noise covariance matrices. I estimated 
-                                        the sensor variance and approximate levels of noise. ADD EXPLANATION.
+                                        the sensor variance and approximate levels of noise. One covariance matrix was for the process noise, which represented 
+                                        my trust in the modeled position and speed. For instance, the first element in this matrix represented how far off 
+                                        the ToF sensor measurement is anticipated to be per second. I used a value of 100. The second element represented how 
+                                        far off the speed will be and I used a value of 100. I chose these values to be larger than what I expected, so that I 
+                                        could simply reduce these values slowly as I made the robot move faster. The second covariance matrix was for the 
+                                        measurement noise, and it represented how much I trust the sensor data. Specifically, larger values indicate that 
+                                        there is more sensor error. For this matrix, I chose a value of 20 since I mostly trusted the sensor values (the 
+                                        main problem was the slow sampling rate). I modified all of these values after implementing the Kalman Filter on 
+                                        the robot.
 
-                                        THen, I created the C matrix. My state space had one state and two dimensions. The one state was measuring the distance 
+                                        <br>
+
+                                        Then, I created the C matrix. My state space had one state and two dimensions. The one state was measuring the distance 
                                         to the wall. The two dimensions were distance to the wall and PWM motor value. As a result, my C matrix was <code>
-                                        [ [1, 0] ] </code>.
+                                        [ [1, 0] ] </code>, since my distance to the wall was greater than <code>0</code> (at least initially) and the 
+                                        starting PWM value was 0.
                                     
                                     </p>
 
@@ -2205,43 +2249,120 @@
 
                                         <br>
 
-                                        I used the following provided code to perform the Kalman Filter on data (ToF reading, motor PWM value) at one point in time.
+                                        I adapted the provided code to perform the Kalman Filter on data (ToF reading, motor PWM value) at one point in time.
 
-                                        <img>
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Python_KF_Part2.png" width="500">
+                                        
+                                        <br>
+                                        <br>
 
                                         I had to loop through all of the previous data, and call this function for every datapoint. Since I used the step response to 
                                         general some of the KF parameters, I had to scale down the PWM motor value so that it was in the range <code>[0, 1]</code>. 
                                         The plots below depict the output for my initial covariance matrices.
 
-                                        <img>
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Python_KF_Part1.png" width="500">
+                                        
+                                        <br>
+                                        <br>
 
                                         <img>
 
-                                        I experimented with these matrices to ensure the KF changed as I expected it to.
-
                                         <img>
 
-                                        <img>
+                                        I experimented with these matrices to ensure the KF changed as I expected it to. First, I used the covariance matrix values I stated 
+                                        above, which are also displayed below, to assess the performance of the Kalman Filter. In the graph below, the blue line 
+                                        represents the ToF sensor outputs and the orange line represents the KF output. The KF matched the sensor outputs fairly closely.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Initial_Covariance_Matrices.png" width="500">
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Python_KF_Initial.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        I repeated this process but used larger values for the process noise covariance matrix, which placed less trust in the 
+                                        model and more trust in the sensor values, and as a result the KF followed the sensor values much more closely.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Covariance_Matrices_Model.png" width="500">
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Python_KF_Model.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        I repeated this process again but used larger values for the measurement noise covariance matrix, which implied that the 
+                                        sensor measurements have more error and placed less trust in the sensor values, and as a result the KF followed the sensor 
+                                        values less closely.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Covariance_Matrices_Sensor.png" width="500">
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab7/Python_KF_Sensor.png" width="500">
+
+                                        <br>
+                                        <br>
                                     
                                     </p>
 
                                     <h1>Kalman Filter: Artemis Nano Implementation</h1>
                                     <p class="mb-4">
                                     
-                                        I used the <code>BasicLinearAlgebra</code> library to implement the KF on my robot. The following code snippet shows the parameters 
-                                        that I initialized prior to the actual run.
+                                        Now that I had finished testing my KF using old data, I proceeded to implement it on the Artemis. I used the 
+                                        <code>BasicLinearAlgebra</code> library to implement the KF on my robot. The following code snippet shows the 
+                                        parameters that I initialized prior to the actual run.
+
+                                        <br>
+                                        <br>
                                         
-                                        <img>
+                                        <img src="assets/img/Lab7/Arduino_KF_Constants.png" width="500">
+
+                                        <br>
+                                        <br>
 
                                         The following snippet shows the KF function that ran at every time step. When there was a new sensor value, I incorporated that value 
                                         into the KF; otherwise, I simply used the KF to predict the sensor value.
 
-                                        <img>
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab7/" width="500">
+
+                                        <br>
+                                        <br>
 
                                         I modified my PID logic to incorporate the output of this function. The main difference was that I used the output to determine 
                                         the error, which I utilized in my PID logic.
 
-                                        <img>
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab7/Arduino_KF_PIDChanges.png" width="500">
+
+                                        <br>
+                                        <br>
 
                                         The following images show the outputs of two runs. The KF did help since the ToF sensor is so slow, but I still need to fine tune 
                                         the matrices based on the lab floor since I did most of my tests on a carpet.
