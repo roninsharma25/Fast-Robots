@@ -2292,7 +2292,7 @@
                                         <br>
                                         <br>
 
-                                        I repeated this process but used larger values for the process noise covariance matrix, which placed less trust in the 
+                                        I repeated this process but used a larger value for the process noise covariance matrix, which placed less trust in the 
                                         model and more trust in the sensor values, and as a result the KF followed the sensor values much more closely.
 
                                         <br>
@@ -2330,7 +2330,8 @@
                                     <h1>Kalman Filter: Artemis Nano Implementation</h1>
                                     <p class="mb-4">
                                     
-                                        Now that I had finished testing my KF using old data, I proceeded to implement it on the Artemis. I used the 
+                                        Now that I had finished testing my KF using old data, I proceeded to implement it on the Artemis. It was the same as my 
+                                        Python implementation, just using a different language. I used the 
                                         <code>BasicLinearAlgebra</code> library to implement the KF on my robot. The following code snippet shows the 
                                         parameters that I initialized prior to the actual run.
 
@@ -2348,7 +2349,7 @@
                                         <br>
                                         <br>
                                         
-                                        <img src="assets/img/Lab7/" width="500">
+                                        <img src="assets/img/Lab7/Arduino_KF_Func.png" width="500">
 
                                         <br>
                                         <br>
@@ -2364,12 +2365,59 @@
                                         <br>
                                         <br>
 
-                                        The following images show the outputs of two runs. The KF did help since the ToF sensor is so slow, but I still need to fine tune 
-                                        the matrices based on the lab floor since I did most of my tests on a carpet.
+                                        The following videos and images show the outputs of three runs. For each run, I kept the PID coefficients the same, and only 
+                                        varied the process noise covariance matrix value. The values I used were <code>1000, 1500, and 1000</code>, respectively. I 
+                                        varied this parameter to assess the impact of following the front ToF's sensor values more closely. The blue line depicts the 
+                                        KF output and the red dots are the front ToF sensor outputs. The KF did help since the ToF sensor is so slow, but I still need 
+                                        to fine tune the matrices based on the lab floor since I did most of my tests on a carpet. I was able to reduce the oscillations 
+                                        about the setpoint, which were very prevalent in previous labs.
 
-                                        <img>
+                                        <br>
+                                        <br>
 
-                                        <img>
+                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/74YuUwqq-FA" 
+                                        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+                                        encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab7/KF_Take1.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        <hr>
+
+                                        <br>
+                                        <br>
+
+                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/F5RwUj94G8M" 
+                                        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+                                        encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab7/KF_Take2.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        <hr>
+                                        
+                                        <br>
+                                        <br>
+
+                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/Se29MMgj8u8" 
+                                        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; 
+                                        encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        
+                                        <br>
+                                        <br>
+                                        
+                                        <img src="assets/img/Lab7/KF_Take3.png" width="500">                                        
 
                                     </p>
 
