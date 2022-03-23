@@ -55,8 +55,11 @@ float performKF(float tof, float motorSpeed) {
 
     Matrix<2,1> kkf_gain = sigma_p * ~C * sigma_m_invert;
 
-    x = mu_p + kkf_gain * y_m;
-    sig = (I_2 - (kkf_gain * C)) * sigma_p;
+    if (tof != -1000) { // only update where there is a new value
+      x = mu_p + kkf_gain * y_m;
+      sig = (I_2 - (kkf_gain * C)) * sigma_p;
+    }
+    
     kfPWMReady = true;
     return x(0,0); // return the new value
 }

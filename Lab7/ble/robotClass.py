@@ -143,7 +143,7 @@ class RobotControl():
             self.kf_tof = []
             self.kf_motor_pwm = []
             
-        self.ble.send_command(CMD.PING, f'{startX}')
+        self.ble.send_command(CMD.PING, '')#, f'{startX}')
 
 
  

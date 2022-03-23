@@ -791,3 +791,17 @@
 2022-03-22 01:46:49,292 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
 2022-03-22 01:46:55,134 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
 2022-03-22 01:46:58,620 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-03-22 22:37:42,675 | MainThread   | [DEBUG   ] | __init__            |: Python Info: sys.version_info(major=3, minor=9, micro=10, releaselevel='final', serial=0)
+2022-03-22 22:37:42,676 | MainThread   | [DEBUG   ] | __init__            |: System Info: macOS-10.16-x86_64-i386-64bit
+2022-03-22 22:37:42,676 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-03-22 22:37:56,469 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-03-22 22:39:04,505 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-03-22 22:39:07,569 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-03-22 22:42:18,207 | MainThread   | [INFO    ] | _connect            |: Already connected to a BLE device
+2022-03-22 22:44:13,081 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-03-22 22:45:39,848 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-03-22 22:45:42,741 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-03-22 23:02:02,457 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-03-22 23:10:42,540 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-03-22 23:10:42,550 | MainThread   | [WARNING ] | exit_handler        |: Could not disconnect before exiting
+2022-03-22 23:10:42,554 | MainThread   | [WARNING ] | exit_handler        |: Not connected to a BLE device

@@ -129,8 +129,8 @@ handle_command()
             }
 
             int startingDistance;
-            success = robot_cmd.get_next_value(startingDistance);
-            x(0,0) = startingDistance;
+            //success = robot_cmd.get_next_value(startingDistance);
+            x(0,0) = 800; //startingDistance;
             x(0,1) = 0;
 
             break;
