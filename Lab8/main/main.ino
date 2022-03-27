@@ -100,58 +100,7 @@ handle_command()
             }
 
             break;
-        /*
-         * Extract two integers from the command string
-         */
-        case SEND_TWO_INTS:
-            int int_a, int_b;
 
-            // Extract the next value from the command string as an integer
-            success = robot_cmd.get_next_value(int_a);
-            if (!success)
-                return;
-
-            // Extract the next value from the command string as an integer
-            success = robot_cmd.get_next_value(int_b);
-            if (!success)
-                return;
-
-            Serial.print("Two Integers: ");
-            Serial.print(int_a);
-            Serial.print(", ");
-            Serial.println(int_b);
-            
-            break;
-        /*
-         * Extract three floats from the command string
-         */
-        case SEND_THREE_FLOATS:
-            float float_a, float_b, float_c;
-
-            // Extract the first value from the command string as a float
-            success = robot_cmd.get_next_value(float_a);
-            if (!success)
-                return;
-
-            // Extract the second value from the command string as a float
-            success = robot_cmd.get_next_value(float_b);
-            if (!success)
-                return;
-
-            // Extract the third value from the command string as a float
-            success = robot_cmd.get_next_value(float_c);
-            if (!success)
-                return;
-
-            // Display the three floats
-            Serial.print("Three Floats: ");
-            Serial.print(float_a);
-            Serial.print(", ");
-            Serial.print(float_b);
-            Serial.print(", ");
-            Serial.println(float_c);
-            
-            break;
         /*
          * Add a prefix and postfix to the string value extracted from the command string
          */
@@ -173,20 +122,6 @@ handle_command()
             Serial.print("Sent back: ");
             Serial.println(tx_estring_value.c_str());
             
-            break;
-        /*
-         * DANCE
-         */
-        case DANCE:
-            Serial.println("Look Ma, I'm Dancin'!");
-
-            break;
-        
-        /*
-         * SET_VEL
-         */
-        case SET_VEL:
-
             break;
 
         /*
@@ -431,7 +366,7 @@ void loop() {
 
       } else {
 
-        moveForwardCase(75, 75, 1);
+        moveForwardCase(75, 75, 1); // FLIP THIS DIRECTION AFTER INITIAL TESTS
 
       }
     }
