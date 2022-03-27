@@ -71,15 +71,10 @@ handle_command()
          * Write "PONG" on the GATT characteristic BLE_UUID_TX_STRING
          */
         case PING:
-            int startingDistance;
+            int startingDistance, clearAllDone, performFlip;
             success = robot_cmd.get_next_value(startingDistance);
-            
-            tx_estring_value.clear();
-            tx_estring_value.append("PONG");
-            tx_characteristic_string.writeValue(tx_estring_value.c_str());
-
-            Serial.print("Sent back: ");
-            Serial.println(tx_estring_value.c_str());
+            success = robot_cmd.get_next_value(clearAllDone);
+            success = robot_cmd.get_next_value(performFlip);
 
             // Use PING to toggle between writing motor PWM values
             if (startWritingPWM) {
@@ -90,6 +85,19 @@ handle_command()
 
             x(0,0) = startingDistance;
             x(0,1) = 0;
+
+            if (clearAllDone == 1) { // reset
+              allDone = false;
+            }
+
+            if (performFlip == 1) { // start the flip
+              stopRobotFast();
+              startedStunt = true;
+              stuntStartTime = millis();
+            } else {
+              startedStunt = false;
+              flipFinished = false;
+            }
 
             break;
         /*
@@ -364,8 +372,6 @@ void setup() {
 }
 
 void loop() {
-
-  while (allDone) { }
   
   central = BLE.central();
 
@@ -376,6 +382,9 @@ void loop() {
     if (checkRXCharString()) {
         handle_command();
     }
+  }
+
+  if (central && !allDone) {
 
     // still send data if the robot is moving forward without performing PID
     if (startWritingPWM) {
@@ -391,7 +400,9 @@ void loop() {
     }
   }
 
-  if (!startedStunt && !noPID && startedMoving) {
+  if (!allDone && !startedStunt && !noPID && startedMoving) {
+
+    Serial.println("Haven't detected wall");
 
     tof2 = getTOF2();
     float kfOut = performKF(tof2, motorSpeed);
@@ -399,7 +410,9 @@ void loop() {
     
     PID(tof2, millis() - startTime, kfOut);
 
-  } else {
+  } else if (!allDone && startedStunt) {
+
+    Serial.println("Performing stunt");
     
     writeTXFloatKFTOF(x(0,0));
 
@@ -427,7 +440,9 @@ void loop() {
 
 void PID(float sensorValue, unsigned long dt, float kfOut) {
 
-  if (kfOut <= setpoint + 200) { // start performing flip
+  Serial.println("PIDing");
+
+  if (kfOut <= setpoint + 50) { // start performing flip
     stopRobotFast();
 
     startedStunt = true;
@@ -498,6 +513,9 @@ int getTOF2() { // Front sensor
   } else {
     distance2 = -1000;
   }
+
+  Serial.println(distance2);
+  //distanceSensor2.startRanging();
   
   return distance2;
 }

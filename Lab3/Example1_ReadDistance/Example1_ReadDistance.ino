@@ -52,15 +52,15 @@ void setup(void)
       ;
   }
 
-  if (distanceSensor2.begin() != 0)
-  {
-    Serial.println("Sensor 2 failed to begin. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
-  
-  distanceSensor.setDistanceModeLong();
-  distanceSensor2.setDistanceModeLong();
+//  if (distanceSensor2.begin() != 0)
+//  {
+//    Serial.println("Sensor 2 failed to begin. Please check wiring. Freezing...");
+//    while (1)
+//      ;
+//  }
+//  
+  distanceSensor.setDistanceModeShort();
+  distanceSensor2.setDistanceModeShort();
 
   distanceSensor.setTimingBudgetInMs(20);
   distanceSensor2.setTimingBudgetInMs(20);
