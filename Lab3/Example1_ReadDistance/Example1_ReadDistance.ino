@@ -74,10 +74,10 @@ void loop(void)
   distanceSensor.startRanging(); //Write configuration bytes to initiate measurement
   distanceSensor2.startRanging();
   
-  while (!(distanceSensor.checkForDataReady() && distanceSensor2.checkForDataReady()))
-  {
-    delay(1);
-  }
+//  while (!(distanceSensor.checkForDataReady() && distanceSensor2.checkForDataReady()))
+//  {
+//    delay(1);
+//  }
   int distance = distanceSensor.getDistance(); //Get the result of the measurement from the sensor
   distanceSensor.clearInterrupt();
   distanceSensor.stopRanging();

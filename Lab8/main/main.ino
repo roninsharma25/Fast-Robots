@@ -366,7 +366,7 @@ void loop() {
 
       } else {
 
-        moveForwardCase(75, 75, 1); // FLIP THIS DIRECTION AFTER INITIAL TESTS
+        moveForwardCase(200, 200, 0); // FLIP THIS DIRECTION AFTER INITIAL TESTS
 
       }
     }
@@ -415,8 +415,8 @@ void PID(float sensorValue, unsigned long dt, float kfOut) {
       // Deadband and max PWM signal thresholding
       if (motorSpeed < 50) {
         motorSpeed = 50;
-      } else if (motorSpeed > 100) {
-        motorSpeed = 100;
+      } else if (motorSpeed > 255) {
+        motorSpeed = 255;
       }
 
       // Write motor speed to the corresponding float characteristic
