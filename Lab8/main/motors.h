@@ -80,3 +80,20 @@ void moveForward(int speed1, int speed2) {
   analogWrite(m2_pin1, 0);
   analogWrite(m2_pin2, speed2);
 }
+
+void turn(int speed, int dir) {
+  if (dir) {
+    analogWrite(m1_pin1, speed);
+    analogWrite(m1_pin2, 0);
+
+    analogWrite(m2_pin1, 0);
+    analogWrite(m2_pin2, 0);
+  } else {
+    analogWrite(m1_pin1, 0);
+    analogWrite(m1_pin2, 0);
+
+    analogWrite(m2_pin1, 0);
+    analogWrite(m2_pin2, speed);
+  }
+}
+

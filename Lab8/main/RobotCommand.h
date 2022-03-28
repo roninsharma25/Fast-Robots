@@ -16,7 +16,8 @@ enum CommandTypes
     MOVE_FORWARD,
     STOP_ROBOT,
     GET_IMU,
-    UPDATE_PID
+    UPDATE_PID,
+    TURN
 };
 
 /**

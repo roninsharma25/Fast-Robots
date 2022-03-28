@@ -247,6 +247,16 @@ handle_command()
          * It is safer to validate the command string on the central device (in python)
          * before writing to the characteristic.
          */
+          case TURN:
+            float speed, dir;
+
+            // Extract speed and direction
+            success = robot_cmd.get_next_value(speed);
+            success = robot_cmd.get_next_value(dir);
+
+            turn(speed, dir);
+
+
         default:
             Serial.print("Invalid Command Type: ");
             Serial.println(cmd_type);
@@ -440,16 +450,17 @@ int getTOF1() {
 }
 
 int getTOF2() { // Front sensor
+  distanceSensor2.startRanging();
+  int distance2 = distanceSensor2.getDistance();
+  distanceSensor2.clearInterrupt();
+  distanceSensor2.stopRanging();
+  // if (distanceSensor2.checkForDataReady()) {
+  //   distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
+  //   distanceSensor2.clearInterrupt();
+  // } else {
+  //   distance2 = -1000;
+  // }
 
-  int distance2;
-  if (distanceSensor2.checkForDataReady()) {
-    distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
-    distanceSensor2.clearInterrupt();
-  } else {
-    distance2 = -1000;
-  }
-
-  Serial.println(distance2);
   //distanceSensor2.startRanging();
   
   return distance2;

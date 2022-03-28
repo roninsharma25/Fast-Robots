@@ -11,3 +11,4 @@ class CMD(Enum):
     STOP_ROBOT = 7
     GET_IMU = 8
     UPDATE_PID = 9
+    TURN = 10

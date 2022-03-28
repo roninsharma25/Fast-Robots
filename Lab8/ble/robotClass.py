@@ -145,3 +145,5 @@ class RobotControl():
             
         self.ble.send_command(CMD.PING, f'{startX}|{clearAllDone}|{performFlip}')
 
+    def turn(self, speed, turn = 0):
+        self.ble.send_command(CMD.TURN, f'{speed}|{turn}')
