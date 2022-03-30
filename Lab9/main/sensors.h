@@ -49,7 +49,20 @@ void setupTOF() {
   resetDistanceArray();
   motorIndex = 0;
 
-  //Serial.println("Sensors online!");
+  if (distanceSensor.begin() != 0) //Begin returns 0 on a good init
+  {
+    Serial.println("Sensor 1 failed to begin. Please check wiring. Freezing...");
+    while (1)
+      ;
+  }
+
+  if (distanceSensor2.begin() != 0)
+  {
+    Serial.println("Sensor 2 failed to begin. Please check wiring. Freezing...");
+    while (1)
+      ;
+  }
+  
 
   //distanceSensor.setDistanceModeShort();
   distanceSensor2.setDistanceModeLong();

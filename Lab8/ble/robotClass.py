@@ -142,8 +142,8 @@ class RobotControl():
             self.motor_readings = []
             self.kf_tof = []
             self.kf_motor_pwm = []
-            
-        self.ble.send_command(CMD.PING, f'{startX}|{clearAllDone}|{performFlip}')
+        print(int(clear))
+        self.ble.send_command(CMD.PING, f'{startX}|{int(clear)}|{clearAllDone}|{performFlip}')
 
     def turn(self, forwardSpeed, backwardSpeed = 30, turn = 0):
         self.ble.send_command(CMD.TURN, f'{forwardSpeed}|{backwardSpeed}|{turn}')

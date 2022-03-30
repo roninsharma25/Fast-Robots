@@ -19,6 +19,9 @@ unsigned long currentTime;
 unsigned long rangingTime;
 
 float gyroVal;
+float initialGyroVal;
+
+bool started = false;
 
 void getIMUCase() {
   myICM.getAGMT();
@@ -34,7 +37,10 @@ void updateGyro() {
   currentTime = millis();
 
   // Yaw angle
-  gyroVal -= myICM.gyrZ() * (currentTime - previousTime); // may need to scale this
+  gyroVal -= myICM.gyrZ() * (currentTime - previousTime) / 1000;
+  Serial.println(gyroVal);
+
+  writeTXFloat4(gyroVal);
 
   // Update time
   previousTime = currentTime;
@@ -69,8 +75,9 @@ handle_command()
          * Write "PONG" on the GATT characteristic BLE_UUID_TX_STRING
          */
         case PING:
-            int startingDistance, clearAllDone, performFlip;
+            int startingDistance, toggleUpdate, clearAllDone, performFlip;
             success = robot_cmd.get_next_value(startingDistance);
+            success = robot_cmd.get_next_value(toggleUpdate);
             success = robot_cmd.get_next_value(clearAllDone);
             success = robot_cmd.get_next_value(performFlip);
 
@@ -80,6 +87,12 @@ handle_command()
             } else {
               startWritingPWM = true;
             }
+
+            Serial.println(toggleUpdate);
+            started = toggleUpdate ? !started : started;
+
+            updateGyro();
+            initialGyroVal = gyroVal;
 
             break;
 
@@ -178,50 +191,38 @@ handle_command()
          */
         case UPDATE_PID:
             float float_aa, float_bb, float_cc, float_dd, float_uu, float_zz;
+            int doPID2;
 
             // Extract the first value from the command string as a float
             success = robot_cmd.get_next_value(float_aa);
-            if (!success)
-                return;
 
             // Extract the second value from the command string as a float
             success = robot_cmd.get_next_value(float_bb);
-            if (!success)
-                return;
 
             // Extract the third value from the command string as a float
             success = robot_cmd.get_next_value(float_cc);
-            if (!success)
-                return;
 
             // Extract the fourth value from the command string as a float
             success = robot_cmd.get_next_value(float_dd);
-            if (!success)
-                return;
 
             // Extract the fifth value from the command string as a float
             success = robot_cmd.get_next_value(float_uu);
-            if (!success)
-                return;
 
             // Extract the sixth value from the command string as a float
             success = robot_cmd.get_next_value(float_zz);
-            if (!success)
-                return;
 
-            noPID = false;
-            startedMoving = false;
+            success = robot_cmd.get_next_value(doPID2);
+
+            noPID = doPID2 == 0; // doPID = 1 when the robot should move
+            startedMoving = !noPID2;
+            
+            //noPID = false;
+            //startedMoving = false;
 
             setpoint = float_aa;
             k_p = float_bb;
             k_i = float_cc;
             k_d = float_dd;
-
-            // Set KF parameters
-            sig_u(0,0) = float_uu;
-            sig_u(1,1) = float_uu;
-            
-            sig_z(0,0) = float_zz;
 
             break;
 
@@ -310,25 +311,22 @@ void loop() {
         handle_command();
     }
 
-    // still send data if the robot is moving forward without performing PID
-    if (startWritingPWM) {
-      writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
-      tof2 = getTOF2();
-      writeTXFloat3(tof2);
+    
+    if (!noPID && startedMoving) {
+      PID(millis() - startTime);
     }
 
-    if (!noPID && startedMoving) {
+    if (started) {
       tof2 = getTOF2();
+      writeTXFloat3(tof2);
+      writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
       updateGyro();
-      PID(millis() - startTime);
 
     }
   }
 }
 
 void PID(unsigned long dt) {
-
-  Serial.println("PIDing");
     
   if (gyroVal <= setpoint + 20 && gyroVal >= setpoint - 20) { // stop the robot
  
@@ -336,7 +334,7 @@ void PID(unsigned long dt) {
 
   } else {
 
-      float error = gyroVal - setpoint;
+      float error = gyroVal - (initialGyroVal + setpoint);
 
       // dir is 0 when going forward and 1 when going backwards
       // error < 0 --> passed setpoint so go backwards
@@ -359,10 +357,10 @@ void PID(unsigned long dt) {
       motorSpeed = abs(delta_p + delta_i + delta_d);
 
       // Deadband and max PWM signal thresholding
-      if (motorSpeed < 50) {
-        motorSpeed = 50;
-      } else if (motorSpeed > 100) {
-        motorSpeed = 100;
+      if (motorSpeed < 150) {
+        motorSpeed = 150;
+      } else if (motorSpeed > 255) {
+        motorSpeed = 255;
       }
 
       // Write motor speed to the corresponding float characteristic
@@ -372,7 +370,12 @@ void PID(unsigned long dt) {
       prevError = error;
 
       // write new speeds
-      moveForwardCase(motorSpeed, motorSpeed, dir);
+      //moveForwardCase(motorSpeed, motorSpeed, dir);
+      if (dir) {
+        turn(motorSpeed, 85, dir);
+      } else {
+        turn(85, motorSpeed, dir);
+      }
   }
 }
 

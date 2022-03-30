@@ -95,7 +95,7 @@ void writeTXFloat3(float val) {
     tx_characteristic_float3.writeValue(val);
 }
 
-void writeTXFloat4(float val) {
+void writeTXFloat4(float val) { // IMU
     tx_characteristic_float4.writeValue(val);
 }
 

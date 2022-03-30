@@ -132,18 +132,18 @@ class RobotControl():
         self.ble.send_command(CMD.STOP_ROBOT, '')
     
     # A function to instruct the robot to update PID constants
-    def updatePID(self, setpoint, k_p, k_i, k_d, sig_u, sig_z):
-        self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}|{sig_u}|{sig_z}')
+    def updatePID(self, setpoint, k_p, k_i, k_d, sig_u, sig_z, doPID = 0): # doPID = 1 when the robot should move
+        self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}|{sig_u}|{sig_z}|{doPID}')
     
-    def pingRobot(self, startX = 500, clear = False, clearAllDone = 0, performFlip = 0): # 1 to perform flip
+    def pingRobot(self, toggleUpdate, startX = 500, clear = False, clearAllDone = 0, performFlip = 0): # 1 to perform flip
         if (clear):
             self.tof_readings = []
             self.tof2_readings = []
             self.motor_readings = []
             self.kf_tof = []
             self.kf_motor_pwm = []
-            
-        self.ble.send_command(CMD.PING, f'{startX}|{clearAllDone}|{performFlip}')
+        
+        self.ble.send_command(CMD.PING, f'{startX}|{toggleUpdate}|{clearAllDone}|{performFlip}')
 
     def turn(self, forwardSpeed, backwardSpeed = 30, turn = 0):
         self.ble.send_command(CMD.TURN, f'{forwardSpeed}|{backwardSpeed}|{turn}')
