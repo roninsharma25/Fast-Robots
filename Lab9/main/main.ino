@@ -9,23 +9,16 @@
 // RX
 RobotCommand robot_cmd(":|");
 
-// TX
-float tx_float_value = 0.0;
-
 // PID Constants
 float setpoint, k_p, k_i, k_d;
 float cumulativeError, prevError;
 
 unsigned long startTime;
+unsigned long previousTime;
+unsigned long currentTime;
 unsigned long rangingTime;
 
-// Stunt
-unsigned long stuntStartTime;
-unsigned long flipFinishedTime;
-bool startedStunt = false;
-bool flipFinished = false;
-bool allDone = false;
-
+float gyroVal;
 
 void getIMUCase() {
   myICM.getAGMT();
@@ -36,11 +29,16 @@ void getIMUCase() {
   writeTXFloat4(accX);
 }
 
-void sendDistanceData() {
-  for (int i = 0; i < numberDistanceMeasurements; i++) {
-    writeTXFloat3(distances[i]); // TOF2
-    delay(100);
-  }
+void updateGyro() {
+  myICM.getAGMT();
+  currentTime = millis();
+
+  // Yaw angle
+  gyroVal -= myICM.gyrZ() * (currentTime - previousTime); // may need to scale this
+
+  // Update time
+  previousTime = currentTime;
+
 }
 
 void
@@ -81,22 +79,6 @@ handle_command()
               startWritingPWM = false;
             } else {
               startWritingPWM = true;
-            }
-
-            x(0,0) = startingDistance;
-            x(0,1) = 0;
-
-            if (clearAllDone == 1) { // reset
-              allDone = false;
-            }
-
-            if (performFlip == 1) { // start the flip
-              stopRobotFast();
-              startedStunt = true;
-              stuntStartTime = millis();
-            } else {
-              startedStunt = false;
-              flipFinished = false;
             }
 
             break;
@@ -168,6 +150,7 @@ handle_command()
 
             moveForwardCase(motor_speed_1, motor_speed_2, forward);
             startTime = millis();
+            previousTime = millis();
 
             break;
 
@@ -321,87 +304,39 @@ void loop() {
   
   central = BLE.central();
 
-  //tof2 = getTOF2();
-
   if (central) {
-    
+
     if (checkRXCharString()) {
         handle_command();
     }
-  }
-
-  if (central && !allDone) {
 
     // still send data if the robot is moving forward without performing PID
     if (startWritingPWM) {
       writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
       tof2 = getTOF2();
-      if (tof2 != -1000) writeTXFloat3(tof2);
+      writeTXFloat3(tof2);
     }
 
-    if (kfPWMReady) {
-      // Write KF PWM value to the corresponding float characteristic
-      writeTXFloatKFMOTORPWM(x(1,0) / 100);
-      kfPWMReady = false;
-    }
-  }
+    if (!noPID && startedMoving) {
+      tof2 = getTOF2();
+      updateGyro();
+      PID(millis() - startTime);
 
-  if (!allDone && !startedStunt && !noPID && startedMoving) {
-
-    Serial.println("Haven't detected wall");
-
-    tof2 = getTOF2();
-    float kfOut = performKF(tof2, motorSpeed);
-    writeTXFloatKFTOF(kfOut);
-    
-    PID(tof2, millis() - startTime, kfOut);
-
-  } else if (!allDone && startedStunt) {
-
-    Serial.println("Performing stunt");
-    
-    writeTXFloatKFTOF(x(0,0));
-
-    if (!flipFinished) {
-        if ( (millis() - stuntStartTime) > 2000 ) { // allocate 2 seconds for the flip
-            flipFinished = true;
-            flipFinishedTime = millis();
-        }
-    } else { // flip is finished
-      
-      // Move backwards for two seconds
-      if ( (millis() - flipFinishedTime) > 2000 ) {
-        
-        allDone = true;
-        stopRobot();
-
-      } else {
-
-        moveForwardCase(200, 200, 0); // FLIP THIS DIRECTION AFTER INITIAL TESTS
-
-      }
     }
   }
 }
 
-void PID(float sensorValue, unsigned long dt, float kfOut) {
+void PID(unsigned long dt) {
 
   Serial.println("PIDing");
-
-  if (kfOut <= setpoint + 50) { // start performing flip
-    stopRobotFast();
-
-    startedStunt = true;
-    stuntStartTime = millis();
     
-  } else if (kfOut <= setpoint + 50 && kfOut >= setpoint - 10) { // stop the robot
+  if (gyroVal <= setpoint + 20 && gyroVal >= setpoint - 20) { // stop the robot
  
     stopRobotFast();
-    startTime = millis();
 
   } else {
 
-      float error = kfOut - setpoint;
+      float error = gyroVal - setpoint;
 
       // dir is 0 when going forward and 1 when going backwards
       // error < 0 --> passed setpoint so go backwards
@@ -426,8 +361,8 @@ void PID(float sensorValue, unsigned long dt, float kfOut) {
       // Deadband and max PWM signal thresholding
       if (motorSpeed < 50) {
         motorSpeed = 50;
-      } else if (motorSpeed > 255) {
-        motorSpeed = 255;
+      } else if (motorSpeed > 100) {
+        motorSpeed = 100;
       }
 
       // Write motor speed to the corresponding float characteristic
@@ -455,14 +390,6 @@ int getTOF2() { // Front sensor
   int distance2 = distanceSensor2.getDistance();
   distanceSensor2.clearInterrupt();
   distanceSensor2.stopRanging();
-  // if (distanceSensor2.checkForDataReady()) {
-  //   distance2 = distanceSensor2.getDistance(); // Get the result of the measurement from the sensor (in mm)
-  //   distanceSensor2.clearInterrupt();
-  // } else {
-  //   distance2 = -1000;
-  // }
-
-  //distanceSensor2.startRanging();
   
   return distance2;
 }
