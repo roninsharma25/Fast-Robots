@@ -18,8 +18,7 @@ unsigned long previousTime;
 unsigned long currentTime;
 unsigned long rangingTime;
 
-float gyroVal;
-float initialGyroVal;
+float prevGyroVal, currGyroVal, deltaGyro;
 
 bool started = false;
 
@@ -37,10 +36,13 @@ void updateGyro() {
   currentTime = millis();
 
   // Yaw angle
-  gyroVal -= myICM.gyrZ() * (currentTime - previousTime) / 1000;
-  Serial.println(gyroVal);
+  currGyroVal -= myICM.gyrZ() * (currentTime - previousTime) / 1000;
+  Serial.println(currGyroVal);
 
-  writeTXFloat4(gyroVal);
+  if (abs(currGyroVal - prevGyroVal) > deltaGyro) {
+    writeTXFloat4(currGyroVal);
+    prevGyroVal = currGyroVal
+  }
 
   // Update time
   previousTime = currentTime;
@@ -92,7 +94,6 @@ handle_command()
             started = toggleUpdate ? !started : started;
 
             updateGyro();
-            initialGyroVal = gyroVal;
 
             break;
 
@@ -328,13 +329,13 @@ void loop() {
 
 void PID(unsigned long dt) {
     
-  if (gyroVal <= setpoint + 20 && gyroVal >= setpoint - 20) { // stop the robot
+  if (currGyroVal <= setpoint + 20 && currGyroVal >= setpoint - 20) { // stop the robot
  
     stopRobotFast();
 
   } else {
 
-      float error = gyroVal - (initialGyroVal + setpoint);
+      float error = currGyroVal - (prevGyroVal + setpoint);
 
       // dir is 0 when going forward and 1 when going backwards
       // error < 0 --> passed setpoint so go backwards
