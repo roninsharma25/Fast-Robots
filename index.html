@@ -2484,7 +2484,7 @@
                                         <br>
                                         <br>
                                         
-                                        <img>
+                                        <img src="assets/img/Lab8/KF_Function.png" width="500">
 
                                         <br>
                                         <br>
@@ -2497,12 +2497,12 @@
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab8/KF_DetectNewReading.png" width="500">
 
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab8/KF_UpdateLogic.png" width="500">
 
                                         <br>
                                         <br>
@@ -2510,16 +2510,28 @@
                                         I varied my PID and Kalman Filter parameters to adjust for the higher robot speed. However, I faced several problems 
                                         with my front ToF sensor. I rarely got a consistent reading, even in cases when the robot wasn't moving. I experimented 
                                         with varying the distance mode and integration time, but neither improved the sensor reading reliability. I verified that 
-                                        this problem persisted using multiple surfaces. I decided to do a "bang-bang" control instead of rely on the front ToF 
-                                        sensor. I started by moving the robot at full speed towards the wall. When it reached the sticky matt, I sent the command 
-                                        over bluetooth to initiate the flip. This command consisted of moving all four wheels in the opposite direction at max 
-                                        speed for a short period of time and then stopping. Lastly, I made the robot move forward (in this opposite direction) at 
-                                        full speed. The image below shows these commands.
+                                        this problem persisted using multiple surfaces. The plots below show the front ToF sensor readings (red dots), KF output 
+                                        values (blue line), and PWM input values. Regardless of the parameters I set, the sensor rarely detected distances above 
+                                        <code>700 mm</code>, which was a major problem since the starting distance was about <opde>2000 mm</code>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab8/Stunt_Bad_Plots.png" width="500">
+
+                                        <br>
+                                        <br>
+                                        
+                                        I decided to do a "bang-bang" control instead of rely on the front ToF sensor. I started by moving the robot at full 
+                                        speed towards the wall. When it reached the sticky matt, I sent the command over bluetooth to initiate the flip. 
+                                        This command consisted of moving all four wheels in the opposite direction at max speed for a short period of time 
+                                        and then stopping. Lastly, I made the robot move forward (in this opposite direction) at full speed. The image 
+                                        below shows these commands.
                                         
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab8/Stunt_bang_bang.png" width="500">
 
                                         <br>
                                         <br>
