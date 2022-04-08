@@ -2219,14 +2219,14 @@
 
                                         The first step in setting up the Kalman Filter was creating the process and sensor noise covariance matrices. I estimated 
                                         the sensor variance and approximate levels of noise. One covariance matrix was for the process noise, which represented 
-                                        my trust in the modeled position and speed. For instance, the first element in this matrix represented how far off 
-                                        the ToF sensor measurement is anticipated to be per second. I used a value of 100. The second element represented how 
-                                        far off the speed will be and I used a value of 100. I chose these values to be larger than what I expected, so that I 
-                                        could simply reduce these values slowly as I made the robot move faster. The second covariance matrix was for the 
-                                        measurement noise, and it represented how much I trust the sensor data. Specifically, larger values indicate that 
-                                        there is more sensor error. For this matrix, I chose a value of 20 since I mostly trusted the sensor values (the 
-                                        main problem was the slow sampling rate). I modified all of these values after implementing the Kalman Filter on 
-                                        the robot.
+                                        my trust in the modeled position and speed. For instance, the first element in this matrix corresponded to how far off 
+                                        the ToF sensor measurement is anticipated to be per second. I estimated this value to be 100 mm. The second element 
+                                        corrresponded to how far off the speed will be and I estimated this value to be 100 mm/s. I chose these values 
+                                        to be larger than what I expected, so that I could simply reduce these values slowly as I made the robot move faster. 
+                                        The second covariance matrix was for the measurement noise, and it represented how much I trust the sensor data. 
+                                        Specifically, larger values indicate that there is more sensor error. For this matrix, I chose a value of 20 since I mostly 
+                                        trusted the sensor values (the main problem was the slow sampling rate). I modified all of these values after implementing 
+                                        the Kalman Filter on the robot.
 
                                         <br>
                                         <br>
