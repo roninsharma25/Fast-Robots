@@ -140,7 +140,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/cake.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab8/stunt.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 8</div>
                     </div>
@@ -2455,7 +2455,7 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab6/PID.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab8/flip.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
@@ -2478,8 +2478,8 @@
                                         was approximately <code>0.5 m</code> from the wall, and then drive the robot very fast past its initial 
                                         position.
 
-                                        First, I updated by Kalman Filter implementation. Initially, I always performed the prediction and update 
-                                        steps.
+                                        First, I updated my Kalman Filter implementation. Initially, I always performed the prediction and update 
+                                        steps, as shown below.
 
                                         <br>
                                         <br>
@@ -2490,14 +2490,14 @@
                                         <br>
 
                                         I updated this logic to only perform both steps when the robot received a new sensor reading from the front 
-                                        ToF sensor. I only ran the prediction step based on the motor signal and model when I didn't have a new 
+                                        ToF sensor. I only ran the prediction step based on the motor PWM signal and KF model when I didn't have a new 
                                         sensor reading. The code snippets below reflect these changes. I used the default value of <code>-1000</code> 
                                         for the front ToF sensor reading, and then updated that value if there was a new value.
 
                                         <br>
                                         <br>
 
-                                        <img src="assets/img/Lab8/KF_DetectNewReading.png" width="500">
+                                        <img src="assets/img/Lab8/KF_DetectNewReading.png" width="400">
 
                                         <br>
                                         <br>
@@ -2510,19 +2510,13 @@
                                         I varied my PID and Kalman Filter parameters to adjust for the higher robot speed. However, I faced several problems 
                                         with my front ToF sensor. I rarely got a consistent reading, even in cases when the robot wasn't moving. I experimented 
                                         with varying the distance mode and integration time, but neither improved the sensor reading reliability. I verified that 
-                                        this problem persisted using multiple surfaces. The plots below show the front ToF sensor readings (red dots), KF output 
-                                        values (blue line), and PWM input values. Regardless of the parameters I set, the sensor rarely detected distances above 
-                                        <code>700 mm</code>, which was a major problem since the starting distance was about <opde>2000 mm</code>
-
-                                        <br>
-                                        <br>
-
-                                        <img src="assets/img/Lab8/Stunt_Bad_Plots.png" width="500">
+                                        this problem persisted across multiple surfaces. Regardless of the parameters I set, the sensor rarely detected distances 
+                                        above <code>700 mm</code>, which was a major problem since the starting distance was about <code>2000 mm</code>.
 
                                         <br>
                                         <br>
                                         
-                                        I decided to do a "bang-bang" control instead of rely on the front ToF sensor. I started by moving the robot at full 
+                                        I decided to do "bang-bang" control instead of rely on the front ToF sensor. I started by moving the robot at full 
                                         speed towards the wall. When it reached the sticky matt, I sent the command over bluetooth to initiate the flip. 
                                         This command consisted of moving all four wheels in the opposite direction at max speed for a short period of time 
                                         and then stopping. Lastly, I made the robot move forward (in this opposite direction) at full speed. The image 
@@ -2563,31 +2557,43 @@
                                         <br>
                                         <br>
 
-                                        The plots below show the ToF readings, KF values, and motor PWM values for the stunt.
+                                        The plots below show the ToF readings (red dots) and KF values (blue line) in the first plot, 
+                                        and motor PWM values in the second plot for the stunt. I stopped measuring the ToF readings after 
+                                        the robot got close to the wall, which is why the ToF readings don't increase near the again back 
+                                        up to <code>2000 mm</code>. Even though I ended up using "bang-bang" control, my Arduino code still 
+                                        performed PID whenever it received a new ToF value. After the robot got close to the wall and performed 
+                                        the flip, I didn't want it to perform PID anymore and just return back to the starting line as fast 
+                                        as possible.
 
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab8/Stunt_Bad_Plot.png" width="500">
 
                                         <br>
                                         <br>
 
-                                        <img>
-
-                                        <br>
-                                        <br>
-
-                                        <img>
+                                        <img src="assets/img/Lab8/Stunt_MotorInput.png" width="500">
 
                                     </p>
 
                                     <h1>Open Loop, Repeatable Stunts</h1>
                                     <p>
 
-                                        ADD CONTROL COMMANDS
-
                                         <h3>Spin!</h3>
+
+                                        The next stunt involved making the robot spin in place. I picked this stunt in preparation 
+                                        for lab 9. Here are the control commands I sent to the robot.
+
+                                        <br>
+                                        <br>
+
+                                        <ol style="list-style-position: inside;">
+                                            <li>Turn CCW (for 2 seconds)</li>
+                                            <li>Stop</li>
+                                            <li>Turn CW (for 2 secconds)</li>
+                                            <li>Stop</li>
+                                        </ol>
 
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/br5kldr66SM" 
                                         title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
@@ -2604,7 +2610,25 @@
                                         clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                                         </iframe>
 
+                                        <br>
+                                        <br>
+
                                         <h3>Draw a T!</h3>
+
+                                        The next stunt involved making the robot draw the letter T. Here are the control commands 
+                                        I sent to the robot.
+
+                                        <br>
+                                        <br>
+
+                                        <ol style="list-style-position: inside;">
+                                            <li>Move forward (for 0.5 seconds)</li>
+                                            <li>Turn left (for 0.35 seconds)</li>
+                                            <li>Move forward (for 0.5 seconds)</li>
+                                            <li>Turn left (for 0.5 seconds)</li>
+                                            <li>Move forward (for 0.75 seconds)</li>
+                                            <li>Stop</li>
+                                        </ol>
 
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/Cf6wWTpTwSI" 
                                         title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
@@ -2621,6 +2645,20 @@
                                         clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                                         </iframe>
 
+                                        <br>
+                                        <br>
+
+                                        <h3>Double Flip</h3>
+
+                                        <p>
+                                            The last stunt I worked on was a double flip. The involved making the robot flip once (as I had 
+                                            done before), then move in the opposite direction for some time and flip again. I didn't end up 
+                                            completing this task for the well-being of my robot. While testing this stunt, the robot kept 
+                                            hitting into walls, and I started to worry about its structural integrity, especially since I still 
+                                            needed to use the ToF sensors and IMU in later labs. I may come back and redo this stunt at the end of 
+                                            the semester.
+                                        </p>
+
                                     </p>
 
                                     <h1>Bloopers</h1>
@@ -2635,9 +2673,12 @@
                                         clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                                         </iframe>
 
+                                        <br>
+                                        <br>
+
                                         <h3>Robot vs. Individual + Tricycle</h3>
 
-                                        Individuals can not easily oooutrun the robot when also steering a tricycle.
+                                        Individuals can not easily outrun the robot when also steering a tricycle.
 
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/98JlZjO2GZU" 
                                         title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
