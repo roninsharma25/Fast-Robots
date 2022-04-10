@@ -39,14 +39,10 @@ void updateGyro() {
   currGyroVal -= myICM.gyrZ() * (currentTime - previousTime) / 1000;
   Serial.println(currGyroVal);
 
-  if (abs(currGyroVal - prevGyroVal) > deltaGyro) {
-    writeTXFloat4(currGyroVal);
-    prevGyroVal = currGyroVal
-  }
+  writeTXFloat4(currGyroVal);
 
   // Update time
   previousTime = currentTime;
-
 }
 
 void
@@ -92,8 +88,6 @@ handle_command()
 
             Serial.println(toggleUpdate);
             started = toggleUpdate ? !started : started;
-
-            updateGyro();
 
             break;
 
@@ -216,14 +210,15 @@ handle_command()
 
             noPID = doPID2 == 0; // doPID = 1 when the robot should move
             startedMoving = !noPID2;
-            
-            //noPID = false;
-            //startedMoving = false;
 
             setpoint = float_aa;
             k_p = float_bb;
             k_i = float_cc;
             k_d = float_dd;
+
+            previousTime = millis();
+            updateGyro();
+            prevGyroVal = currGyroVal;
 
             break;
 
@@ -329,20 +324,16 @@ void loop() {
 
 void PID(unsigned long dt) {
     
-  if (currGyroVal <= setpoint + 20 && currGyroVal >= setpoint - 20) { // stop the robot
+  if (currGyroVal >= setpoint - 5) { // stop the robot when it's within 5 degrees of finishing the turn
  
     stopRobotFast();
+    writeTXFloat2(getTOF2());
+    prevGyroVal = currGyroVal;
+    turn(motorSpeed, 85, 1);
 
   } else {
 
-      float error = currGyroVal - (prevGyroVal + setpoint);
-
-      // dir is 0 when going forward and 1 when going backwards
-      // error < 0 --> passed setpoint so go backwards
-      int dir = 0;
-      if (error < 0) {
-        dir = 1;
-      }
+      float error = abs(currGyroVal - prevGyroVal) - setpoint;
 
       // P
       float delta_p = k_p * error;
@@ -371,12 +362,7 @@ void PID(unsigned long dt) {
       prevError = error;
 
       // write new speeds
-      //moveForwardCase(motorSpeed, motorSpeed, dir);
-      if (dir) {
-        turn(motorSpeed, 85, dir);
-      } else {
-        turn(85, motorSpeed, dir);
-      }
+      turn(motorSpeed, 85, 1);
   }
 }
 
