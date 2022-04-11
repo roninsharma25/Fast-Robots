@@ -2710,7 +2710,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 9</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 9: Mapping</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -2722,14 +2722,37 @@
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
-
+                                        The purpose of this lab was to generate a map of a rectangular region of the lab. I placed 
+                                        my robot in three locations within the region and used the robot's front ToF sensor to obtain 
+                                        distance measurements at several different orientations. I combined all of these readings to 
+                                        create the map. Lastly, I converted the distance data points to a line-based map which I compared 
+                                        with the actual reegion to deterrmine the accuracy of my approach and measurements. I will use 
+                                        this line-based map in the future localization and navigation labs.
                                     </p>
 
                                     <h1>Materials</h1>
+                                    <p>Artemis Nano</p>
+                                    <p>USB C-to-C Cable</p>
+                                    <p>Battery Packs (600mAh and 850mAh)</p>
+                                    <p>ToF sensor</p>
+                                    <p>IMU</p>
+                                    <p>RC Car</p>
+
+                                    <h1>PID Control</h1>
+                                    <p class="mb-4">
+
+                                        When obtaining the distance measurements from the ToF sensor, I had to rotate the robot on its own axis. This 
+                                        allowed me to calculate multiple data points at each location within the rectangular region, and thus reduce the total 
+                                        number of locations. Ideally, the robot would rotate by a fixed amount for each turn, since this would result in the 
+                                        best map after using transformation matrices to combine all readings.                                                                                                                                                                                        
+                                        
+                                        I used PID to rotate the robot for a fixed turn amount.                                                            
+
+                                    </p>
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
-                                        Close Window
+                                        Close Windowc 
                                     </button>
                                 </div>
                             </div>
@@ -2745,7 +2768,7 @@
         <script src="js/scripts.js"></script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
-        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->effecteiisfbbi-zxcvcxx
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
