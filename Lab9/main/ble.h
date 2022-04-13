@@ -87,11 +87,11 @@ bool checkRXCharString() {
     return rx_characteristic_string.written();
 }
 
-void writeTXFloat2(float val) {
+void writeTXFloat2(float val) { // TOF 1
     tx_characteristic_float2.writeValue(val);
 }
 
-void writeTXFloat3(float val) {
+void writeTXFloat3(float val) { // TOF 2
     tx_characteristic_float3.writeValue(val);
 }
 

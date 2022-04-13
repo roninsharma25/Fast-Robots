@@ -16,11 +16,15 @@ float cumulativeError, prevError;
 unsigned long startTime;
 unsigned long previousTime;
 unsigned long currentTime;
-unsigned long rangingTime;
 
-float prevGyroVal, currGyroVal, deltaGyro;
+// Variables for stopping and restarting movement
+bool stoppedRobot = false;
+unsigned long stoppedRobotTime;
+
+float prevGyroVal, currGyroVal, deltaGyro, timeBuffer;
 
 bool started = false;
+bool doPID = false;
 
 void getIMUCase() {
   myICM.getAGMT();
@@ -37,12 +41,14 @@ void updateGyro() {
 
   // Yaw angle
   currGyroVal -= myICM.gyrZ() * (currentTime - previousTime) / 1000;
-  Serial.println(currGyroVal);
+  //Serial.println(currGyroVal);
 
-  writeTXFloat4(currGyroVal);
+  //writeTXFloat4(currGyroVal);
 
   // Update time
   previousTime = currentTime;
+
+  //Serial.println("IN UPDATE GYRO");
 }
 
 void
@@ -73,45 +79,10 @@ handle_command()
          * Write "PONG" on the GATT characteristic BLE_UUID_TX_STRING
          */
         case PING:
-            int startingDistance, toggleUpdate, clearAllDone, performFlip;
-            success = robot_cmd.get_next_value(startingDistance);
-            success = robot_cmd.get_next_value(toggleUpdate);
-            success = robot_cmd.get_next_value(clearAllDone);
-            success = robot_cmd.get_next_value(performFlip);
+            // Use PING to toggle between writing motor PWM and sensor values
+            startWritingPWM = !startWritingPWM;
+            started = !started;
 
-            // Use PING to toggle between writing motor PWM values
-            if (startWritingPWM) {
-              startWritingPWM = false;
-            } else {
-              startWritingPWM = true;
-            }
-
-            Serial.println(toggleUpdate);
-            started = toggleUpdate ? !started : started;
-
-            break;
-
-        /*
-         * Add a prefix and postfix to the string value extracted from the command string
-         */
-        case ECHO:
-
-            char char_arr[MAX_MSG_SIZE];
-
-            // Extract the next value from the command string as a character array
-            success = robot_cmd.get_next_value(char_arr);
-            if (!success)
-                return;
-
-            tx_estring_value.clear();
-            tx_estring_value.append("Robot says -> ");
-            tx_estring_value.append(char_arr);
-            tx_estring_value.append(" :)");
-            tx_characteristic_string.writeValue(tx_estring_value.c_str());
-
-            Serial.print("Sent back: ");
-            Serial.println(tx_estring_value.c_str());
-            
             break;
 
         /*
@@ -119,12 +90,10 @@ handle_command()
          */
         case MOVE_FORWARD:
 
-            Serial.println("IN CASE MOVE FORWARD");
-
             // reset the distance array
             resetDistanceArray();
 
-            int motor_speed_1, motor_speed_2, forward, doPID;
+            int motor_speed_1, motor_speed_2, forward, PID;
 
             // Extract the next value from the command string as an int
             success = robot_cmd.get_next_value(motor_speed_1);
@@ -142,15 +111,11 @@ handle_command()
                 return;
 
             // Extract the next value from the command string as an int
-            success = robot_cmd.get_next_value(doPID); // determine whether to do PID or not
+            success = robot_cmd.get_next_value(PID); // determine whether to do PID or not
             if (!success)
                 return;
 
-            noPID = doPID == 1;
-
-            Serial.println(motor_speed_1);
-            Serial.println(motor_speed_2);
-            Serial.println(forward);
+            doPID = PID == 1;
 
             motorSpeed = motor_speed_1;
             motorSpeed1 = motor_speed_1;
@@ -167,8 +132,8 @@ handle_command()
          */
         case STOP_ROBOT:
 
+          doPID = false;
           motorSpeed = 0;
-          startedMoving = false;
           stopRobotFast();
           break;
 
@@ -185,32 +150,17 @@ handle_command()
          * UPDATE_PID
          */
         case UPDATE_PID:
-            float float_aa, float_bb, float_cc, float_dd, float_uu, float_zz;
-            int doPID2;
-
-            // Extract the first value from the command string as a float
+            float float_aa, float_bb, float_cc, float_dd, PID2, time_;
             success = robot_cmd.get_next_value(float_aa);
-
-            // Extract the second value from the command string as a float
             success = robot_cmd.get_next_value(float_bb);
-
-            // Extract the third value from the command string as a float
             success = robot_cmd.get_next_value(float_cc);
-
-            // Extract the fourth value from the command string as a float
             success = robot_cmd.get_next_value(float_dd);
+            success = robot_cmd.get_next_value(PID2);
+            success = robot_cmd.get_next_value(time_);
 
-            // Extract the fifth value from the command string as a float
-            success = robot_cmd.get_next_value(float_uu);
-
-            // Extract the sixth value from the command string as a float
-            success = robot_cmd.get_next_value(float_zz);
-
-            success = robot_cmd.get_next_value(doPID2);
-
-            noPID = doPID2 == 0; // doPID = 1 when the robot should move
-            startedMoving = !noPID2;
-
+            doPID = PID2 == 1; // doPID is true when PID should be performed
+            timeBuffer = time_;
+            
             setpoint = float_aa;
             k_p = float_bb;
             k_i = float_cc;
@@ -219,6 +169,8 @@ handle_command()
             previousTime = millis();
             updateGyro();
             prevGyroVal = currGyroVal;
+            stoppedRobot = false;
+            
 
             break;
 
@@ -295,6 +247,9 @@ void setup() {
   // Set starting motor values
   m1_val = 50;
   m2_val = 50;
+
+  // Set starting time buffer
+  timeBuffer = 2000;
 }
 
 void loop() {
@@ -307,33 +262,46 @@ void loop() {
         handle_command();
     }
 
-    
-    if (!noPID && startedMoving) {
+    if (doPID) {
       PID(millis() - startTime);
     }
 
     if (started) {
       tof2 = getTOF2();
-      writeTXFloat3(tof2);
+      writeTXFloat3(tof2); // write to TOF 2
       writeTXFloatMotor(motorSpeed); // write PWM value to the corresponding float characteristic
       updateGyro();
-
     }
   }
 }
 
 void PID(unsigned long dt) {
+
+  float delta = abs(currGyroVal - prevGyroVal);
+
+  if (stoppedRobot && (millis() - stoppedRobotTime > timeBuffer)) {  // turning time buffer has elapsed --> continue turning
     
-  if (currGyroVal >= setpoint - 5) { // stop the robot when it's within 5 degrees of finishing the turn
- 
+    stoppedRobot = false;
+    motorSpeed = 150;
+
+  } else if (stoppedRobot) { // turning time buffer hasn't elapsed yet
+
     stopRobotFast();
-    writeTXFloat2(getTOF2());
+
+  } else if (delta >= setpoint - 5) { // stop the robot when it's within 5 degrees of finishing the turn
+
+    stopRobotFast();
+    writeTXFloat2(getTOF2()); // write to TOF 1
+    writeTXFloat4(currGyroVal); // write Gyroscope value
     prevGyroVal = currGyroVal;
     turn(motorSpeed, 85, 1);
 
+    stoppedRobot = true;
+    stoppedRobotTime = millis();
+
   } else {
 
-      float error = abs(currGyroVal - prevGyroVal) - setpoint;
+      float error = delta - setpoint;
 
       // P
       float delta_p = k_p * error;
