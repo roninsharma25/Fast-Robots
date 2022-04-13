@@ -22,6 +22,7 @@ bool stoppedRobot = false;
 unsigned long stoppedRobotTime;
 
 float prevGyroVal, currGyroVal, deltaGyro, timeBuffer;
+float backwardSpeed;
 
 bool started = false;
 bool doPID = false;
@@ -157,6 +158,7 @@ handle_command()
             success = robot_cmd.get_next_value(float_dd);
             success = robot_cmd.get_next_value(PID2);
             success = robot_cmd.get_next_value(time_);
+            success = robot_cmd.get_next_value(backwardSpeed); // update the backward speed
 
             doPID = PID2 == 1; // doPID is true when PID should be performed
             timeBuffer = time_;
@@ -294,7 +296,7 @@ void PID(unsigned long dt) {
     writeTXFloat2(getTOF2()); // write to TOF 1
     writeTXFloat4(currGyroVal); // write Gyroscope value
     prevGyroVal = currGyroVal;
-    turn(motorSpeed, 85, 1);
+    turn(motorSpeed, backwardSpeed, 1);
 
     stoppedRobot = true;
     stoppedRobotTime = millis();
@@ -330,7 +332,7 @@ void PID(unsigned long dt) {
       prevError = error;
 
       // write new speeds
-      turn(motorSpeed, 85, 1);
+      turn(motorSpeed, backwardSpeed, 1);
   }
 }
 

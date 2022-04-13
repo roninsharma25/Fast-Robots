@@ -132,8 +132,8 @@ class RobotControl():
         self.ble.send_command(CMD.STOP_ROBOT, '')
     
     # A function to instruct the robot to update PID constants
-    def updatePID(self, setpoint, k_p, k_i, k_d, doPID = 0, timeBuffer = 2): # doPID = 1 when the robot should move
-        self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}|{doPID}|{timeBuffer*1000}')
+    def updatePID(self, setpoint, k_p, k_i, k_d, doPID = 0, timeBuffer = 2, backwardSpeed = 100): # doPID = 1 when the robot should move
+        self.ble.send_command(CMD.UPDATE_PID, f'{setpoint}|{k_p}|{k_i}|{k_d}|{doPID}|{timeBuffer*1000}|{backwardSpeed}')
     
     def pingRobot(self, clear = False):
         if (clear):

@@ -388,3 +388,23 @@
 2022-04-13 03:24:45,974 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
 2022-04-13 03:24:45,978 | MainThread   | [WARNING ] | exit_handler        |: Could not disconnect before exiting
 2022-04-13 03:24:45,979 | MainThread   | [WARNING ] | exit_handler        |: Not connected to a BLE device
+2022-04-13 14:44:29,689 | MainThread   | [DEBUG   ] | __init__            |: Python Info: sys.version_info(major=3, minor=9, micro=10, releaselevel='final', serial=0)
+2022-04-13 14:44:29,689 | MainThread   | [DEBUG   ] | __init__            |: System Info: macOS-10.16-x86_64-i386-64bit
+2022-04-13 14:44:29,690 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-04-13 14:44:32,478 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-04-13 14:47:15,199 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-04-13 14:47:26,129 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-04-13 14:47:39,387 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-04-13 14:48:09,203 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-04-13 14:48:11,963 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-04-13 14:55:36,992 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-04-13 14:55:55,952 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-04-13 14:55:58,707 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-04-13 14:57:56,461 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-04-13 14:57:56,465 | MainThread   | [WARNING ] | exit_handler        |: Could not disconnect before exiting
+2022-04-13 14:57:56,466 | MainThread   | [WARNING ] | exit_handler        |: Task <Task pending name='Task-112' coro=<BLEAsyncDevice._disconnect() running at /Users/roninsharma/Desktop/Cornell/ECE 5960/Fast-Robots/Lab9/ble/base_ble.py:94>> got Future <Future pending> attached to a different loop
+2022-04-13 14:59:15,178 | MainThread   | [DEBUG   ] | __init__            |: Python Info: sys.version_info(major=3, minor=9, micro=10, releaselevel='final', serial=0)
+2022-04-13 14:59:15,178 | MainThread   | [DEBUG   ] | __init__            |: System Info: macOS-10.16-x86_64-i386-64bit
+2022-04-13 14:59:15,179 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-04-13 14:59:18,032 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-04-13 15:15:25,106 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
