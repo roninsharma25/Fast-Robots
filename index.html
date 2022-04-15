@@ -2723,10 +2723,10 @@
                                     <h1>Overview</h1>
                                     <p class="mb-4">
                                         The purpose of this lab was to generate a map of a rectangular region of the lab. I placed 
-                                        my robot in three locations within the region and used the robot's front ToF sensor to obtain 
+                                        my robot in five locations within the region and used the robot's front ToF sensor to obtain 
                                         distance measurements at several different orientations. I combined all of these readings to 
                                         create the map. Lastly, I converted the distance data points to a line-based map which I compared 
-                                        with the actual reegion to deterrmine the accuracy of my approach and measurements. I will use 
+                                        with the actual reegion to determine the accuracy of my approach and measurements. I will use 
                                         this line-based map in the future localization and navigation labs.
                                     </p>
 
@@ -2764,19 +2764,24 @@
                                         <br>
                                         <br>
 
-                                        The video below shows the robot successfully turning on axis.
-
-                                        <video></video>
+                                        The video below shows the robot successfully turning fairly well on axis.
 
                                         <br>
                                         <br>
 
-                                        The plot below shows the output gyroscope values for <code>P = 0.25</code>. (ADD PLOT FOR sampleGyroscopeValues.txt)
+                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/wXMcbodNhKw" title="YouTube video player" 
+                                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen></iframe>
+
+                                        <br>
+                                        <br>
+
+                                        The plot below shows the output gyroscope values for <code>P = 0.25</code>.
                                         
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab9/gyro_vals.png" width="500">
 
                                         <br>
                                         <br>
@@ -2786,16 +2791,17 @@
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <img src="assets/img/Lab9/gyro_val_diffs.png" width="500">
 
                                         <br>
                                         <br>
 
-                                        Overall, the robot did not turn exactly <code>20</code> degrees every time, but it was fairly close.
+                                        Overall, the robot did not turn exactly <code>20</code> degrees every time, but it was fairly close <code>(+/- 5 degrees)</code>. 
+                                        The video below shows the robot turning on the lab floor. Unfortunately, it did move while turning which will impact my final 
+                                        map.
 
-                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/wXMcbodNhKw" title="YouTube video player" 
-                                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen></iframe>
+                                        <br>
+                                        <br>
 
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/9QNsqm4CDCI" title="YouTube video player" 
                                         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -2824,7 +2830,7 @@
                                     <h1>Plot Readings</h1>
                                     <p class="mb-4">
 
-                                        I plotted the gyroscope and ToF distance sensor values in a polar plot, as shown below.
+                                        I plotted the integrated gyroscope values and ToF distance sensor values in a polar plot, as shown below.
 
                                         <br>
                                         <br>
@@ -2890,7 +2896,7 @@
                                         I iterated over every data point and performed this calculation to convert it to <code>x, y</code> coordinates, as depicted in the 
                                         snippet below.
 
-                                        <script></script>
+                                        <script src="https://gist.github.com/roninsharma25/448fcbd925f109abb1f7b19b86149051.js"></script>
 
                                         Now that I had all the <code>x, y</code> coordinates, I plotted them, stratified by location. I added in the lines representing the outlines 
                                         for the boundary and obstacles. I obtained the positions for these lines from the lab 10 repository.
@@ -2900,7 +2906,11 @@
                                         <br>
                                         <br>
 
-                                        TALK ABOUT THE DIFFERENCES
+                                        Overall, my sensor values weren't perfect. Part of this is because the robot didn't perfectly spin on axis. The plot shows the best run as 
+                                        the previous runs were much worse. Another reason for the poor readings is the inconsistency of my front ToF sensor. As I mentioned in my 
+                                        lab 8 wiki, sometimes it simply can't detect values greater than <code>600 mm</code>, regardless of the distance mode, and sometimes 
+                                        it consistently detects values too large, regardless of the integration time. Generally, I was able to detect the box near the center of 
+                                        the space, and was somewhat able to detect the box near the boundary.
                                     
                                     </p>
 
