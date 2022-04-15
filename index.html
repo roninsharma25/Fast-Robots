@@ -150,7 +150,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/portfolio/circus.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab9/Robot.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 9</div>
                     </div>
@@ -2718,7 +2718,7 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab6/PID.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab9/lineBasedMap.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
@@ -2806,6 +2806,18 @@
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/9QNsqm4CDCI" title="YouTube video player" 
                                         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                         allowfullscreen></iframe>
+
+                                        <br>
+                                        <br>
+
+                                        On average, the robot's orientation changes by <code>17 degrees</code> during a single measurement. The maximum error would 
+                                        occur if I registered the front ToF sensor's value at a <code>90 degree</code> orientation instead of at the expected 
+                                        <code>~73 degrees</code>. I will discuss this later, but the error in the computed <code>x-position</code> would be 
+                                        <code>2000 mm * 1 - cos(90-73) = 87 mm</code> (<code>2000 mm</code> since the robot will start centered). However, 
+                                        this assumes that my ToF sensors operate fairly well, which is not the case. On average, my ToF sensors are off by <code>
+                                        100 mm</code>, so the theoretical max error should be <code>187 mm</code>. My robot also doesn't turn on axis incredibly 
+                                        reliably and moves by approximately <code>200 mm</code> per full rotation, increasing the max error to <code>387 mm</code>. 
+                                        The average error should be smaller than this, but it probably won't be the case.
 
                                     </p>
                                     
@@ -2899,18 +2911,26 @@
                                         <script src="https://gist.github.com/roninsharma25/448fcbd925f109abb1f7b19b86149051.js"></script>
 
                                         Now that I had all the <code>x, y</code> coordinates, I plotted them, stratified by location. I added in the lines representing the outlines 
-                                        for the boundary and obstacles. I obtained the positions for these lines from the lab 10 repository.
+                                        for the boundary and obstacles. I obtained the positions for these lines from the lab 10 repository (pink). The cyan borders represent the 
+                                        boundaries that I determined experimentally from my ToF data. I included the two boundary point lists below the graph. The first list (boundary) 
+                                        consists of the points I added and the second list (world) consists of the points provided in the lab 10 setup.
+
+                                        <br>
+                                        <br>
 
                                         <img src="assets/img/Lab9/lineBasedMap.png" width="500">
 
                                         <br>
                                         <br>
 
+                                        <script src="https://gist.github.com/roninsharma25/994588867981827e3d82ac21c10bdad5.js"></script>
+
                                         Overall, my sensor values weren't perfect. Part of this is because the robot didn't perfectly spin on axis. The plot shows the best run as 
                                         the previous runs were much worse. Another reason for the poor readings is the inconsistency of my front ToF sensor. As I mentioned in my 
                                         lab 8 wiki, sometimes it simply can't detect values greater than <code>600 mm</code>, regardless of the distance mode, and sometimes 
                                         it consistently detects values too large, regardless of the integration time. Generally, I was able to detect the box near the center of 
-                                        the space, and was somewhat able to detect the box near the boundary.
+                                        the space, and was somewhat able to detect the box near the boundary. The gyroscope values would also drift over time so that could have 
+                                        contributed to errors in the computed angles.
                                     
                                     </p>
 
