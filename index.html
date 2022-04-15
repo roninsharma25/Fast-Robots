@@ -2841,10 +2841,50 @@
                                         <br>
                                         <br>
 
+                                        I used the individual plots to verify that I obtained readings at roughly <code>20</code> 
+                                        degree increments. I analyzed individual plots after each run to ensure that the angle 
+                                        measurements line up with what I observed while watching the robot turn. 
+
                                     </p>
 
                                     <h1>Merge Data</h1>
                                     <p class="mb-4">
+
+                                        Lastly, I combined the sensor data from all of the individual locations to construct the map. For each data 
+                                        point, I had the sensor value <code>(r)</code> and the corresponding angle <code>(thetha)</code>. I had to 
+                                        convert each of these datapoints to <code>x, y</code> coordinates. I used the formulas <code>x = r * cos(thetha)</code> 
+                                        and <code>y = r * sin(thetha)</code>, based on transformation matrices. I also had to adjust for the different 
+                                        locations. The lab had each location mapped as follows.
+
+                                        <br>
+                                        <br>
+
+                                        <script src="https://gist.github.com/roninsharma25/9dd3aa3cad7511ad9aa82da75a5356bb.js"></script>
+
+                                        <br>
+                                        <br>
+
+                                        These values represent tile coordinates. Each tile was <code>300 mm</code>, so I simply multiplied the tile coordinates 
+                                        by <code>300</code>. I added these deltas to the previous values. Specifcally, <code>x_final = r * cos(thetha) + 
+                                        tile_x * 300</code> and <code>y_final = r * sin(thetha) + tile_y * 300</code>. The last step in converting the measurements 
+                                        to the inertial reference frame of the room was accounting for the ToF sensor's placement on the robot. The robot rotated 
+                                        about its center, and the sensor was mounted <code>90 mm</code> from the center, so I subtracted 90 from each <code>x</code> 
+                                        measurement. Finally, <code>x_final = r * cos(thetha) + tile_x * 300 - 90</code>.
+
+                                        <br>
+                                        <br>
+
+                                        I iterated over every data point and performed this calculation to convert it to <code>x, y</code> coordinates, as depicted in the 
+                                        snippet below.
+
+                                        <script></script>
+
+                                        Now that I had all the <code>x, y</code> coordinates, I plotted them, stratified by location. I added in the lines representing the outlines 
+                                        for the boundary and obstacles. I obtained the positions for these lines from the lab 10 repository.
+
+                                        <img>
+
+                                        TALK ABOUT THE DIFFERENCES
                                     
                                     </p>
 
