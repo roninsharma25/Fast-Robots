@@ -1,0 +1,4 @@
+2022-04-16 00:50:45,907 | MainThread   | [INFO    ] | on_click_sim_reset  |: Resetting Simulator
+2022-04-16 00:51:41,494 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-16 00:51:43,034 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
+2022-04-16 00:52:16,707 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
