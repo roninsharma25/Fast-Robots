@@ -16,3 +16,6 @@
 2022-04-17 01:41:25,416 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
 2022-04-17 02:10:22,336 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
 2022-04-17 02:10:22,337 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-18 00:42:16,964 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-18 00:42:17,933 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-18 00:48:04,407 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
