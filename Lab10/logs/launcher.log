@@ -13,3 +13,5 @@
 2022-04-17 02:10:22,329 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
 2022-04-18 00:45:31,122 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
 2022-04-18 00:46:17,444 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-04-19 01:09:35,467 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-19 01:09:36,111 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
