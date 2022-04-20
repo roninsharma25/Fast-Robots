@@ -3008,11 +3008,48 @@
 
                                     <h1>Setup</h1>
                                     <p class="mb-4">
+
+                                        <ol>
+                                            <li>Upgrade <code>Python</code> version to <code>3.10</code></li>
+                                            <li>Upgrade <code>pip</code> version to <code>21.0</code></li>
+                                            <li>Delete and recreate virtual environment using the updated
+                                                 <code>Python</code> version</li>
+                                            <li>Install dependencies: <code>numpy pygame pyqt5 pyqtgraph 
+                                                pyyaml ipywidgets colorama</code></li>
+                                            <li>Install <code>Box2D</code></li>
+                                        </ol>
                                         
                                     </p>
                                     
                                     <h1>Simulation Environment</h1>
                                     <p class="mb-4">
+
+                                        <ul>
+                                            <li>Simulator and Plotter</li>
+                                            <lI>GUI to start/stop/reset both the simulator and plotter</lI>
+                                            <li>Programmatically start/stop/reset both the simulator and plotter</li>
+                                            <li>Programmatically check if the simulator or plotter is running</li>
+                                        </ul>
+
+                                        <br>
+
+                                        Functions to interact with the simulator
+                                        <ul>
+                                            <li>Set the linear and angular velocity of the virtual robot</li>
+                                            <li>Get the odometry and ground truth of the virtual robot</li>
+                                            <li>Get the ToF sensor data of the virtual robot</li>
+                                            <li>Reset the position and orientation of the virtual robot to its initial state</li>
+                                        </ul>
+
+
+                                        <br>
+
+                                        Functions to interact with the plotter
+                                        <ul>
+                                            <li>Plot points in the plotter in red, green, or blue</li>
+                                            <li>Plot a map (sequence of points) in the plotter</li>
+                                            <li>Reset the plotter</li>
+                                        </ul>
                                     
                                     </p>
 
@@ -3020,7 +3057,19 @@
                                     <p class="mb-4">
 
                                         The main open loop control task that I perforrmed was making the virtual robot execute a "square" 
-                                        loop.
+                                        loop. I issued the <code>velocity</code> command for <code>1</code> second intervals as the robot 
+                                        either moved forward or turned. As seen in the videos, the robot did not always execute the 
+                                        same shape. This is because I utilized angular speed and time duration to execute my turns. Specifically, 
+                                        if I needed to turn <code>90</code> degrees, I utilized angular speed and time duration values that 
+                                        multiplied to <code>90</code>. However, the function required the angular speed to have units of 
+                                        <code>radians/sec</code>. Since the units involved radians, I had to involve <code>pi</code>, which 
+                                        resulted in some level of approximation. As a result, the computed angle wasn't always exactly 
+                                        <code>90</code> degrees. Since I had to compute the angle four times per square, the error 
+                                        was compounded so each square was slightly further off. Additionally, I used the <code>asyncio</code> 
+                                        module for the time duration. While this module is fairly accurate, it is not perfect, so the timing 
+                                        was not always the expected amount, which further propagated the angle error. Overall, the error 
+                                        angle wasn't huge, but it was definitely noticeable. There were a few runs where the error was extremely 
+                                        small so it wasn't noticeable, but this wasn't always the case.
 
                                         <br>
                                         <br>
@@ -3038,6 +3087,31 @@
 
                                     <h1>Closed Loop Control</h1>
                                     <p class="mb-4">
+
+                                        When the virtual robot reaches an obstacle, it should keep turning until it no longer faces an 
+                                        obstacle. Initially, I set this angle to <code>90</code> degrees which essentially guaranteed 
+                                        that the robot would no longer face an obstacle after turning. I modified this to be a random 
+                                        angle to make the robot movement nondeterministic.
+
+                                        <br>
+
+                                        The maximum linear speed I achieved was <code>25 m/s</code>. I achieved this but making the virtual 
+                                        robot move at this large speed for very short periods of time. After this short period of time, 
+                                        I checked the ToF sensor value and turned the robot if it was close to an obstacle. This prevented 
+                                        it from hitting into the wall.
+
+                                        <br>
+
+                                        The closest I was able to get to the wall without colliding was <code>0.12 m</code>. 
+
+                                        <br>
+
+                                        My obstacle avoidance code works most of the time. There are unique cases when the robot is moving 
+                                        in a straight line near an edge, but it doesn't detect that edge. Based on my trials, this situations 
+                                        are very infrequent. However, this only happened at very high speeds. At low speeds, this never happened 
+                                        since the robot was always able to detect an obstacle in front of it.
+
+                                        <br>
 
                                         <iframe width="560" height="315" src="https://www.youtube.com/embed/ViiZFcW0GwA" title="YouTube video player" 
                                         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
