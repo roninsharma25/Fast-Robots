@@ -60,6 +60,8 @@ def processRunData(file):
     with open(file, 'r') as f:
         x = f.read().splitlines()
     
+    print(x)
+    
     comma = x[0].index(",")
     oldSensorValue = float(x[0][1:comma])
     oldTimeValue = startTimeValue = float(x[0][comma+2:-1])
