@@ -3038,33 +3038,34 @@
                                     <h1>Simulation Environment</h1>
                                     <p class="mb-4">
 
-                                        <ul>
-                                            <li>Simulator and Plotter</li>
-                                            <lI>GUI to start/stop/reset both the simulator and plotter</lI>
-                                            <li>Programmatically start/stop/reset both the simulator and plotter</li>
-                                            <li>Programmatically check if the simulator or plotter is running</li>
-                                        </ul>
+                                        <h3>Overview</h3>
+
+                                        The simulation environment included a simulator and plotter for controlling the virtual robot. The 
+                                        virtual robot has a laser range finder, which functions very similarly to the ToF sensors on 
+                                        my robot. There is a GUI that could be used to start, stop, and reset both the simulator and plotter. 
+                                        This can also be done programmatically by using the following functions: <code>START_SIM(), START_PLOTTER(), 
+                                        STOP_SIM(), STOP_PLOTTER(), RESET_SIM(), RESET_PLOTTER()</code>.
+
+                                        <h3>Simulator</h3>
+
+                                        The simulator recorded the ground truth of the robot, which is the actual position of the robot. It also 
+                                        used the sensors to estimate changes in position over time. Specifically, these changes are integrated over 
+                                        time to predict the location of the robot. The simulator provides this odometry pose estimate.
 
                                         <br>
 
-                                        Functions to interact with the simulator
-                                        <ul>
-                                            <li>Set the linear and angular velocity of the virtual robot</li>
-                                            <li>Get the odometry and ground truth of the virtual robot</li>
-                                            <li>Get the ToF sensor data of the virtual robot</li>
-                                            <li>Reset the position and orientation of the virtual robot to its initial state</li>
-                                        </ul>
+                                        There are functions to set the linear and angular velocity of the virtual robot, get the odoometry and 
+                                        ground truth of the virtual robot, get the distance sensor data of the virtual robot, and reset the position 
+                                        and orientation of the virtual robot to its initial state.
 
+                                        <h3>Plotter</h3>
 
+                                        The plotter tool plots the ground truth and odometry poses.
+                                        
                                         <br>
 
-                                        Functions to interact with the plotter
-                                        <ul>
-                                            <li>Plot points in the plotter in red, green, or blue</li>
-                                            <li>Plot a map (sequence of points) in the plotter</li>
-                                            <li>Reset the plotter</li>
-                                        </ul>
-                                    
+                                        There are functions to plot points in the plotter in red, green, or blue, plot a map (sequence of points), 
+                                        and reset the plotter.
                                     </p>
 
                                     <h1>Open Loop Control</h1>
@@ -3072,8 +3073,14 @@
 
                                         The main open loop control task that I perforrmed was making the virtual robot execute a "square" 
                                         loop. I issued the <code>velocity</code> command for <code>1</code> second intervals as the robot 
-                                        either moved forward or turned. As seen in the videos, the robot did not always execute the 
-                                        same shape. This is because I utilized angular speed and time duration to execute my turns. Specifically, 
+                                        either moved forward or turned. I used the <code>asyncio</code> module to wait for <code>1</code> 
+                                        second in between forward commands. Simply issuing a velocity command will make the robot move 
+                                        at that velocity forever, until another velocity command is sent that changes the velocity.
+                                        
+                                        <br>
+
+                                        As seen in the videos, the robot did not always execute the same shape. This is because I utilized 
+                                        angular speed and time duration to execute my turns. Specifically, 
                                         if I needed to turn <code>90</code> degrees, I utilized angular speed and time duration values that 
                                         multiplied to <code>90</code>. However, the function required the angular speed to have units of 
                                         <code>radians/sec</code>. Since the units involved radians, I had to involve <code>pi</code>, which 
@@ -3113,10 +3120,14 @@
 
                                         <br>
 
-                                        The maximum linear speed I achieved was <code>25 m/s</code>. I achieved this but making the virtual 
-                                        robot move at this large speed for very short periods of time. After this short period of time, 
-                                        I checked the ToF sensor value and turned the robot if it was close to an obstacle. This prevented 
-                                        it from hitting into the wall.
+                                        The maximum linear speed I achieved was <code>25 m/s</code>. I achieved this by making the virtual 
+                                        robot move at this large speed for very short periods of time (<code>0.50 s, 0.10 s, 0.01 s</code>). 
+                                        After this short period of time, I checked the ToF sensor value and turned the robot if it was close 
+                                        to an obstacle. This prevented it from hitting into the wall. On average, the robot should move 
+                                        slower (around <code>5 m/s</code>). Moving at this slower speed would make the obstacle collision 
+                                        logic easier since it would be easier to control the robot at this slower speed, thus making it 
+                                        easier to adjust the robot's movement. 
+
 
                                         <br>
 
@@ -3124,10 +3135,18 @@
 
                                         <br>
 
-                                        My obstacle avoidance code works most of the time. There are unique cases when the robot is moving 
+                                        My obstacle avoidance code works most of the time (<code>99%</code>). There are unique cases when the robot is moving 
                                         in a straight line near an edge, but it doesn't detect that edge. Based on my trials, this situations 
                                         are very infrequent. However, this only happened at very high speeds. At low speeds, this never happened 
-                                        since the robot was always able to detect an obstacle in front of it.
+                                        since the robot was always able to detect an obstacle in front of it. Overall, by issuing the <code>
+                                        set_velocity</code> commands in very short intervals, I was able to make the obstacle avoidance logic 
+                                        nearly flawless. This ensures that the robot moves at very high speeds while turning prior to hitting into 
+                                        a wall. Additionally, prior to moving forward, I check if the robot will hit into a wall if it was to 
+                                        move forward at a specified speed for a specified time (<code>checkSafeMovement() function</code>). This 
+                                        ensures that the robot will not collide into a wall in front of it, since it will turn instead. As I mentioned 
+                                        before, this works for almost every case, and solely doesn't work for the corner cases where the sensor 
+                                        doesn't detect the obstale jutting out. It is also still possible for this to happen in slow speed cases, 
+                                        as shown in the video below.
 
                                         <br>
 
