@@ -172,3 +172,108 @@
 
 2022-04-23 12:58:51,854 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
 2022-04-23 13:02:23,735 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
+2022-04-23 16:59:55,672 | MainThread   | [DEBUG   ] | run                 |: Python version: 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]
+2022-04-23 16:59:55,676 | MainThread   | [DEBUG   ] | run                 |: Parameters used:
+2022-04-23 16:59:55,676 | MainThread   | [DEBUG   ] | run                 |: Symbol               : o
+2022-04-23 16:59:55,676 | MainThread   | [DEBUG   ] | run                 |: Symbol size          : 5
+2022-04-23 16:59:55,676 | MainThread   | [DEBUG   ] | run                 |: Line thickness       : 2
+2022-04-23 16:59:55,676 | MainThread   | [DEBUG   ] | run                 |: Position tolerance   : 0.03
+2022-04-23 16:59:55,676 | MainThread   | [DEBUG   ] | run                 |: ------------------
+
+2022-04-23 17:01:00,725 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 17:01:00,727 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
+2022-04-23 17:01:00,873 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 19:06:44,276 | MainThread   | [DEBUG   ] | run                 |: Python version: 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]
+2022-04-23 19:06:44,277 | MainThread   | [DEBUG   ] | run                 |: Parameters used:
+2022-04-23 19:06:44,277 | MainThread   | [DEBUG   ] | run                 |: Symbol               : o
+2022-04-23 19:06:44,277 | MainThread   | [DEBUG   ] | run                 |: Symbol size          : 5
+2022-04-23 19:06:44,277 | MainThread   | [DEBUG   ] | run                 |: Line thickness       : 2
+2022-04-23 19:06:44,278 | MainThread   | [DEBUG   ] | run                 |: Position tolerance   : 0.03
+2022-04-23 19:06:44,278 | MainThread   | [DEBUG   ] | run                 |: ------------------
+
+2022-04-23 19:08:44,834 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:08:57,656 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:08:59,857 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-04-23 19:09:00,739 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-04-23 19:09:02,639 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-04-23 19:09:03,606 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-04-23 19:09:04,773 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:09:05,822 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-04-23 19:09:07,223 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-04-23 19:09:08,372 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:09:11,439 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-04-23 19:22:38,638 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:23:24,162 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:25:18,871 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:25:55,139 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:27:21,281 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:27:46,780 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:27:55,897 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:27:57,813 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:27:58,631 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:28:02,512 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:28:12,811 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:28:15,861 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:28:16,711 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:28:48,257 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:28:48,924 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-04-23 19:28:49,574 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-04-23 19:28:55,273 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:28:56,806 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:28:57,689 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:28:58,506 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-04-23 19:28:59,406 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-04-23 19:29:01,056 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-04-23 19:29:01,522 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-04-23 19:29:02,322 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-04-23 19:29:02,956 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-04-23 19:29:04,222 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-04-23 19:29:04,906 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-04-23 19:29:07,038 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:29:07,838 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:42:09,027 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:42:30,098 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-04-23 19:42:30,865 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-04-23 19:42:31,432 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:42:32,215 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:42:32,982 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-04-23 19:42:33,749 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-04-23 19:42:34,682 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-04-23 19:42:35,548 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-04-23 19:42:36,531 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:42:36,965 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:42:37,731 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:42:58,590 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:02,392 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:06,039 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:08,761 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:21,994 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:25,006 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:26,276 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:26,909 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:27,526 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:43:28,959 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:43:29,808 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:43:31,708 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 19:44:02,122 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:44:02,922 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:44:03,622 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:44:04,406 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:44:05,988 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-04-23 19:44:07,138 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-04-23 19:44:08,138 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-04-23 19:44:08,605 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-04-23 19:44:09,105 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-04-23 19:44:09,470 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-04-23 19:44:10,271 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-04-23 19:44:11,204 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-04-23 19:45:11,549 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:45:11,997 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:45:14,431 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 19:45:14,997 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-04-23 19:45:15,546 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-04-23 19:45:16,047 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-04-23 19:45:17,430 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-04-23 19:45:18,014 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-04-23 19:49:31,019 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 19:49:31,025 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...

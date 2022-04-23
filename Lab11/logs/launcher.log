@@ -23,3 +23,6 @@
 2022-04-23 12:58:21,274 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
 2022-04-23 12:58:31,472 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
 2022-04-23 12:58:32,099 | MainThread   | [INFO    ] | start               |: Creating New Plotter Process
+2022-04-23 17:01:01,540 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-04-23 19:49:30,333 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-23 19:49:31,021 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
