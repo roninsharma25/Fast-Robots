@@ -1,0 +1,40 @@
+2022-04-16 00:49:16,656 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-16 00:49:18,020 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-16 00:51:41,503 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-16 00:51:41,503 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-16 00:51:43,362 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-16 00:51:44,231 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-16 00:52:07,898 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-16 00:52:17,042 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-16 00:52:18,059 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-16 00:56:04,339 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-17 01:04:26,836 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-17 01:04:27,722 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-17 01:41:22,886 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-17 01:41:22,888 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-17 01:41:24,467 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-17 01:41:25,416 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-17 02:10:22,336 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-17 02:10:22,337 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-18 00:42:16,964 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-18 00:42:17,933 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-18 00:48:04,407 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-18 19:42:34,465 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-18 19:42:35,447 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-18 19:43:34,140 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-19 00:50:37,521 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-19 00:50:38,428 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-19 01:09:35,463 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-19 01:09:35,469 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-22 03:40:28,909 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-22 03:40:29,917 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-22 03:40:29,934 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-22 03:40:29,934 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-22 03:40:48,960 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-22 03:40:49,797 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-22 03:53:33,062 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-23 02:07:34,196 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-23 02:07:35,247 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-23 02:09:13,231 | MainThread   | [DEBUG   ] | _create_generator   |: | Executing Observation Loop at 120.000 deg/s
+2022-04-23 02:09:16,575 | MainThread   | [DEBUG   ] | step                |: | Angle diff after obs loop :341.998 deg
+2022-04-23 02:23:55,209 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
