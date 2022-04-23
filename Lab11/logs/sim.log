@@ -38,3 +38,15 @@
 2022-04-23 02:09:13,231 | MainThread   | [DEBUG   ] | _create_generator   |: | Executing Observation Loop at 120.000 deg/s
 2022-04-23 02:09:16,575 | MainThread   | [DEBUG   ] | step                |: | Angle diff after obs loop :341.998 deg
 2022-04-23 02:23:55,209 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-23 12:57:13,091 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-23 12:57:14,161 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-23 12:58:15,488 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 12:58:15,489 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-23 12:58:15,605 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 12:58:20,237 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-23 12:58:20,925 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-23 12:58:21,278 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 12:58:21,278 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully
+2022-04-23 12:58:31,802 | MainThread   | [DEBUG   ] | run                 |: Starting Flatland
+2022-04-23 12:58:32,681 | MainThread   | [DEBUG   ] | __init__            |: | Observations per loop: 18
+2022-04-23 12:58:55,706 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully

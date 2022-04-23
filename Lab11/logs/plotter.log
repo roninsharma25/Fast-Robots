@@ -140,3 +140,35 @@
 2022-04-23 02:07:59,062 | MainThread   | [DEBUG   ] | run                 |: ------------------
 
 2022-04-23 02:23:57,987 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
+2022-04-23 12:57:13,940 | MainThread   | [DEBUG   ] | run                 |: Python version: 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]
+2022-04-23 12:57:13,942 | MainThread   | [DEBUG   ] | run                 |: Parameters used:
+2022-04-23 12:57:13,942 | MainThread   | [DEBUG   ] | run                 |: Symbol               : o
+2022-04-23 12:57:13,942 | MainThread   | [DEBUG   ] | run                 |: Symbol size          : 5
+2022-04-23 12:57:13,942 | MainThread   | [DEBUG   ] | run                 |: Line thickness       : 2
+2022-04-23 12:57:13,942 | MainThread   | [DEBUG   ] | run                 |: Position tolerance   : 0.03
+2022-04-23 12:57:13,942 | MainThread   | [DEBUG   ] | run                 |: ------------------
+
+2022-04-23 12:58:08,626 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-04-23 12:58:15,486 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 12:58:15,486 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
+2022-04-23 12:58:15,535 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 12:58:20,955 | MainThread   | [DEBUG   ] | run                 |: Python version: 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]
+2022-04-23 12:58:20,956 | MainThread   | [DEBUG   ] | run                 |: Parameters used:
+2022-04-23 12:58:20,956 | MainThread   | [DEBUG   ] | run                 |: Symbol               : o
+2022-04-23 12:58:20,957 | MainThread   | [DEBUG   ] | run                 |: Symbol size          : 5
+2022-04-23 12:58:20,958 | MainThread   | [DEBUG   ] | run                 |: Line thickness       : 2
+2022-04-23 12:58:20,958 | MainThread   | [DEBUG   ] | run                 |: Position tolerance   : 0.03
+2022-04-23 12:58:20,958 | MainThread   | [DEBUG   ] | run                 |: ------------------
+
+2022-04-23 12:58:21,274 | MainThread   | [DEBUG   ] | signal_handler      |: Received SIGTERM
+2022-04-23 12:58:21,516 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
+2022-04-23 12:58:32,729 | MainThread   | [DEBUG   ] | run                 |: Python version: 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]
+2022-04-23 12:58:32,730 | MainThread   | [DEBUG   ] | run                 |: Parameters used:
+2022-04-23 12:58:32,730 | MainThread   | [DEBUG   ] | run                 |: Symbol               : o
+2022-04-23 12:58:32,730 | MainThread   | [DEBUG   ] | run                 |: Symbol size          : 5
+2022-04-23 12:58:32,731 | MainThread   | [DEBUG   ] | run                 |: Line thickness       : 2
+2022-04-23 12:58:32,731 | MainThread   | [DEBUG   ] | run                 |: Position tolerance   : 0.03
+2022-04-23 12:58:32,731 | MainThread   | [DEBUG   ] | run                 |: ------------------
+
+2022-04-23 12:58:51,854 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-04-23 13:02:23,735 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
