@@ -3250,7 +3250,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 11</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 11: Grid Localization using Bayes Filter</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -3262,12 +3262,13 @@
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
-                                        
+                                        The goal of this lab was to use the robot simulation environment to implement 
+                                        grid localization using Bayes filter. 
                                     </p>
 
                                     <h1>Materials</h1>
+                                    <p>Laptop</p>
                                     
-
                                     <h1>Preliminary Work</h1>
                                     <p class="mb-4">
 
@@ -3276,12 +3277,34 @@
                                     <h1>Compute Control</h1>
                                     <p class="mb-4">
 
+                                        The first function I completed was compute control. This helper function took in the previous 
+                                        pose and the current pose as input arguments, and returned three transformations to get from 
+                                        the previous pose to the current pose. The image below depicts these transformations (two 
+                                        rotations and a transformation).
+                                        
+                                        <img src="assets/img/Lab11/Compute_Control_Transformation.png" width="500">
+
+                                        The odometry model of the motion between two states can be constructed by the initial rotation, 
+                                        then a translation, and lastly a final rotation. In the function, I first calculated the change in 
+                                        x, y, and thetha between the two poses. Then I used geometry and trigonometry to calculate the three 
+                                        transformations. Lastly, I had to normalize the two angular transformations, and I used the provided 
+                                        <code>normalize_angle</code> function to do so.
+
                                         <script src="https://gist.github.com/roninsharma25/e600f87ab383ad3fd1116b4258de6321.js"></script>
 
                                     </p>
 
                                     <h1>Odomotry Motion Model</h1>
                                     <p class="mb-4">
+
+                                        The second function was odomotry motion model. This helper function took in the previous pose, current pose, 
+                                        and control input. The control input was defined similarly to the transformations in compute control, with 
+                                        two rotation parameters and one translation parameter. This function returned the propability of transitioning 
+                                        from the previous pose to the current pose (previous state to this state), based on the control input. I used 
+                                        the <code>compute_control</code> function to calculate the control input required to move from the previous 
+                                        pose to the current pose. I then used the provided <code>gaussian</code> function to compare this control input 
+                                        with the control input argument, and calculate the probability.
+
 
                                         <script src="https://gist.github.com/roninsharma25/a71bfb69fc400b210ae0f854226f8f85.js"></script>
 
