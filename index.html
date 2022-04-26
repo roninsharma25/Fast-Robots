@@ -170,7 +170,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab9/Robot.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab11/Loc.jpg" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 11</div>
                     </div>
@@ -3258,12 +3258,13 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab10/Simulator.png" alt="..." />
+                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab11/Bayes_Filter.png" alt="..." />
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
                                         The goal of this lab was to use the robot simulation environment to implement 
-                                        grid localization using Bayes filter. 
+                                        grid localization using Bayes filter. I expanded on initial simulation work 
+                                        from lab 10 and created the foundation for lab 12.
                                     </p>
 
                                     <h1>Materials</h1>
@@ -3272,6 +3273,24 @@
                                     <h1>Preliminary Work</h1>
                                     <p class="mb-4">
 
+                                        I started by reviewing the steps needed to perform grid localization using the robot 
+                                        within the lab space. The robot can be located anywhere in this space, but I simplified 
+                                        the analysis by reducing the continuous state space to a discretized finite 3D grid space.
+                                        The robot's position in this space can be broken down into grid cells, and each grid cell 
+                                        can be represented by (x, y, thetha). I will use the Bayes filter to compute the probability 
+                                        of the robot being located in each cell. The image below depicts the entire discretized 
+                                        state space.
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab11/Entire_State_Space.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        I implemented five functions, which were all combined to perform the final grid localization.
+                                        
                                     </p>
 
                                     <h1>Compute Control</h1>
@@ -3280,14 +3299,21 @@
                                         The first function I completed was compute control. This helper function took in the previous 
                                         pose and the current pose as input arguments, and returned three transformations to get from 
                                         the previous pose to the current pose. The image below depicts these transformations (two 
-                                        rotations and a transformation).
+                                        rotations and a translation).
+
+                                        <br>
+                                        <br>
                                         
                                         <img src="assets/img/Lab11/Compute_Control_Transformation.png" width="500">
+
+                                        <br>
+                                        <br>
 
                                         The odometry model of the motion between two states can be constructed by the initial rotation, 
                                         then a translation, and lastly a final rotation. In the function, I first calculated the change in 
                                         x, y, and thetha between the two poses. Then I used geometry and trigonometry to calculate the three 
-                                        transformations. Lastly, I had to normalize the two angular transformations, and I used the provided 
+                                        transformations. Lastly, I had to normalize the two angular transformations to fall within the correct
+                                        range (<code>-180 degrees</code> to <code>180 degrees</code>), and I used the provided 
                                         <code>normalize_angle</code> function to do so.
 
                                         <script src="https://gist.github.com/roninsharma25/e600f87ab383ad3fd1116b4258de6321.js"></script>
@@ -3299,11 +3325,11 @@
 
                                         The second function was odomotry motion model. This helper function took in the previous pose, current pose, 
                                         and control input. The control input was defined similarly to the transformations in compute control, with 
-                                        two rotation parameters and one translation parameter. This function returned the propability of transitioning 
-                                        from the previous pose to the current pose (previous state to this state), based on the control input. I used 
+                                        two rotation parameters and one translation parameter. This function returned the probability of transitioning 
+                                        from the previous pose to the current pose (previous state to current state), based on the control input. I used 
                                         the <code>compute_control</code> function to calculate the control input required to move from the previous 
                                         pose to the current pose. I then used the provided <code>gaussian</code> function to compare this control input 
-                                        with the control input argument, and calculate the probability.
+                                        with the control input argument, and calculated the probability of all three transformations occurring.
 
 
                                         <script src="https://gist.github.com/roninsharma25/a71bfb69fc400b210ae0f854226f8f85.js"></script>
@@ -3313,12 +3339,37 @@
                                     <h1>Prediction Step</h1>
                                     <p class="mb-4">
 
+                                        This function generated new probabilities that the robot was located in each grid cell. It took two 
+                                        inputs: the previous and current poses from the odometry motion model. I used the <code>compute_control</code> 
+                                        function to generate the control input (transformations) that are required to get from the previous 
+                                        pose to the current pose. Then, for all of the previous dimensions and current dimensions, I used the 
+                                        <code>odom_motion_model</code> function to calculate the probability of transitioning from the 
+                                        previous pose to the current pose with the control input that I generated using <code>compute_control</code>. 
+                                        Then, I updated the prior belief for each grid cell with these new probabilities. Lastly, I normalized all 
+                                        the probabilities to ensure they summed to one. 
+
                                         <script src="https://gist.github.com/roninsharma25/8be132d2e9aa629e19ab469aa8f38518.js"></script>
 
+                                        I did not compute new probabilities for every grid cell. I checked if the previous belief's probability 
+                                        was greater than <code>0.0001</code>, and didn't loop over all the current dimensions if this was not the case. 
+                                        This is because the new probability would be very close to <code>0</code>, since the previous probability 
+                                        was so small, so this function would be more efficient if I just skipped over those grid cells.
+
+                                        <br>
+                                        <br>
+                                        
+                                        I referenced the lecture slide in the appendix to implement the prediction step of the Bayes filter.
                                     </p>
 
                                     <h1>Sensor Model</h1>
                                     <p class="mb-4">
+
+                                        This helper function took the true observations for the current pose as an input and returned the probabilities 
+                                        of the likelihoods of each observation. At each location, the robot obtained <code>18</code> equidistant 
+                                        observations, since it rotated <code>20 degrees</code> at each location. In the function, I looped over 
+                                        the true observations and used the provided <code>gaussian</code> function to calculate the probability of 
+                                        each observation based on the sensor values obtained from the robot and the provided sensor noise. I multiplied 
+                                        all of these probabilities together to get the total probability of all observations.
 
                                         <script src="https://gist.github.com/roninsharma25/b16dd20beee185a0acbf780491749474.js"></script>
 
@@ -3327,14 +3378,68 @@
                                     <h1>Update Step</h1>
                                     <p class="mb-4">
 
+                                        This function updated the probabilities of each grid cell based on the predicted probabilities (from 
+                                        <code>predict_step</code>) and the computed probability for the current pose. In the function, I looped over 
+                                        all of the current poses (grid cells), computed the probability for that pose using the <code>sensor_model</code> 
+                                        function, and then multiplied that probability with the predicted probability for that grid cell, which was 
+                                        stored in an attribute in the <code>BaseLocalization</code> object (I updated this attribute in the 
+                                        <code>predict_step</code> function). Lastly, I normalized these probabilities so that they summed to 1.
+
                                         <script src="https://gist.github.com/roninsharma25/c7f403c296311d2dfb5fd620f3c0cf07.js"></script>
+                                        
+                                        I referenced the lecture slide in the appendix to implement the update step of the Bayes filter.
 
                                     </p>
 
                                     <h1>Profit!</h1>
                                     <p class="mb-4">
 
+                                        Overall, my Bayes filter worked fairly well. The video below depicts it running for the provided trajectory. 
+                                        It seems slow, but given the number of calculations it's performing at each grid location, I believe that it is fine. 
+                                        I tried to minimize the extra variables I defined as well as the operations I performed within nested loops to make 
+                                        it as efficient as possible. 
+                                        
+                                        <br>
+                                        <br>
+
+                                        In the video below, the green line is the robot's ground truth, the red line is the calculated positions 
+                                        (odometry poses), and the blue line is the Bayes filter predicted belief. The highlighted cells show 
+                                        probabilities, with lighter cells denoting higher probabilities (white cells indicate probabilities close 
+                                        to 1). The image below the video shows the final robot state.
+
+                                        <br>
+                                        <br>
+
+                                        <iframe width="560" height="315" src="https://www.youtube.com/embed/2byC6qvFpgY" title="YouTube video player" 
+                                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen></iframe>
+
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab11/Final_Localization.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        The image below shows the output information from the run above. It shows the most probable state 
+                                        after each iteration of the Bayes filter. Additionally, it includes the probability of that state 
+                                        and the ground truth grid cell. Each iteration also has information about both the prediction and 
+                                        update steps. There was a slight startup overhead where the Bayes filter overcompensated for the 
+                                        control inputs which made it overshoot the predicted grid cells. It also seemed to work poorly 
+                                        when the predicted probability was extremely small (<code>< 1E-9</code>). I believe these very 
+                                        small probabilities skewed the updated probabilities by also making them comparatively small, which 
+                                        negatively impacted the algorithm.
+
+                                        <script src="https://gist.github.com/roninsharma25/c6797c548de391de95fc219283ca523c.js"></script>
+
                                     </p>
+
+                                    <h1>Appendix</h1>
+                                    <p class="mb-4">
+                                        <img src="assets/img/Lab11/Bayes_Filter.png" width="500">
+                                    </p>
+
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
