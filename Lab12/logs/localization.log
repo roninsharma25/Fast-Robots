@@ -68,3 +68,13 @@
 2022-05-02 18:06:38,334 | MainThread   | [INFO    ] | print_update_stats  |: Belief        : (-0.914, -0.305, -170.000)
 2022-05-02 18:06:38,337 | MainThread   | [INFO    ] | print_update_stats  |: POS ERROR     : (0.036, 0.189, 6108.865)
 2022-05-02 18:06:38,350 | MainThread   | [INFO    ] | print_update_stats  |: ---------- UPDATE STATS -----------
+2022-05-04 15:57:58,188 | MainThread   | [INFO    ] | populate_views      |:  | Number of observations per grid cell: 18
+2022-05-04 15:57:58,195 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Views...
+2022-05-04 15:58:02,139 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Time: 3.942 secs
+2022-05-04 15:58:02,139 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-04 15:58:02,141 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-04 16:09:45,698 | MainThread   | [INFO    ] | populate_views      |:  | Number of observations per grid cell: 18
+2022-05-04 16:09:45,705 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Views...
+2022-05-04 16:09:50,502 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Time: 4.796 secs
+2022-05-04 16:09:50,503 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-04 16:09:50,505 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
