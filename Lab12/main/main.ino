@@ -80,9 +80,9 @@ handle_command()
          * Write "PONG" on the GATT characteristic BLE_UUID_TX_STRING
          */
         case PING:
-            // Use PING to toggle between writing motor PWM and sensor values
-            startWritingPWM = !startWritingPWM;
+            // Use PING to toggle between robot states
             started = !started;
+            numGyroVals = 0;
 
             break;
 
@@ -306,7 +306,7 @@ void turnUpdates() {
     writeTXFloat4(currGyroVal);
     
     // Send front ToF sensor value
-    writeTXFloat2(getTOF2());
+    writeTXFloat3(getTOF2());
 
     // Update previous value
     prevGyroVal = currGyroVal;
@@ -314,8 +314,10 @@ void turnUpdates() {
     numGyroVals += 1;
   }
 
-  if (numGyroVals == 18) {
+  if (numGyroVals >= 17) { // 17 to account for the initial measurement
     stopRobotFast();
+    started = !started; // no longer need to receive an additional PING command
+    Serial.println("Finished 18 measurements");
   }
 
 }

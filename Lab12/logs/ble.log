@@ -56,3 +56,20 @@
 2022-05-04 16:31:00,414 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
 2022-05-04 16:31:39,543 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
 2022-05-04 16:31:42,615 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-05-04 16:35:37,963 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-05-04 16:35:37,980 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-04 16:35:37,983 | MainThread   | [WARNING ] | exit_handler        |: Could not disconnect before exiting
+2022-05-04 16:35:37,985 | MainThread   | [WARNING ] | exit_handler        |: Not connected to a BLE device
+2022-05-05 01:57:32,074 | MainThread   | [DEBUG   ] | __init__            |: Python Info: sys.version_info(major=3, minor=10, micro=4, releaselevel='final', serial=0)
+2022-05-05 01:57:32,074 | MainThread   | [DEBUG   ] | __init__            |: System Info: macOS-12.2.1-x86_64-i386-64bit
+2022-05-05 01:57:32,075 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-05-05 01:57:35,690 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-05-05 02:06:19,824 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-05-05 02:06:29,625 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-05-05 02:06:32,854 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-05-05 02:10:41,497 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-05-05 02:12:17,716 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
+2022-05-05 02:12:20,686 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
+2022-05-05 02:14:10,000 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-05 02:14:10,006 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-05-05 02:14:10,008 | MainThread   | [INFO    ] | exit_handler        |: Gracefully Exiting
