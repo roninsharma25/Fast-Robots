@@ -178,10 +178,11 @@ handle_command()
             break;
         
         case TURN_360:
-            float forwardSpeed_, backwardSpeed_;
+            float forwardSpeed_, backwardSpeed_, dir_;
 
             success = robot_cmd.get_next_value(forwardSpeed_);
             success = robot_cmd.get_next_value(backwardSpeed_);
+            success = robot_cmd.get_next_value(dir_);
 
             previousTime = millis();
             updateGyro();
@@ -191,6 +192,8 @@ handle_command()
             // Send starting values
             writeTXFloat4(currGyroVal);
             writeTXFloat2(getTOF2());
+
+            turn(forwardSpeed_, backwardSpeed_, dir_);
 
             break;
 

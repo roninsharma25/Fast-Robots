@@ -64,3 +64,11 @@
 2022-05-02 18:06:35,348 | MainThread   | [INFO    ] | prediction_step     |:  | Prediction Time: 0.073 secs
 2022-05-02 18:06:38,293 | MainThread   | [INFO    ] | update_step         |: Update Step
 2022-05-02 18:06:38,299 | MainThread   | [INFO    ] | update_step         |:      | Update Time: 0.005 secs
+2022-05-06 22:07:06,562 | MainThread   | [INFO    ] | update_step         |: Update Step
+2022-05-06 22:09:29,447 | MainThread   | [INFO    ] | update_step         |: Update Step
+2022-05-06 22:09:48,053 | MainThread   | [INFO    ] | update_step         |: Update Step
+2022-05-06 22:11:13,739 | MainThread   | [INFO    ] | update_step         |: Update Step
+2022-05-06 22:11:13,751 | MainThread   | [INFO    ] | update_step         |:      | Update Time: 0.009 secs
+2022-05-06 22:11:13,755 | MainThread   | [INFO    ] | plot_update_step_data|: Bel index     : (0, 0, 0) with prob = nan
+2022-05-06 22:11:13,757 | MainThread   | [INFO    ] | plot_update_step_data|: Bel_bar prob at index = 0.00051440329218107
+2022-05-06 22:11:13,760 | MainThread   | [INFO    ] | plot_update_step_data|: Belief        : (-1.524, -1.219, -170.000)

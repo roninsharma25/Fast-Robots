@@ -149,5 +149,5 @@ class RobotControl():
     def turn(self, forwardSpeed, backwardSpeed = 30, turn = 0):
         self.ble.send_command(CMD.TURN, f'{forwardSpeed}|{backwardSpeed}|{turn}')
     
-    def turn360(self, forwardSpeed = 150, backwardSpeed = 50):
-        self.ble.send_command(CMD.TURN_360, f'{forwardSpeed}|{backwardSpeed}')
+    def turn360(self, forwardSpeed = 150, backwardSpeed = 50, dir_ = 0):
+        self.ble.send_command(CMD.TURN_360, f'{forwardSpeed}|{backwardSpeed}|{dir_}')
