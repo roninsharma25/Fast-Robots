@@ -41,7 +41,7 @@ class RobotControl():
         self.latest_imu_reading = None
         
         # Activate notifications (if required)
-        self.setup_notify()
+        #self.setup_notify()
     
     def setup_notify(self):
         self.ble.start_notify(self.ble.uuid['RX_TOF1'], self.tof_callback_handler)

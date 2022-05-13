@@ -191,7 +191,7 @@ handle_command()
 
             // Send starting values
             writeTXFloat4(currGyroVal);
-            writeTXFloat2(getTOF2());
+            writeTXFloat3(getTOF2());
 
             turn(forwardSpeed_, backwardSpeed_, dir_);
 
