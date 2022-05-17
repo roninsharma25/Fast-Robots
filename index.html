@@ -3461,7 +3461,7 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-8">
                                     <!-- Portfolio Modal - Title-->
-                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 12</h2>
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 12: Localization on the Real Robot</h2>
                                     <!-- Icon Divider-->
                                     <div class="divider-custom">
                                         <div class="divider-custom-line"></div>
@@ -3473,14 +3473,41 @@
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
-                                        
+                                        The goal of this lab was to perform localization on the physical robot. I adapted the 
+                                        provided Bayes filter implementation to solely perform the update step after receiving 
+                                        data from my robot.
                                     </p>
 
                                     <h1>Materials</h1>
+                                    <p>Artemis Nano</p>
+                                    <p>USB C-to-C Cable</p>
+                                    <p>Two 4m Time-of-FLight Distance Sensors</p>
+                                    <p>9DOF Inertial Measurement Unit Sensor</p>
+                                    <p>Battery Packs (600 mAh and 850 mAh)</p>
+                                    <p>RC Car</p>
 
-                                    <h1>Setup</h1>
+                                    <h1>Simulation Verification</h1>
                                     <p class="mb-4">
+                                        In this lab, I was provided with a working and optimized Bayes Filter implementation. I ran 
+                                        the simulator using this implementation to verify that it worked as expected. Here is the final 
+                                        plot, which looked reasonable, so I felt confident that it was working correctly.
 
+                                        <img>
+                                    </p>
+
+                                    <h1>Localization on the Robot</h1>
+                                    <p class="mb-4">
+                                        Next, I moved onto implemented it on the robot. At each position, the robot needed to turn in 
+                                        <code>20</code> degree increments and record the front ToF sensor reading. In lab 9, I performed this 
+                                        task, but the results weren't great. My robot moved too much while turning, which when combined with 
+                                        my unreliable ToF sensor readings created lots of problems. As a result, I modified my rotating in-place 
+                                        approach. Instead, I had the robot turn a full <code>360</code> degrees, and used the gyroscope to identify 
+                                        when <code>20</code> degrees had elapsed. After this turn, I recorded the front ToF sensor reading and sent 
+                                        it to my laptop via bluetooth. By using this approach, I was able to turn my robot slightly faster, which 
+                                        prevented it from skidding as much and it didn't move translationally as much during the turning process. I 
+                                        also sent the gyroscope values to confirm that the ToF values were after <code>20</code> degree increments.
+
+                                        ADD CODE SNIPPET
                                     </p>
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
