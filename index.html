@@ -3496,6 +3496,8 @@
                                     </p>
 
                                     <h1>Localization on the Robot</h1>
+                                    
+                                    <h3>Implementation</h3>
                                     <p class="mb-4">
                                         Next, I moved onto implemented it on the robot. At each position, the robot needed to turn in 
                                         <code>20</code> degree increments and record the front ToF sensor reading. In lab 9, I performed this 
@@ -3507,8 +3509,73 @@
                                         prevented it from skidding as much and it didn't move translationally as much during the turning process. I 
                                         also sent the gyroscope values to confirm that the ToF values were after <code>20</code> degree increments.
 
-                                        ADD CODE SNIPPET
+                                        I added a new robot function (specified using bluetooth) which makes the robot start turning and stores the initial 
+                                        values. In the main loop function, if the robot has started turning, I constantly called the <code>turnUpdates()</code> 
+                                        function, which updated the gyroscope readings, checked if one turn iteration finished, sent the appropriate values 
+                                        over bluetooth, and finally stopped turning if the robot had turned enough times (<code>360</code> degrees). Through 
+                                        experimentation, I found that waiting until the gyroscope changed by <code>19</code> degrees resulted in angle deltas 
+                                        that were closer to <code>20</code>.
+
+                                        ADD CODE SNIPPETS
                                     </p>
+
+                                    <p class="mb-4">
+                                        Then, I updated the provided code to utilize my onboard implementation. In the <code>RealRobot</code> class, the 
+                                        <code>perform_observation_loop</code> function had to return the sensor values at the <code>20</code> degree 
+                                        increments. In this function, I invoked the <code>TURN 360</code> robot command, waited for the turn to finish, 
+                                        which I determined by experimentation, and reshaped the TOF sensor value array accordingly.
+
+                                        ADD CODE SNIPPET
+
+                                        In the update step of the Bayes filter, the provided code automatically called this function (internally from the 
+                                        <code>Localization</code> object, and used the results to determine the robot position).
+                                    </p>
+                                    
+                                    <h3>Results</h3>
+                                    <p class="mb-4">
+                                        I performed localization and four locations marked in the lab (ADD COORDINATES).
+                                        Overall, my results were bad. The robot was consistently believed to be located within one of the obstacles. 
+                                        The images below depict the actual and predicted positions for each location, where the actual position is the 
+                                        COLOR dot and the predicted position is the COLOR dot.
+
+                                        <br>
+                                        <br>
+
+                                        <img>
+                                        
+                                        <br>
+                                        <br>
+
+                                        <img>
+
+                                        <br>
+                                        <br>
+
+                                        <img>
+
+                                        <br>
+                                        <br>
+
+                                        <img>
+                                    </p>
+
+                                    <h3>Analysis</h3>
+                                    <p class="mb-4">
+                                        One possible reason for the poor results is duplicate values. On the robot side, I use the <code>checkForDataReady()</code> function 
+                                        before reading a new ToF sensor value, otherwise I use the old value. Despite varying and reducing the integration time, 
+                                        there were some scenarios where the robot recorded the same ToF sensor reading for adjacent turn angles. The plot below 
+                                        shows an example of this. ADD EXPLANATION.
+
+                                        ADD PLOT IMAGE 
+
+                                        Also, regardless of the distance mode I set, my ToF sensors seem to get capped around <code>700-800</code> mm. Sometimes, they will 
+                                        be able to detect larger distances, but they do so very rarely and the values are very inconsistent. I have also been obtaining 
+                                        fairly inconsistent values at smaller distances as well. Despite performing several trials, none of the localization results 
+                                        worked well. I also tried to use my other ToF sensor, but it didn't work much better.
+
+                                    </p>
+
+
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
