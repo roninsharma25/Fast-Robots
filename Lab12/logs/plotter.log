@@ -491,3 +491,39 @@
 2022-05-12 23:47:18,417 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
 2022-05-12 23:47:18,420 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
 2022-05-12 23:47:38,389 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...
+2022-05-17 16:21:28,116 | MainThread   | [DEBUG   ] | run                 |: Python version: 3.10.4 (v3.10.4:9d38120e33, Mar 23 2022, 17:29:05) [Clang 13.0.0 (clang-1300.0.29.30)]
+2022-05-17 16:21:28,118 | MainThread   | [DEBUG   ] | run                 |: Parameters used:
+2022-05-17 16:21:28,118 | MainThread   | [DEBUG   ] | run                 |: Symbol               : o
+2022-05-17 16:21:28,118 | MainThread   | [DEBUG   ] | run                 |: Symbol size          : 5
+2022-05-17 16:21:28,118 | MainThread   | [DEBUG   ] | run                 |: Line thickness       : 2
+2022-05-17 16:21:28,119 | MainThread   | [DEBUG   ] | run                 |: Position tolerance   : 0.03
+2022-05-17 16:21:28,119 | MainThread   | [DEBUG   ] | run                 |: ------------------
+
+2022-05-17 16:23:17,137 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 16:26:07,169 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 16:26:25,156 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 16:28:25,138 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 17:06:16,504 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 17:07:24,428 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 17:08:22,820 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-05-17 17:08:23,753 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-05-17 17:08:25,002 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-05-17 17:08:25,653 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-05-17 17:08:26,114 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-05-17 17:08:26,456 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-05-17 17:08:27,190 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-05-17 17:08:27,554 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-05-17 17:08:29,067 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-05-17 17:08:29,668 | MainThread   | [DEBUG   ] | show_plot           |: Show Distribution
+2022-05-17 17:08:34,152 | MainThread   | [DEBUG   ] | reset_all_plots     |: Resetting trajectory plots...
+2022-05-17 17:08:38,051 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Map
+2022-05-17 17:08:38,843 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Belief
+2022-05-17 17:08:39,489 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Ground Truth
+2022-05-17 17:08:40,114 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-05-17 17:08:41,563 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Distribution
+2022-05-17 17:08:42,204 | MainThread   | [DEBUG   ] | show_plot           |: Show Map
+2022-05-17 17:08:42,850 | MainThread   | [DEBUG   ] | show_plot           |: Show Belief
+2022-05-17 17:08:43,829 | MainThread   | [DEBUG   ] | show_plot           |: Show Ground Truth
+2022-05-17 17:08:45,042 | MainThread   | [DEBUG   ] | show_plot           |: Show Odometry
+2022-05-17 17:08:46,370 | MainThread   | [DEBUG   ] | hide_plot           |: Hide Odometry
+2022-05-17 17:08:49,909 | MainThread   | [DEBUG   ] | run                 |: Exiting gracefully...

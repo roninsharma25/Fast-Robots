@@ -33,3 +33,4 @@
 2022-05-07 15:52:16,657 | MainThread   | [INFO    ] | get_logger          |: Logger demo_notebook.log already initialized.
 2022-05-08 22:26:46,563 | MainThread   | [INFO    ] | get_logger          |: Logger demo_notebook.log initialized.
 2022-05-12 22:44:48,214 | MainThread   | [INFO    ] | get_logger          |: Logger demo_notebook.log initialized.
+2022-05-17 16:21:25,790 | MainThread   | [INFO    ] | get_logger          |: Logger demo_notebook.log initialized.

@@ -263,3 +263,37 @@
 2022-05-12 23:47:04,263 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
 2022-05-12 23:47:04,510 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
 2022-05-12 23:47:04,511 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:22:53,731 | MainThread   | [INFO    ] | populate_views      |:  | Number of observations per grid cell: 18
+2022-05-17 16:22:53,732 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Views...
+2022-05-17 16:22:59,332 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Time: 5.598 secs
+2022-05-17 16:22:59,333 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:22:59,334 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:23:17,341 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:23:17,342 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:26:02,249 | MainThread   | [INFO    ] | populate_views      |:  | Number of observations per grid cell: 18
+2022-05-17 16:26:02,250 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Views...
+2022-05-17 16:26:07,075 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Time: 4.823 secs
+2022-05-17 16:26:07,076 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:26:07,077 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:26:07,323 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:26:07,323 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:26:25,358 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:26:25,359 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:28:06,759 | MainThread   | [INFO    ] | populate_views      |:  | Number of observations per grid cell: 18
+2022-05-17 16:28:06,761 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Views...
+2022-05-17 16:28:11,803 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Time: 5.041 secs
+2022-05-17 16:28:11,804 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:28:11,805 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 16:28:25,346 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 16:28:25,347 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 17:06:16,707 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 17:06:16,712 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 17:07:10,403 | MainThread   | [INFO    ] | populate_views      |:  | Number of observations per grid cell: 18
+2022-05-17 17:07:10,404 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Views...
+2022-05-17 17:07:15,707 | MainThread   | [INFO    ] | populate_views      |:  | Precaching Time: 5.302 secs
+2022-05-17 17:07:15,709 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 17:07:15,710 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 17:07:24,630 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 17:07:24,631 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
+2022-05-17 17:08:34,352 | MainThread   | [INFO    ] | init_uniform_distribution|: Initializing beliefs with a Uniform Distribution
+2022-05-17 17:08:34,353 | MainThread   | [INFO    ] | init_uniform_distribution|: Uniform Belief with each cell value: 0.00051440329218107
