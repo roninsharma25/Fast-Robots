@@ -180,7 +180,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab9/Robot.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab12/Robot.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 12</div>
                     </div>
@@ -3469,7 +3469,7 @@
                                         <div class="divider-custom-line"></div>
                                     </div>
                                     <!-- Portfolio Modal - Image-->
-                                    <img class="img-fluid rounded mb-5" src="assets/img/Lab10/Simulator.png" alt="..." />
+                                    <!-- <img class="img-fluid rounded mb-5" src="assets/img/Lab10/Simulator.png" alt="..." /> -->
                                     <!-- Portfolio Modal - Text-->
                                     <h1>Overview</h1>
                                     <p class="mb-4">
@@ -3481,7 +3481,7 @@
                                     <h1>Materials</h1>
                                     <p>Artemis Nano</p>
                                     <p>USB C-to-C Cable</p>
-                                    <p>Two 4m Time-of-FLight Distance Sensors</p>
+                                    <p>Two 4m Time-of-Flight Distance Sensors</p>
                                     <p>9DOF Inertial Measurement Unit Sensor</p>
                                     <p>Battery Packs (600 mAh and 850 mAh)</p>
                                     <p>RC Car</p>
@@ -3490,24 +3490,31 @@
                                     <p class="mb-4">
                                         In this lab, I was provided with a working and optimized Bayes Filter implementation. I ran 
                                         the simulator using this implementation to verify that it worked as expected. Here is the final 
-                                        plot, which looked reasonable, so I felt confident that it was working correctly.
+                                        plot, which looked reasonable, so I felt confident that it was working correctly. The robot followed 
+                                        the correct trajectory, and the predicted positions were relatively close.
 
-                                        <img>
+                                        <br>
+                                        <br>
+
+                                        <img src="assets/img/Lab12/Lab12_Final_Plot.png" width="500">
                                     </p>
 
                                     <h1>Localization on the Robot</h1>
                                     
                                     <h3>Implementation</h3>
                                     <p class="mb-4">
-                                        Next, I moved onto implemented it on the robot. At each position, the robot needed to turn in 
+                                        Next, I moved onto implementing it on the robot. At each position, the robot needed to turn in 
                                         <code>20</code> degree increments and record the front ToF sensor reading. In lab 9, I performed this 
                                         task, but the results weren't great. My robot moved too much while turning, which when combined with 
                                         my unreliable ToF sensor readings created lots of problems. As a result, I modified my rotating in-place 
                                         approach. Instead, I had the robot turn a full <code>360</code> degrees, and used the gyroscope to identify 
-                                        when <code>20</code> degrees had elapsed. After this turn, I recorded the front ToF sensor reading and sent 
+                                        when <code>20</code> degrees had elapsed. After each turn, I recorded the front ToF sensor reading and sent 
                                         it to my laptop via bluetooth. By using this approach, I was able to turn my robot slightly faster, which 
                                         prevented it from skidding as much and it didn't move translationally as much during the turning process. I 
                                         also sent the gyroscope values to confirm that the ToF values were after <code>20</code> degree increments.
+
+                                        <br>
+                                        <br>
 
                                         I added a new robot function (specified using bluetooth) which makes the robot start turning and stores the initial 
                                         values. In the main loop function, if the robot has started turning, I constantly called the <code>turnUpdates()</code> 
@@ -3516,66 +3523,157 @@
                                         experimentation, I found that waiting until the gyroscope changed by <code>19</code> degrees resulted in angle deltas 
                                         that were closer to <code>20</code>.
 
-                                        ADD CODE SNIPPETS
+                                        <script src="https://gist.github.com/roninsharma25/7ef9aa065335a5efb2485834d74f59e7.js"></script>
+
+                                        <br>
+
+                                        <script src="https://gist.github.com/roninsharma25/b38c246c44db25d1c73631c69a636e81.js"></script>
                                     </p>
 
                                     <p class="mb-4">
                                         Then, I updated the provided code to utilize my onboard implementation. In the <code>RealRobot</code> class, the 
                                         <code>perform_observation_loop</code> function had to return the sensor values at the <code>20</code> degree 
                                         increments. In this function, I invoked the <code>TURN 360</code> robot command, waited for the turn to finish, 
-                                        which I determined by experimentation, and reshaped the TOF sensor value array accordingly.
+                                        which I determined the time delay by experimentation, and reshaped the TOF sensor value array accordingly.
 
-                                        ADD CODE SNIPPET
+                                        <script src="https://gist.github.com/roninsharma25/eb7b55274ef0999ccb16237033909191.js"></script>
+
+                                        <br>
 
                                         In the update step of the Bayes filter, the provided code automatically called this function (internally from the 
-                                        <code>Localization</code> object, and used the results to determine the robot position).
+                                        <code>Localization</code> object, and used the results to determine the robot position). As provided, I used a 
+                                        uniform prior belief for every cell value in the state space.
                                     </p>
                                     
                                     <h3>Results</h3>
                                     <p class="mb-4">
-                                        I performed localization and four locations marked in the lab (ADD COORDINATES).
+                                        I performed localization at four locations marked in the lab:
+
+                                        <br>
+                                        <br>
+                                        <code>(-3 ft, -2 ft, 0 deg)</code>
+                                        <br>
+                                        <code>(0 ft, 3 ft, 0 deg)</code>
+                                        <br>
+                                        <code>(5 ft, -3 ft, 0 deg)</code>
+                                        <br>
+                                        <code>(5 ft, 3 ft, 0 deg)</code>
+                                        <br>
+                                        <br>
+
                                         Overall, my results were bad. The robot was consistently believed to be located within one of the obstacles. 
                                         The images below depict the actual and predicted positions for each location, where the actual position is the 
-                                        COLOR dot and the predicted position is the COLOR dot.
+                                        green dot and the predicted position is the light blue dot. The predicted belief and corresponding probability are 
+                                        depicted below each image.
+
+                                        <br>
+                                        <br>
+                                        
+                                        <h6><code>(-3 ft, -2 ft, 0 deg)</code></h6>
+                                        <img src="assets/img/Lab12/loc_minus3_minus2.png" width="500">
+
+                                        <br>
+                                        <br>
+                                        Predicted location: <code>(2.9987 ft, 1.0007 ft, 90 deg)</code>
+                                        <br>
+                                        <br>
+                                        <img src="assets/img/Lab12/loc_data_minus3_minus2.png" width="500">
+
 
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <hr>
+
+                                        <br>
+                                        <br>
+                                        
+                                        <h6><code>(0 ft, 3 ft, 0 deg)</code></h6>
+                                        <img src="assets/img/Lab12/loc_0_3.png" width="500">
+
+                                        <br>
+                                        <br>
+                                        Predicted location: <code>(2.9987 ft, 0 ft, 110 deg)</code>
+                                        <br>
+                                        <br>
+                                        <img src="assets/img/Lab12/loc_data_0_3.png" width="500">
                                         
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <hr>
 
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <h6><code>(5 ft, -3 ft, 0 deg)</code></h6>
+                                        <img src="assets/img/Lab12/loc_5_minus3.png" width="500">
+
+                                        <br>
+                                        <br>
+                                        Predicted location: <code>(2.9987 ft, 1.0007 ft, 70 deg)</code>
+                                        <br>
+                                        <br>
+                                        <img src="assets/img/Lab12/loc_data_5_minus3.png" width="500">
 
                                         <br>
                                         <br>
 
-                                        <img>
+                                        <hr>
+
+                                        <br>
+                                        <br>
+
+                                        <h6><code>(5 ft, 3 ft, 0 deg)</code></h6>
+                                        <img src="assets/img/Lab12/loc_5_3.png" width="500">
+                                        <br>
+                                        <br>
+                                        Predicted location: <code>(2.9987 ft, 1.0007 ft, 90 deg)</code>
+                                        <br>
+                                        <br>
+                                        <img src="assets/img/Lab12/loc_data_5_3.png" width="500">
                                     </p>
 
                                     <h3>Analysis</h3>
                                     <p class="mb-4">
                                         One possible reason for the poor results is duplicate values. On the robot side, I use the <code>checkForDataReady()</code> function 
                                         before reading a new ToF sensor value, otherwise I use the old value. Despite varying and reducing the integration time, 
-                                        there were some scenarios where the robot recorded the same ToF sensor reading for adjacent turn angles. The plot below 
-                                        shows an example of this. ADD EXPLANATION.
+                                        there were some scenarios where the robot recorded the same ToF sensor reading for adjacent turn angles. The plots below 
+                                        show some examples.
+                                        
+                                        <br>
+                                        <br>
 
-                                        ADD PLOT IMAGE 
+                                        <h6><code>(-3 ft, -2 ft, 0 deg)</code></h6>
+                                        <img src="assets/img/Lab12/sensorReadings_minus3_minus2.png" width="500">
+
+                                        <br>
+                                        <br>
+
+                                        <hr>
+
+                                        <br>
+                                        <br>
+
+                                        <h6><code>(0 ft, 3 ft, 0 deg)</code></h6>
+                                        <img src="assets/img/Lab12/sensorReadings_0_3.png" width="500">
+
+                                        <br>
+                                        <br>
 
                                         Also, regardless of the distance mode I set, my ToF sensors seem to get capped around <code>700-800</code> mm. Sometimes, they will 
                                         be able to detect larger distances, but they do so very rarely and the values are very inconsistent. I have also been obtaining 
-                                        fairly inconsistent values at smaller distances as well. Despite performing several trials, none of the localization results 
-                                        worked well. I also tried to use my other ToF sensor, but it didn't work much better.
+                                        fairly inconsistent values at smaller distances as well.
+                                        
+                                        <br>
+                                        <br>
 
+                                        Despite performing several trials, none of the localization results worked well. I also tried to use my other ToF sensor, but it 
+                                        didn't work much better. This was quite disappointing. I was surprised that the predicted position was so similar across the four 
+                                        marked positions. They overlapped for several trials, but had different angles so they weren't identical. I thought this could have 
+                                        been a problem with my implementation, but the probabilities were also different (as shown in the images above) so it wasn't somehow 
+                                        using the same data for all trials. I will have to improve this for the final lab.
                                     </p>
-
-
 
                                     <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                         <i class="fas fa-times fa-fw"></i>
