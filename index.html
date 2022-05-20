@@ -190,7 +190,7 @@
                             <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
                                 <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab12/Robot.png" alt="..." />
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab13/Map.png" alt="..." />
                         </div>
                         <div class="lab-text text-center mt-4">Lab 13</div>
                     </div>
@@ -3707,7 +3707,7 @@
                         <div class="row justify-content-center">
                             <div class="col-lg-8">
                                 <!-- Portfolio Modal - Title-->
-                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 13</h2>
+                                <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Lab 13: Path Planning and Execution</h2>
                                 <!-- Icon Divider-->
                                 <div class="divider-custom">
                                     <div class="divider-custom-line"></div>
@@ -3715,7 +3715,7 @@
                                     <div class="divider-custom-line"></div>
                                 </div>
                                 <!-- Portfolio Modal - Image-->
-                                <img class="img-fluid rounded mb-5" src="assets/img/Lab10/Simulator.png" alt="..." />
+                                <img class="img-fluid rounded mb-5" src="assets/img/Lab13/Map.png" alt="..." />
                                 <!-- Portfolio Modal - Text-->
                                 <h1>Overview</h1>
                                 <p class="mb-4">
@@ -3749,7 +3749,7 @@
                                 <h1>Turning</h1>
                                 <p class="mb-4">
                                     We utilized integrated gyroscope values for our turning. We used the yaw angle from the gyroscope 
-                                    and performed this integration in the <code>updateGyro</code> function, which update the current 
+                                    and performed this integration in the <code>updateGyro</code> function, which updated the current 
                                     integrated gyroscope value.
 
                                     <script src="https://gist.github.com/roninsharma25/1af9c3da56aac8cb9da9f02e473a224c.js"></script>
@@ -3771,7 +3771,7 @@
                                     best through experimentation. Again, we sent the PID command over bluetoooth which 
                                     set the PID constants and initiated the robot's forward motion. We utilized a separate 
                                     PID function, which also contained a small buffer, which made the robot stop at the provided 
-                                    setpoint. We also retricted the robot's maximum speed to 150 and the minimum speed to 50.
+                                    setpoint. We also restricted the robot's maximum speed to 150 and the minimum speed to 50.
 
                                     <script src="https://gist.github.com/roninsharma25/69b86551afa77e119c02313dab5bc225.js"></script>
                                 </p>
@@ -3781,7 +3781,7 @@
 
                                     The overall workflow included sending a command over bluetooth, waiting for the command to finish, 
                                     and then sending another command over bluetooth. Here is an example command we sent over bluetooth 
-                                    to get the robot to turn clockwise for <code>90</code> degrees. We executed these turns are higher 
+                                    to get the robot to turn clockwise for <code>90</code> degrees. We executed these turns at higher 
                                     speeds, which required slightly larger turning buffers.
 
                                     <script src="https://gist.github.com/roninsharma25/957cd692541d6e207ade9a0f7198803e.js"></script>
@@ -3798,7 +3798,15 @@
 
                                     This performed fairly well, with only two brief nudges to help the robot.
 
-                                    ADD WORKING VIDEO
+                                    <br>
+                                    <br>
+
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/6PnDThYF0pk" title="YouTube video player" 
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
+
+                                    <br>
+                                    <br>
 
                                     It was difficult to get consistent turns at the different locations, but we felt that we achieved this 
                                     fairly well. If the turns were off by small degrees, then the following straight line motion would 
@@ -3821,14 +3829,14 @@
 
                                     We wrote a <code>performLocalization</code> function which took the position we wanted to get to as 
                                     an input. This function executed the <code>360</code> degree rotation, computed the turn angle and distance 
-                                    using the helper function above, turn the robot appropriately, and the PID off the front ToF sensor until it 
-                                    moved this distance.
+                                    using the helper function above, turn the robot appropriately, and then performed PID off the front ToF 
+                                    sensor until it moved this distance.
 
                                     <script src="https://gist.github.com/roninsharma25/9c9816ac52eb7ccf260c09673905581f.js"></script>
 
                                     Now, we were able to use this function from any place in the map to move the robot to any other position, 
                                     and the robot would take the shortest path to get to that final location. For instance, we would issue 
-                                    the following command to move the robot from it's current position to tile <code>(2, -3)</code>: 
+                                    the following command to move the robot from it's current position to tile <code>(2,-3)</code>: 
                                     <code>await performLocalization(2,-3)</code>.
 
                                     This function worked somewhat well. Again, we faced challenges when turning the robot, as sometimes it would 
@@ -3839,17 +3847,40 @@
                                     <br>
                                     <br>
 
-                                    ADD VIDEO 1
-
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/oOFpXr4hack" title="YouTube video player" 
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
                                     <br>
                                     <br>
 
-                                    ADD VIDEO 2
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Y0UYc0rULq8" title="YouTube video player" 
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
 
                                     <br>
                                     <br>
 
                                     <img src="assets/img/Lab13/Beliefs.png" width="500">
+
+                                    <br>
+                                    <br>
+
+                                    Here are some bad trials. The main problem was the robot finishing localization at the slight angle, which would 
+                                    result in an incorrect direction when moving to the desired point.
+
+                                    <br>
+                                    <br>
+
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/Vd0QCd25qko" title="YouTube video player" 
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
+
+                                    <br>
+                                    <br>
+
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/FQR6jknxHiA" title="YouTube video player" 
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen></iframe>
 
                                 </p>
 
@@ -3858,7 +3889,7 @@
                                     We faced many challenges in this lab. First, the bluetooth connection intermittently failed in the middle of runs. 
                                     This made testing very tedious since we would have to reconnect in the middle of a run, and then resend the commands. We 
                                     didn't face a ton of problems with this in previous labs so it was somewhat surprising. We also had to deal with battery 
-                                    issues. Since we tested over long period of time, the battery depleted which affected the turning rates. We constantly 
+                                    issues. Since we tested over long periods of time, the battery depleted which affected the turning rates. We constantly 
                                     had to update our calibration factors to account for these changes.
 
                                     <br>
@@ -3866,15 +3897,9 @@
 
                                     While we were glad that our localization worked for some individual points, we wanted to integrate this with the complete 
                                     map. Even though the robot localized fairly well at the marked locations, it didn't perform extremely well when it was offset 
-                                    slightly due to turning and speed variations. When tested the localization code, some subsequent runs would not correctly 
-                                    update attributes in the notification handlers, despite theese handlers being setup correctly. We resolved this by resetting 
+                                    slightly due to turning and speed variations. When testing the localization code, some subsequent runs would not correctly 
+                                    update attributes in the notification handlers, despite these handlers being setup correctly. We resolved this by resetting 
                                     the kernel, but then we would have to reconnect to the robot.
-
-                                    <br>
-                                    <br>
-
-                                    INCLUDE A FEW BAD VIDEOS
-
                                 </p>
 
 
