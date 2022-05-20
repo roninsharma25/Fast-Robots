@@ -1,0 +1,47 @@
+2022-04-16 00:50:45,907 | MainThread   | [INFO    ] | on_click_sim_reset  |: Resetting Simulator
+2022-04-16 00:51:41,494 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-16 00:51:43,034 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
+2022-04-16 00:52:16,707 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
+2022-04-17 01:04:17,242 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-04-17 01:10:53,098 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-04-17 01:32:43,742 | MainThread   | [INFO    ] | on_click_plotter_reset|: Resetting Plotter
+2022-04-17 01:32:44,433 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-17 01:41:21,220 | MainThread   | [INFO    ] | on_click_sim_reset  |: Resetting Simulator
+2022-04-17 01:41:22,883 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-17 01:41:23,980 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
+2022-04-17 01:57:41,774 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-04-17 02:10:22,329 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-18 00:45:31,122 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-04-18 00:46:17,444 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-04-19 01:09:35,467 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-19 01:09:36,111 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-22 03:40:29,925 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-22 03:40:29,939 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-22 03:40:35,204 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-04-22 03:42:19,768 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-23 12:58:21,266 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-23 12:58:21,274 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-23 12:58:31,472 | MainThread   | [INFO    ] | start               |: Creating New Simulator Process
+2022-04-23 12:58:32,099 | MainThread   | [INFO    ] | start               |: Creating New Plotter Process
+2022-04-23 17:01:01,540 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-04-23 19:49:30,333 | MainThread   | [INFO    ] | stop                |: Simulator is stopped
+2022-04-23 19:49:31,021 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-24 02:35:29,769 | MainThread   | [INFO    ] | start               |: Creating New Plotter Process
+2022-04-24 02:37:36,446 | MainThread   | [INFO    ] | start               |: Creating New Plotter Process
+2022-04-24 02:39:45,887 | MainThread   | [INFO    ] | on_click_plotter_reset|: Resetting Plotter
+2022-04-24 02:39:46,705 | MainThread   | [INFO    ] | on_click_plotter_reset|: Resetting Plotter
+2022-04-24 02:39:47,535 | MainThread   | [INFO    ] | on_click_plotter_reset|: Resetting Plotter
+2022-04-24 02:39:48,353 | MainThread   | [INFO    ] | on_click_plotter_reset|: Resetting Plotter
+2022-04-24 02:39:49,170 | MainThread   | [INFO    ] | on_click_plotter_reset|: Resetting Plotter
+2022-04-24 02:39:49,794 | MainThread   | [INFO    ] | stop                |: Plotter is stopped
+2022-04-24 02:39:50,557 | MainThread   | [INFO    ] | start               |: Creating New Plotter Process
+2022-05-04 15:55:16,183 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-04 15:57:25,581 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-04 15:59:30,979 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-04 16:13:47,521 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-04 16:19:19,072 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-04 16:35:37,987 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-05 02:14:10,009 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-06 21:41:55,353 | MainThread   | [INFO    ] | exit_handler        |: Exiting...
+2022-05-07 15:52:16,658 | MainThread   | [INFO    ] | GET_GUI             |: GUI is already running. Shutdown notebook to force restart the GUI.
+2022-05-08 22:26:07,120 | MainThread   | [INFO    ] | start               |: Creating New Plotter Process
