@@ -41,7 +41,10 @@ class RobotControl():
         self.latest_imu_reading = None
         
         # Activate notifications (if required)
-        #self.setup_notify()
+        try:
+            self.setup_notify()
+        except:
+            pass
     
     def setup_notify(self):
         self.ble.start_notify(self.ble.uuid['RX_TOF1'], self.tof_callback_handler)
@@ -51,13 +54,12 @@ class RobotControl():
         self.ble.start_notify(self.ble.uuid['RX_KF_TOF'], self.kf_tof_callback_handler)
         self.ble.start_notify(self.ble.uuid['RX_KF_MOTOR_PWM'], self.kf_motor_pwm_callback_handler)
         
-    
     def stop_notify(self, sensor):
         self.ble.stop_notify(ble.uuid[f'RX_{sensor}'])
         
     def tof_callback_handler(self, uuid, byte_array):
         # Append a tuple (value, time) to a list
-        self.tof_readings.append( ( self.ble.bytearray_to_float(byte_array), time.time() ) )
+        self.tof_readings.append( self.ble.bytearray_to_float(byte_array)/1000 )
         #self.update_tof_readings()
     
     def tof2_callback_handler(self, uuid, byte_array):
@@ -149,5 +151,5 @@ class RobotControl():
     def turn(self, forwardSpeed, backwardSpeed = 30, turn = 0, angle = 90, delta = 10):
         self.ble.send_command(CMD.TURN, f'{forwardSpeed}|{backwardSpeed}|{turn}|{angle}|{delta}')
     
-    def turn360(self, forwardSpeed = 150, backwardSpeed = 50, dir_ = 0):
-        self.ble.send_command(CMD.TURN_360, f'{forwardSpeed}|{backwardSpeed}|{dir_}')
+    def turn360(self, turnSpeed, turnTime):
+        self.ble.send_command(CMD.TURN_360, f'{turnSpeed}|{turnTime}')

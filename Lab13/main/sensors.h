@@ -56,16 +56,16 @@ void setupTOF() {
       ;
   }
 
-  if (distanceSensor2.begin() != 0)
-  {
-    Serial.println("Sensor 2 failed to begin. Please check wiring. Freezing...");
-    while (1)
-      ;
-  }
+//  if (distanceSensor2.begin() != 0)
+//  {
+//    Serial.println("Sensor 2 failed to begin. Please check wiring. Freezing...");
+//    //while (1)
+//      ;
+//  }
   
 
   //distanceSensor.setDistanceModeShort();
-  distanceSensor2.setDistanceModeLong();
+  distanceSensor.setDistanceModeLong();
 
   //distanceSensor.setTimingBudgetInMs(20);
   //distanceSensor2.setTimingBudgetInMs(20);

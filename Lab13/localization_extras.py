@@ -12,6 +12,7 @@ LOG = setup_logging("localization_extras.log")
 class Localization(BaseLocalization):
     def __init__(self, robot, mapper):
         super().__init__(robot, mapper)
+        self.chris = 0
 
     def compute_control(self, cur_pose, prev_pose):
         """ Given the current and previous odometry poses, this function extracts
@@ -137,6 +138,7 @@ class Localization(BaseLocalization):
             self.bel_bar[argmax_bel[0]]))
         LOG.info("Belief        : ({:.3f}, {:.3f}, {:.3f})".format(
             *current_belief))
+        self.chris = current_belief
 
         # Plot data
         self.cmdr.plot_bel(current_belief[0],

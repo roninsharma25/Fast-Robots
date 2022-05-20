@@ -109,3 +109,6 @@
 2022-05-07 15:39:04,374 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C
 2022-05-07 15:39:07,100 | MainThread   | [INFO    ] | _connect            |: Connected to C0:83:B0:6C:9A:3C
 2022-05-07 15:45:28,345 | MainThread   | [INFO    ] | disconnect_handler  |: Disconnected from 607452C2-8441-D076-814E-841EB3635426
+2022-05-19 19:53:44,204 | MainThread   | [DEBUG   ] | __init__            |: Python Info: sys.version_info(major=3, minor=10, micro=4, releaselevel='final', serial=0)
+2022-05-19 19:53:44,205 | MainThread   | [DEBUG   ] | __init__            |: System Info: macOS-12.2.1-x86_64-i386-64bit
+2022-05-19 19:53:44,207 | MainThread   | [INFO    ] | _connect            |: Looking for Artemis Nano Peripheral Device: C0:83:B0:6C:9A:3C

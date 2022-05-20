@@ -34,6 +34,14 @@ int PIDbuffer;
 bool forward = false;
 
 
+// Localization
+unsigned long locStart;
+int locSpeed, locTime;
+bool locTurning = false;
+
+float currentOrientation;
+
+
 void performPID(float tofValue) {
 
   if (tofValue <= setpoint + PIDbuffer) {
@@ -57,7 +65,7 @@ void performPID(float tofValue) {
     previousTimePID = currentTimePID;
     prevError = error;
 
-    float motorSpeed = min( max( dp+dd, 150 ), 200 ) / 3;
+    float motorSpeed = min( max( dp+dd, 150 ), 150 ) / 3;
 
     moveForwardCase(motorSpeed, motorSpeed, dir);
   }
@@ -118,8 +126,8 @@ handle_command()
          */
         case PING:
             // Use PING to toggle between robot states
-            started = !started;
-            numGyroVals = 0;
+            tof2 = getTOF1();
+            writeTXFloat2(tof2);
 
             break;
 
@@ -222,24 +230,35 @@ handle_command()
             break;
         
         case TURN_360:
-            float forwardSpeed_, backwardSpeed_, dir_;
+            int turnSpeed, turnTime;
+            success = robot_cmd.get_next_value(turnSpeed);
+            success = robot_cmd.get_next_value(turnTime);
 
-            success = robot_cmd.get_next_value(forwardSpeed_);
-            success = robot_cmd.get_next_value(backwardSpeed_);
-            success = robot_cmd.get_next_value(dir_);
+            stopRobot();
+            tof2 = getTOF1();
+            writeTXFloat2(tof2);
+            locTurning = true;
+            locStart = millis();
+            locSpeed = turnSpeed;
+            locTime = turnTime;
+            stopRobot();
+            
+//            success = robot_cmd.get_next_value(forwardSpeed_);
+//            success = robot_cmd.get_next_value(backwardSpeed_);
+//            success = robot_cmd.get_next_value(dir_);
+//
+//            previousTime = millis();
+//            updateGyro();
+//            startGyroVal = currGyroVal;
+//            prevGyroVal = currGyroVal;
+//
+//            // Send starting values
+//            writeTXFloat4(currGyroVal);
+//            writeTXFloat3(getTOF2());
+//
+//            turn(forwardSpeed_, backwardSpeed_, dir_);
 
-            previousTime = millis();
-            updateGyro();
-            startGyroVal = currGyroVal;
-            prevGyroVal = currGyroVal;
-
-            // Send starting values
-            writeTXFloat4(currGyroVal);
-            writeTXFloat3(getTOF2());
-
-            turn(forwardSpeed_, backwardSpeed_, dir_);
-
-            Serial.println("Turn 360");
+            Serial.println("Turn localization");
 
             break;
 
@@ -311,6 +330,10 @@ void loop() {
 
   if (central) {
 
+    updateGyro();
+    currentOrientation = int(currGyroVal) % 360;
+//    Serial.println(currentOrientation);
+    
     if (checkRXCharString()) {
         handle_command();
     }
@@ -323,10 +346,16 @@ void loop() {
         turnRobot(turnAngle, angleDelta);
         
     } else if (doPID) {
-        tof2 = getTOF2();
+        tof2 = getTOF1();
         performPID(tof2);
+    } else if (locTurning) {
+      loc();
     }
+
+//    tof2 = getTOF1();
   }
+
+  //stopRobot();
 }
 
 int getTOF1() {
@@ -385,11 +414,20 @@ void turnRobot(int angle, int angleBuffer) {
     Serial.println(prevGyroVal);
     Serial.println(angle);
     Serial.println("stopping turn");
-    stopRobotFast();
+    stopRobot();
     started = false;
 
     // Update previous value
     prevGyroVal = currGyroVal;
   }
   
+}
+
+void loc() {
+  if (millis() - locStart < locTime) {
+    turn(locSpeed, locSpeed, 0);
+  } else {
+    stopRobot();
+    locTurning = false;
+  }
 }
