@@ -3112,15 +3112,16 @@
                                         plotter are depicted side-by-side. On the plotter on the right, the green lines represent 
                                         the ground truth and the red lines represent the calculated positions (odometry poses).
                                         Overall, the robot did not always execute the same shape. This is because I utilized 
-                                        angular speed and time duration to execute my turns. Specifically, 
-                                        if I needed to turn <code>90</code> degrees, I utilized angular speed and time duration values that 
-                                        multiplied to <code>90</code>. However, the function required the angular speed to have units of 
-                                        <code>radians/sec</code>. Since the units involved radians, I had to involve <code>pi</code>, which 
-                                        resulted in some level of approximation. As a result, the computed angle wasn't always exactly 
-                                        <code>90</code> degrees. Since I had to compute the angle four times per square, the error 
-                                        was compounded so each square was slightly further off. Additionally, I used the <code>asyncio</code> 
+                                        angular speed and time duration to execute my turns. Specifically, I used the <code>asyncio</code> 
                                         module for the time duration. While this module is fairly accurate, it is not perfect, so the timing 
-                                        was not always the expected amount, which further propagated the angle error.
+                                        was not always the expected amount. As a result, each turn was not exactly <code>90</code> degrees. This 
+                                        impacted the overal shape. Also, since I was performing many of these turns, the small error was 
+                                        propogated for every turn, which made the total error even worse. More specifically, the 
+                                        <code>asyncio</code> module allowed me to utilize asynchronous functions. This allowed me to move the robot, 
+                                        start an asynchronous timer, and execute some command with the timer finished. There is some inherent 
+                                        delay when the timer finishes, which caused some angle errors. Instead, I could have used a polling 
+                                        loop to make the timing more accurate. However, this method would be blocking, so it wastes CPU cycles 
+                                        and isn't as efficient as using asynchronous functions.
 
                                         <br>
                                         <br>
