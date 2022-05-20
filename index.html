@@ -3766,42 +3766,114 @@
 
                                 <h1>Movement</h1>
                                 <p class="mb-4">
-                                    We used PID to control the motion of the robot. Specifically, 
+                                    We used PID to control the motion of the robot. Specifically, we used a PD controlled with 
+                                    <code>kp = 0.35</code> and <code>kd = 0.75</code>. We found that those constants worked 
+                                    best through experimentation. Again, we sent the PID command over bluetoooth which 
+                                    set the PID constants and initiated the robot's forward motion. We utilized a separate 
+                                    PID function, which also contained a small buffer, which made the robot stop at the provided 
+                                    setpoint. We also retricted the robot's maximum speed to 150 and the minimum speed to 50.
 
-
+                                    <script src="https://gist.github.com/roninsharma25/69b86551afa77e119c02313dab5bc225.js"></script>
                                 </p>
 
                                 <h1>Complete Workflow</h1>
                                 <p class="mb-4">
 
-                                    EXAMPLE BLUETOOTH COMMAND SENT
+                                    The overall workflow included sending a command over bluetooth, waiting for the command to finish, 
+                                    and then sending another command over bluetooth. Here is an example command we sent over bluetooth 
+                                    to get the robot to turn clockwise for <code>90</code> degrees. We executed these turns are higher 
+                                    speeds, which required slightly larger turning buffers.
 
-
+                                    <script src="https://gist.github.com/roninsharma25/957cd692541d6e207ade9a0f7198803e.js"></script>
+                                    
+                                    On the Arduino side, when it received a command, it set a flag for that command, which then prompted 
+                                    a sequence of events (turn for the specified angle, PID forward off the front ToF sensor).
                                 </p>
-
 
                                 <h1>Initial Results</h1>
                                 <p class="mb-4">
+                                    Here is the complete list of commands we sent over bluetooth to reach all the waypoints.
 
-                                    COMPLETE LIST OF BLUETOOTH COMMANDS
+                                    <script src="https://gist.github.com/roninsharma25/7e79474c44ecd4feec6b7e3fba4c2c99.js"></script>
 
-                                    VIDEO
+                                    This performed fairly well, with only two brief nudges to help the robot.
 
+                                    ADD WORKING VIDEO
+
+                                    It was difficult to get consistent turns at the different locations, but we felt that we achieved this 
+                                    fairly well. If the turns were off by small degrees, then the following straight line motion would 
+                                    be significantly affected since the robot would likely end up in a corner, so we were quite satisfied 
+                                    that we were able to avoid this. We fine tuned the PID setpoints and buffers based on the expected 
+                                    robot speeds (larger buffers when the robot was traveling at higher speeds).
                                 </p>
 
                                 <h1>Localization</h1>
                                 <p class="mb-4">
+                                    Even though our closed loop implementation worked well, we wanted to implement localization to improve 
+                                    it. We further adapted the starter code from lab 12. First, we developed a function that took the 
+                                    starting position and angle along with the position we wanted to end up as inputs, and outputted 
+                                    the turn angle and distance required to get to that point. Essentially, it computed how to get 
+                                    from the initial position to the final position. More specifially, we calculated the position 
+                                    change required in both x and y directions, and then the distance and angle required to achieve 
+                                    this. We converted the final distance from tiles to <code>mm</code>.
 
-                                    EXPLAIN FUNCTION
+                                    <script src="https://gist.github.com/roninsharma25/b83f6ae1eef121d16c891fb40b093b98.js"></script>
 
-                                    TWO VIDEOS
+                                    We wrote a <code>performLocalization</code> function which took the position we wanted to get to as 
+                                    an input. This function executed the <code>360</code> degree rotation, computed the turn angle and distance 
+                                    using the helper function above, turn the robot appropriately, and the PID off the front ToF sensor until it 
+                                    moved this distance.
 
-                                    IMAGE SHOWING PROBABILITIES
+                                    <script src="https://gist.github.com/roninsharma25/9c9816ac52eb7ccf260c09673905581f.js"></script>
+
+                                    Now, we were able to use this function from any place in the map to move the robot to any other position, 
+                                    and the robot would take the shortest path to get to that final location. For instance, we would issue 
+                                    the following command to move the robot from it's current position to tile <code>(2, -3)</code>: 
+                                    <code>await performLocalization(2,-3)</code>.
+
+                                    This function worked somewhat well. Again, we faced challenges when turning the robot, as sometimes it would 
+                                    turn the robot too much and then move at an angle away from the desired point. However, we were successful 
+                                    on a smaller scale. We were able to correctly localize from <code>(-2, -1)</code> to <code>(0, 0)</code> and 
+                                    from <code>(5,3)</code> to <code>(0, 3)</code>, as shown in the two videos below.
+
+                                    <br>
+                                    <br>
+
+                                    ADD VIDEO 1
+
+                                    <br>
+                                    <br>
+
+                                    ADD VIDEO 2
+
+                                    <br>
+                                    <br>
+
+                                    <img src="assets/img/Lab13/Beliefs.png" width="500">
 
                                 </p>
 
                                 <h1>Overall Challenges</h1>
                                 <p class="mb-4">
+                                    We faced many challenges in this lab. First, the bluetooth connection intermittently failed in the middle of runs. 
+                                    This made testing very tedious since we would have to reconnect in the middle of a run, and then resend the commands. We 
+                                    didn't face a ton of problems with this in previous labs so it was somewhat surprising. We also had to deal with battery 
+                                    issues. Since we tested over long period of time, the battery depleted which affected the turning rates. We constantly 
+                                    had to update our calibration factors to account for these changes.
+
+                                    <br>
+                                    <br>
+
+                                    While we were glad that our localization worked for some individual points, we wanted to integrate this with the complete 
+                                    map. Even though the robot localized fairly well at the marked locations, it didn't perform extremely well when it was offset 
+                                    slightly due to turning and speed variations. When tested the localization code, some subsequent runs would not correctly 
+                                    update attributes in the notification handlers, despite theese handlers being setup correctly. We resolved this by resetting 
+                                    the kernel, but then we would have to reconnect to the robot.
+
+                                    <br>
+                                    <br>
+
+                                    INCLUDE A FEW BAD VIDEOS
 
                                 </p>
 
