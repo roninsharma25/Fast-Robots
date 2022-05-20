@@ -184,6 +184,16 @@
                         </div>
                         <div class="lab-text text-center mt-4">Lab 12</div>
                     </div>
+                    <!-- Portfolio Item 13-->
+                    <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal13">
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" style="height:260px;" src="assets/img/Lab12/Robot.png" alt="..." />
+                        </div>
+                        <div class="lab-text text-center mt-4">Lab 13</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -3709,15 +3719,92 @@
                                 <!-- Portfolio Modal - Text-->
                                 <h1>Overview</h1>
                                 <p class="mb-4">
-                                    
+                                    The goal of this lab was to combine many features from previous labs to enable the robot 
+                                    to execute a specific path in the map. I combined the robot's individual sensor readings, 
+                                    closed loop control, and localization to achieve this task. I worked closely with Chris 
+                                    Chan on this lab.
                                 </p>
 
                                 <h1>Materials</h1>
+                                    <p>Artemis Nano</p>
+                                    <p>USB C-to-C Cable</p>
+                                    <p>Two 4m Time-of-Flight Distance Sensors</p>
+                                    <p>9DOF Inertial Measurement Unit Sensor</p>
+                                    <p>Battery Packs (600 mAh and 850 mAh)</p>
+                                    <p>RC Car</p>
 
                                 <h1>Setup</h1>
                                 <p class="mb-4">
+                                    We started by planning our our approach. We planned to use the gyroscope to execute our 
+                                    turns, since this worked fairly well for labs 9 and 12. We wanted to rely on PID for movement 
+                                    between the waypoints. Since we were provided with the locations of each waypoint, we identified 
+                                    the distance from each waypoint to the wall, and could PID using this distance, which is 
+                                    the same logic that we used for labs 6-8. After achieving a fairly decent result with this approach, 
+                                    we also wanted to integrate localization from lab 12 to more precisely move the robot between waypoints. We 
+                                    also planned to offload some processing to the computer. We would send commands from our computer to 
+                                    the robot, and then the robot would execute these commands. The command list remained constant throughout 
+                                    each individual run.
+                                </p>
+
+                                <h1>Turning</h1>
+                                <p class="mb-4">
+                                    We utilized integrated gyroscope values for our turning. We used the yaw angle from the gyroscope 
+                                    and performed this integration in the <code>updateGyro</code> function, which update the current 
+                                    integrated gyroscope value.
+
+                                    <script src="https://gist.github.com/roninsharma25/1af9c3da56aac8cb9da9f02e473a224c.js"></script>
+
+                                    We had a separate function to turn the robot. This function updated the gyroscope value and would 
+                                    stop the robot when the robot had turned by the specified angle. We built in an angle buffer to 
+                                    account for slipping and skidding.
+
+                                    <script src="https://gist.github.com/roninsharma25/b98cf7eb4af62ddd42fc1766792e22d5.js"></script>
+
+                                    When we sent the turn command over bluetooth, the robot would turn for the specified angle. We included 
+                                    logic for turning the robot both clockwise and counterclockwise.
+                                </p>
+
+                                <h1>Movement</h1>
+                                <p class="mb-4">
+                                    We used PID to control the motion of the robot. Specifically, 
+
 
                                 </p>
+
+                                <h1>Complete Workflow</h1>
+                                <p class="mb-4">
+
+                                    EXAMPLE BLUETOOTH COMMAND SENT
+
+
+                                </p>
+
+
+                                <h1>Initial Results</h1>
+                                <p class="mb-4">
+
+                                    COMPLETE LIST OF BLUETOOTH COMMANDS
+
+                                    VIDEO
+
+                                </p>
+
+                                <h1>Localization</h1>
+                                <p class="mb-4">
+
+                                    EXPLAIN FUNCTION
+
+                                    TWO VIDEOS
+
+                                    IMAGE SHOWING PROBABILITIES
+
+                                </p>
+
+                                <h1>Overall Challenges</h1>
+                                <p class="mb-4">
+
+                                </p>
+
 
                                 <button class="btn btn-primary" href="index.html" data-bs-dismiss="modal">
                                     <i class="fas fa-times fa-fw"></i>
